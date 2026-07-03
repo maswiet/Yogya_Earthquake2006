@@ -34,3 +34,24 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   details and per-station Tottori metrics (`needs-review`). (2) Assess Yogya 2006
   waveform data availability and EQTransformer generalization —
   [[wiki/questions/applying-eqtransformer-to-yogya-2006]].
+
+## [2026-07-03] ingest | EQTransformer GitHub Repository (smousavi05/EQTransformer)
+
+- **Trigger:** `/ingest https://github.com/smousavi05/EQTransformer`
+- **Source access:** README-level metadata fetched from the repo landing page.
+  No repository code executed. Full module API/source not captured.
+- **Files changed (created):**
+  - `raw/2026-07-03_eqtransformer-github/source.md`
+  - `wiki/sources/eqtransformer-github-repo.md`
+  - `wiki/concepts/phase-association.md`
+- **Files changed (updated):**
+  - `wiki/entities/eqtransformer-model.md` (added software/package facts + source link)
+  - `wiki/concepts/earthquake-signal-detection.md` (two-model false-neg/false-pos tradeoff; Conflicts/Updates)
+  - `wiki/questions/applying-eqtransformer-to-yogya-2006.md` (tooling-available note)
+  - `wiki/index.md`, `wiki/log.md`
+- **Key result:** Runnable implementation of the already-ingested model.
+  MIT-licensed, `pip install EQTransformer`, TensorFlow+ObsPy, ships two
+  pretrained models (Original = min false negatives; Conservative = min false
+  positives). Confirms a low-barrier path to a Yogya 2006 trial run.
+- **Follow-ups:** Locate Yogya 2006 continuous waveform data + choose a location
+  workflow (velocity model + associator) to turn picks into hypocenters.

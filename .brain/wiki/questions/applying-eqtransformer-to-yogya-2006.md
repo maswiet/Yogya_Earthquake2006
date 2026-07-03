@@ -6,6 +6,7 @@ created: 2026-07-03
 updated: 2026-07-03
 sources:
   - "[[wiki/sources/earthquake-transformer-mousavi-2020]]"
+  - "[[wiki/sources/eqtransformer-github-repo]]"
 tags:
   - open-question
   - method-choice
@@ -33,9 +34,18 @@ catalog than manual or classical processing?
 - Downstream location workflow (velocity model, associator) to turn picks into
   hypocenters.
 
+## Tooling available
+
+- EQTransformer is **pip/conda installable** with **pretrained models** included
+  ([[wiki/sources/eqtransformer-github-repo]]) — no retraining required for a
+  first trial run. It reads/writes seismic data via **ObsPy** (mseed) and
+  includes a simple [[wiki/concepts/phase-association]] step, so a
+  detection→picking→association pass on Yogya data is low-barrier to prototype.
+
 ## Status
 
-Open — no project data assessed yet. First seismic-ML source in the vault.
+Open — no project data assessed yet. Method (paper) and runnable tool (repo) are
+now both in the vault; the gap is Yogya 2006 waveform data + a location workflow.
 
 ## Links
 

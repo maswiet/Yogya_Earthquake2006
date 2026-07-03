@@ -32,12 +32,14 @@ Last updated: 2026-07-03
 ## Sources
 
 - [[wiki/sources/earthquake-transformer-mousavi-2020]] - EQTransformer: deep-learning model for simultaneous earthquake detection + P/S phase picking (Nat. Commun. 2020).
+- [[wiki/sources/eqtransformer-github-repo]] - Official MIT-licensed Python package (TensorFlow/ObsPy) implementing EQTransformer with pretrained models.
 
 ## Concepts
 
 - [[wiki/concepts/seismic-phase-picking]] - Identifying P/S wave arrival times; S picking is the hard case.
 - [[wiki/concepts/earthquake-signal-detection]] - Deciding signal-vs-noise; sensitivity vs. false positives.
 - [[wiki/concepts/deep-learning-seismic-processing]] - Attention + multi-task tandem learning on waveforms.
+- [[wiki/concepts/phase-association]] - Grouping per-station picks into single events; bridge to location.
 
 ## Entities
 

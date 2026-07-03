@@ -6,6 +6,7 @@ created: 2026-07-03
 updated: 2026-07-03
 sources:
   - "[[wiki/sources/earthquake-transformer-mousavi-2020]]"
+  - "[[wiki/sources/eqtransformer-github-repo]]"
 tags:
   - model
   - deep-learning
@@ -29,6 +30,17 @@ Python package (docs: https://eqtransformer.readthedocs.io/).
 - Trained on global seismic data; intended as a general-purpose picker.
 - Validated on the [[wiki/entities/2000-tottori-earthquake-sequence]].
 
+### Software package (from [[wiki/sources/eqtransformer-github-repo]])
+
+- Repo: `smousavi05/EQTransformer`, **MIT** license. Install: `pip install
+  EQTransformer` or `conda install -c smousavi05 eqtransformer`.
+- Stack: Python 3 + **TensorFlow** (>=2.5.0) + **ObsPy** + Pandas/Jupyter.
+- Ships **two pretrained models**: *Original* (`EqT_model.h5`, minimizes false
+  negatives) and *Conservative* (minimizes false positives; recommended for
+  tomography / template matching).
+- End-to-end workflow: data download → detection → P/S picking → simple
+  [[wiki/concepts/phase-association]]; runnable without retraining.
+
 ## Relevance to this project
 
 - Candidate tool for building/densifying an aftershock catalog for the
@@ -39,4 +51,5 @@ Python package (docs: https://eqtransformer.readthedocs.io/).
 
 - [[wiki/concepts/deep-learning-seismic-processing]]
 - [[wiki/concepts/seismic-phase-picking]]
+- [[wiki/concepts/phase-association]]
 - [[wiki/claims/eqtransformer-doubles-detections-tottori]]

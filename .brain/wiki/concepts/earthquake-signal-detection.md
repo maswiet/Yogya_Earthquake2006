@@ -6,6 +6,7 @@ created: 2026-07-03
 updated: 2026-07-03
 sources:
   - "[[wiki/sources/earthquake-transformer-mousavi-2020]]"
+  - "[[wiki/sources/eqtransformer-github-repo]]"
 tags:
   - seismology
   - earthquake-detection
@@ -34,7 +35,16 @@ background noise** and for **small (micro) earthquakes**.
 - [[wiki/concepts/deep-learning-seismic-processing]]
 - [[wiki/claims/eqtransformer-doubles-detections-tottori]]
 
+## Conflicts / Updates
+
+- 2026-07-03: The EQTransformer package addresses the sensitivity/false-positive
+  tradeoff operationally by shipping **two pretrained models** — an *Original*
+  model tuned to minimize **false negatives** and a *Conservative* model tuned to
+  minimize **false positives** (recommended for tomography / template matching).
+  See [[wiki/sources/eqtransformer-github-repo]] and
+  [[wiki/entities/eqtransformer-model]].
+
 ## Open Questions
 
-- How does detection sensitivity trade against false positives at the low-SNR
-  tail? Not captured from primary source — `needs-review`.
+- Quantitative precision/recall curves at the low-SNR tail were not captured
+  from a primary source — `needs-review` (read the paper's methods/results).
