@@ -79,3 +79,18 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
     running. Smoke test TF14/155 = 259 P + 271 S picks.
 - **Follow-ups:** Need 1-D velocity model + reference aftershock catalog for the
   locate-and-compare step (asking user).
+
+## [2026-07-03] maintenance | EQT Yogya pilot validated end-to-end
+
+- **Trigger:** Pilot run of the full pipeline on 5 stable stations × days 154–159.
+- **Files changed:** `wiki/syntheses/eqtransformer-yogya-2006-run.md` (status +
+  scale-up plan); scripts under `eqt/scripts/` (run_eqt, associate_locate,
+  plot_pilot); outputs under `eqt/pilot/`.
+- **Key result:** Pipeline works. MPS ~19× faster than CPU. Pilot: 36,939 picks →
+  2,538 located events (808 with ≥4 stations); epicenters cluster in the array,
+  depths 5–15 km (median 11), Omori-like decay. Velocity model = published
+  Central Java 1-D (default, swappable). Reference-catalog comparison deferred
+  (user decides later).
+- **Follow-ups:** Build streaming preprocess→pick driver; run all 12 stations ×
+  ~90 days on MPS (~2 h); relocation-aware coords for location; obtain reference
+  catalog for the '2× more events' comparison.

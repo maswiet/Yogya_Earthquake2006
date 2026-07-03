@@ -61,10 +61,26 @@ Mousavi-style result shown on the 2000 Tottori sequence
 ## Status (2026-07-03)
 
 - Pilot preprocessing: 30 station-day mseed files written.
-- Smoke test (TF14/155): **259 P + 271 S picks, 290 detections** in 152 s — picker
-  works; pick density consistent with active aftershock sequence (association
-  will reject noise).
-- Pilot picking (30 files) running.
+- **MPS (Apple GPU) works and is ~19× faster than CPU** (7.9 s vs 152 s per
+  station-day) with identical picks. Use `--device mps` for the full run.
+- Pilot picking (5 stations × days 154–159) on MPS: **36,939 picks** (18,310 P /
+  18,629 S) in 87 s. Per-station density varies a lot (TF16/TF19 ~1000/day =
+  noisier sites; TF18 ~100/day) — association is the real filter.
+- Pilot association+location (PyOcto, Central Java 1-D model): **2,538 located
+  events** over 6 days; **808 with ≥4 stations, 382 with all 5 (P+S)**.
+- Quality: epicenters cluster tightly inside the array (median −7.94, 110.45),
+  **depths 5–15 km (median 11 km, crustal)**, daily rate decays 600→194
+  (Omori-like). Figure: `eqt/pilot/pilot_summary.png`. **Pipeline validated.**
+
+## Scale-up plan
+
+- Full 2006 Yogya data ≈ **923 station-days** (~44k 30-min segments; 12 stations,
+  48–89 days each). On MPS ≈ **~2 h picking**.
+- Avoid persisting ~90 GB of 100 Hz mseed: build a **streaming** preprocess→pick
+  driver (read `.pri` → merge/resample → annotate → save picks, discard waveform).
+- Location: use **per-period coordinates** for relocated stations (TF07/10/15/17,
+  maybe TF09); full 12-station geometry sharpens locations and allows requiring
+  more stations per event to cut false associations.
 
 ## Needed external inputs (for step 5)
 
