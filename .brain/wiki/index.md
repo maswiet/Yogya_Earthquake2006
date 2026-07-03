@@ -33,6 +33,7 @@ Last updated: 2026-07-03
 
 - [[wiki/sources/earthquake-transformer-mousavi-2020]] - EQTransformer: deep-learning model for simultaneous earthquake detection + P/S phase picking (Nat. Commun. 2020).
 - [[wiki/sources/eqtransformer-github-repo]] - Official MIT-licensed Python package (TensorFlow/ObsPy) implementing EQTransformer with pretrained models.
+- [[wiki/sources/yogya-2006-aftershock-edl-dataset]] - Raw GFZ EDL aftershock recordings (external volume); layout + critical data-hygiene facts.
 
 ## Concepts
 
@@ -45,6 +46,11 @@ Last updated: 2026-07-03
 
 - [[wiki/entities/eqtransformer-model]] - The EQTransformer model / open-source package.
 - [[wiki/entities/2000-tottori-earthquake-sequence]] - Japan sequence used as EQTransformer's field-test dataset.
+- [[wiki/entities/yogya-2006-temp-aftershock-network]] - 12-station temp EDL array + coordinate table.
+
+## Syntheses
+
+- [[wiki/syntheses/eqtransformer-yogya-2006-run]] - Pipeline, decisions, env, and live status for running EQTransformer on the Yogya 2006 data.
 
 ## Claims
 
@@ -53,10 +59,6 @@ Last updated: 2026-07-03
 ## Questions
 
 - [[wiki/questions/applying-eqtransformer-to-yogya-2006]] - Can EQTransformer improve the Yogyakarta 2006 aftershock catalog?
-
-## Syntheses
-
-- No synthesis pages yet.
 
 ## Outputs
 

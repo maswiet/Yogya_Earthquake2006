@@ -55,3 +55,27 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   positives). Confirms a low-barrier path to a Yogya 2006 trial run.
 - **Follow-ups:** Locate Yogya 2006 continuous waveform data + choose a location
   workflow (velocity model + associator) to turn picks into hypocenters.
+
+## [2026-07-03] ingest | Yogya 2006 aftershock EDL dataset + EQT pipeline kickoff
+
+- **Trigger:** User pointed to raw dataset `/Volumes/Untitled 1/DATA-GFZ-Gempa-
+  JOgja-tahap-2` and asked to run EQTransformer to find more aftershocks
+  (Mousavi/Tottori-style).
+- **Files created:** `wiki/sources/yogya-2006-aftershock-edl-dataset.md`,
+  `wiki/entities/yogya-2006-temp-aftershock-network.md`,
+  `wiki/syntheses/eqtransformer-yogya-2006-run.md`.
+- **Files updated:** `wiki/questions/applying-eqtransformer-to-yogya-2006.md`
+  (status → in progress), `wiki/index.md`.
+- **Key results / durable facts:**
+  - 12-station temp EDL array (tf3007, tf3009–tf3019; no tf3008). Components
+    p0=Z/p1=N/p2=E, 200 Hz, miniSEED in 30-min `.pri0/1/2` segments.
+  - Data hygiene: folders mix 2004–05 Germany pre-deployment data; filter by
+    filename year `06` + Yogya GPS box. Several stations relocated mid-campaign
+    (TF07/10/15/17, maybe TF09) → need per-period coords.
+  - Environment: original EQTransformer won't install on arm64; running the same
+    model + original STEAD weights via **SeisBench** (env `eqt`); **PyOcto** in
+    separate env `assoc` for association/location.
+  - Pipeline built + validated; pilot (TF12/14/16/18/19, days 154–159) picking
+    running. Smoke test TF14/155 = 259 P + 271 S picks.
+- **Follow-ups:** Need 1-D velocity model + reference aftershock catalog for the
+  locate-and-compare step (asking user).

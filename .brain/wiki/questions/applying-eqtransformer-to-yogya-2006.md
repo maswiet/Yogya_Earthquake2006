@@ -44,8 +44,12 @@ catalog than manual or classical processing?
 
 ## Status
 
-Open — no project data assessed yet. Method (paper) and runnable tool (repo) are
-now both in the vault; the gap is Yogya 2006 waveform data + a location workflow.
+**In progress (2026-07-03).** Yogya 2006 aftershock data located and being
+processed — see [[wiki/syntheses/eqtransformer-yogya-2006-run]] and
+[[wiki/sources/yogya-2006-aftershock-edl-dataset]]. EQTransformer (original
+weights, via SeisBench) runs on the data; pilot detection/picking underway.
+Generalization looks fine so far (dense picks on stable stations). Remaining gaps:
+1-D velocity model + reference catalog for the locate-and-compare step.
 
 ## Links
 
