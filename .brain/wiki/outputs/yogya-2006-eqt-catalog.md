@@ -43,11 +43,30 @@ a Central Java 1-D velocity model.
 - `eqt/full/catalog_summary.png` — 4-panel summary figure.
 - Scripts: `eqt/scripts/{extract_coords,reloc_coords,preprocess,run_full,associate_full,finalize_catalog}.py`.
 
+## NonLinLoc relocation (v2, 2026-07-04)
+
+All 16,876 events relocated with **NonLinLoc** (built from source, arm64), 3D
+travel-time grids from the Central Java 1-D model, oct-tree search, EDT_OT_WT,
+Vp/Vs=1.75 (S from P grids). Ran in ~8 min.
+
+- **Quality:** RMS median **0.079 s**; location errors median **errH 1.1 km,
+  errZ 1.4 km**; gap median 136°.
+- **Well-constrained subset** (gap<180°, errH<5 km, RMS<0.5): **12,844 events**.
+- **Depth:** median **9.6 km** (shallower than PyOcto's 12.9).
+- **Cross-validation:** median epicenter shift NLLoc↔PyOcto = **1.4 km**
+  (depth −1.5 km) — two independent methods agree.
+- **Structure:** sharper than PyOcto — a clear **NE–SW fault lineament** with a
+  depth gradient (shallow SW → deeper NE), consistent with the debated
+  Opak-fault geometry.
+- Files: `eqt/full/catalog_nll.csv` (all), `eqt/full/catalog_nll_good.csv`
+  (well-constrained), `eqt/full/nll_compare.png`. Pipeline: `eqt/nll/` control
+  files + `eqt/scripts/{gen_nll,parse_nll}.py`; NLL build in `eqt/tools/`.
+
 ## Caveats / next steps
 
-- Locations are preliminary (PyOcto + default Central Java 1-D model). Refining
-  with NonLinLoc/HypoDD + the reference-study velocity model would improve depth
-  and absolute location; counts and space-time patterns are robust.
+- NLLoc locations use the default Central Java 1-D model; swapping in the
+  reference-study model would sharpen absolute depths. HypoDD double-difference
+  relocation is the natural next refinement for fine fault structure.
 - **No magnitudes:** raw miniSEED lacks instrument response → no calibrated ML or
   magnitude of completeness. Needs sensor gain/response to add.
 - **Comparison pending:** need a reference Yogya 2006 aftershock catalog to make

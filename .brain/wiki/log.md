@@ -108,3 +108,16 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** reference-catalog comparison (deferred by user); magnitudes need
   instrument response; optional relocation with NonLinLoc/HypoDD + reference
   velocity model.
+
+## [2026-07-04] maintenance | NonLinLoc relocation of the EQT catalog
+
+- **Trigger:** User asked to proceed to NonLinLoc relocation.
+- **Files changed:** `wiki/outputs/yogya-2006-eqt-catalog.md` (NLLoc section).
+  Deliverables `eqt/full/catalog_nll*.csv`, `eqt/full/nll_compare.png`;
+  `eqt/nll/` control files + grids; scripts `gen_nll.py`, `parse_nll.py`.
+- **Key result:** Built NonLinLoc from source (arm64); 3D grids from Central Java
+  model; relocated all 16,876 events in ~8 min. RMS median 0.079 s, errH 1.1 km;
+  12,844 well-constrained. Resolves a NE–SW fault lineament; agrees with PyOcto
+  to 1.4 km median. Gotchas: needed 3D grids (2D setup gave 3 s RMS) and
+  LOCGRID SAVE (NO_SAVE suppressed .hyp); pandas-3 datetime[us] scaling in parse.
+- **Follow-ups:** reference-catalog comparison; magnitudes; optional HypoDD.
