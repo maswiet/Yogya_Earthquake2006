@@ -1,0 +1,77 @@
+<!-- afk-research:managed v1 -->
+# Index
+
+This is the content map for the `.brain` second brain. Read this file before answering from or editing the wiki. Update it on every ingest and every durable query that changes the vault.
+
+Last updated: 2026-07-03
+
+## Start Here
+
+- [[AGENTS|AGENTS.md]] - Operating schema for the LLM wiki agent.
+- [[CLAUDE|CLAUDE.md]] - Claude-compatible pointer to the schema.
+- [[wiki/log|log.md]] - Append-only chronological activity log.
+
+## Folder Conventions
+
+- `raw/` - Immutable source captures and provenance records.
+- `wiki/` - All maintained knowledge and operating files.
+- `wiki/index.md` - This content map.
+- `wiki/log.md` - Append-only activity log.
+- `wiki/sources/` - Source summaries and extracted takeaways.
+- `wiki/concepts/` - Durable ideas and patterns.
+- `wiki/entities/` - People, organizations, projects, datasets, and named things.
+- `wiki/claims/` - Evidence-bearing claims worth tracking.
+- `wiki/questions/` - Research questions and durable answers.
+- `wiki/syntheses/` - Multi-source analysis and evolving theses.
+- `wiki/outputs/` - Exportable artifacts and examples.
+- `wiki/templates/` - Reusable page templates and workflow checklists.
+- `wiki/inbox/` - Unprocessed material waiting for ingest.
+- `wiki/scratch/` - Temporary agent work notes.
+- `wiki/archive/` - Superseded or inactive material.
+
+## Sources
+
+- [[wiki/sources/earthquake-transformer-mousavi-2020]] - EQTransformer: deep-learning model for simultaneous earthquake detection + P/S phase picking (Nat. Commun. 2020).
+
+## Concepts
+
+- [[wiki/concepts/seismic-phase-picking]] - Identifying P/S wave arrival times; S picking is the hard case.
+- [[wiki/concepts/earthquake-signal-detection]] - Deciding signal-vs-noise; sensitivity vs. false positives.
+- [[wiki/concepts/deep-learning-seismic-processing]] - Attention + multi-task tandem learning on waveforms.
+
+## Entities
+
+- [[wiki/entities/eqtransformer-model]] - The EQTransformer model / open-source package.
+- [[wiki/entities/2000-tottori-earthquake-sequence]] - Japan sequence used as EQTransformer's field-test dataset.
+
+## Claims
+
+- [[wiki/claims/eqtransformer-doubles-detections-tottori]] - ~2× more earthquakes detected with <1/3 of stations (Tottori 2000).
+
+## Questions
+
+- [[wiki/questions/applying-eqtransformer-to-yogya-2006]] - Can EQTransformer improve the Yogyakarta 2006 aftershock catalog?
+
+## Syntheses
+
+- No synthesis pages yet.
+
+## Outputs
+
+- No output pages currently.
+
+## Templates
+
+- [[wiki/templates/source-page]] - Template for source summary pages.
+- [[wiki/templates/concept-page]] - Template for concept pages.
+- [[wiki/templates/entity-page]] - Template for entity pages.
+- [[wiki/templates/ingest-checklist]] - Checklist for future ingest work.
+
+## Open Threads
+
+- Assess whether EQTransformer generalizes to Yogyakarta 2006 aftershock data — see [[wiki/questions/applying-eqtransformer-to-yogya-2006]].
+- `needs-review`: EQTransformer's exact architecture, training-set name/size, and per-station Tottori metrics were not captured from a primary source — fill in from the full paper/methods.
+- Keep all second-brain work inside `.brain`, with content organized under only `raw/` and `wiki/`.
+- Brain operations that change `.brain` must commit and push those `.brain` changes to the repository remote before reporting completion.
+- Brain imports are non-destructive: imported knowledge enriches the current vault, while schema and operational-file collisions are preserved as provenance unless explicitly approved.
+- Brain setup should also ensure generated export/import artifacts under `.outputs/` are ignored by Git.
