@@ -94,3 +94,17 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** Build streaming preprocess→pick driver; run all 12 stations ×
   ~90 days on MPS (~2 h); relocation-aware coords for location; obtain reference
   catalog for the '2× more events' comparison.
+
+## [2026-07-03] export | Yogya 2006 EQT aftershock catalog v1 produced
+
+- **Trigger:** Full run completed; association + finalization.
+- **Files changed:** `wiki/outputs/yogya-2006-eqt-catalog.md` (new);
+  `wiki/questions/applying-eqtransformer-to-yogya-2006.md` (answered),
+  `wiki/index.md`. Deliverables under `eqt/full/` (catalog_eqt.csv,
+  events_full.csv, picks_full.csv, catalog_summary.png).
+- **Key result:** 960 station-days → 397k picks → 17,150 associated →
+  **16,876 located aftershocks** (artifact-filtered), Jun 3–Aug 29 2006, median
+  depth 12.9 km, Omori decay, tight fault-zone cluster. Pipeline fully validated.
+- **Follow-ups:** reference-catalog comparison (deferred by user); magnitudes need
+  instrument response; optional relocation with NonLinLoc/HypoDD + reference
+  velocity model.

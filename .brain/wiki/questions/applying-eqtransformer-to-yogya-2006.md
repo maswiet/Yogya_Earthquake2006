@@ -44,12 +44,13 @@ catalog than manual or classical processing?
 
 ## Status
 
-**In progress (2026-07-03).** Yogya 2006 aftershock data located and being
-processed — see [[wiki/syntheses/eqtransformer-yogya-2006-run]] and
-[[wiki/sources/yogya-2006-aftershock-edl-dataset]]. EQTransformer (original
-weights, via SeisBench) runs on the data; pilot detection/picking underway.
-Generalization looks fine so far (dense picks on stable stations). Remaining gaps:
-1-D velocity model + reference catalog for the locate-and-compare step.
+**Answered — yes (2026-07-03).** EQTransformer (original weights, via SeisBench)
+runs well on the Yogya 2006 array and produces a dense, geophysically sound
+aftershock catalog: **16,876 located events** over Jun–Aug 2006, crustal depths
+(median 12.9 km), tight fault-zone cluster, Omori decay. See deliverable
+[[wiki/outputs/yogya-2006-eqt-catalog]] and [[wiki/syntheses/eqtransformer-yogya-2006-run]].
+Remaining to fully close the Mousavi/Tottori "N× more" comparison: a reference
+aftershock catalog and (optional) magnitudes via instrument response.
 
 ## Links
 

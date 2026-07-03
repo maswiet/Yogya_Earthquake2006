@@ -62,6 +62,8 @@ Last updated: 2026-07-03
 
 ## Outputs
 
+- [[wiki/outputs/yogya-2006-eqt-catalog]] - EQTransformer Yogya 2006 aftershock catalog v1 (16,876 located events).
+
 - No output pages currently.
 
 ## Templates
