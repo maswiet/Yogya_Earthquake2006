@@ -72,6 +72,22 @@ Mousavi-style result shown on the 2000 Tottori sequence
   **depths 5–15 km (median 11 km, crustal)**, daily rate decays 600→194
   (Omori-like). Figure: `eqt/pilot/pilot_summary.png`. **Pipeline validated.**
 
+## Full run (in progress, 2026-07-03)
+
+- Streaming driver `run_full.py` (env `eqt`): per station-day, read `.pri` →
+  merge → **decimate(2)** 200→100 Hz → EQT classify → append picks to
+  `full/picks_full.csv`; `full/done.txt` enables resume. GPS day-gating skips
+  transit days. **960 station-days** queued (days 148–250, 12 stations).
+- Perf: FFT `resample` was the bottleneck (~17 s/station-day). Switched to
+  `decimate(2)` — **identical picks** (verified TF14/155 = 259 P/271 S), much
+  faster. Bottleneck is now external-USB read.
+- Association: `associate_full.py` (env `assoc`) uses **per-period station codes**
+  (`config/stations_periods.json`) so relocated stations get correct geometry;
+  reports `n_stations` per event. Pilot rerun with n_picks≥8, ≥3 P+S →
+  817 clean events, all ≥4 stations.
+- Finalize: `finalize_catalog.py` → quality-filtered catalog CSV + 4-panel figure
+  (map/depth/daily-rate/cumulative), optional reference overlay.
+
 ## Scale-up plan
 
 - Full 2006 Yogya data ≈ **923 station-days** (~44k 30-min segments; 12 stations,
