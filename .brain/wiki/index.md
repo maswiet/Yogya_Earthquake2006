@@ -63,6 +63,7 @@ Last updated: 2026-07-03
 ## Outputs
 
 - [[wiki/outputs/yogya-2006-eqt-catalog]] - EQTransformer Yogya 2006 aftershock catalog v1 (16,876 located events).
+- [[wiki/outputs/yogya-2006-1d-velocity-model]] - Data-driven 1-D velocity (Wadati Vp/Vs=1.735; VELEST minimum-1D + station corrections).
 
 - No output pages currently.
 

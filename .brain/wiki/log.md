@@ -121,3 +121,18 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   to 1.4 km median. Gotchas: needed 3D grids (2D setup gave 3 s RMS) and
   LOCGRID SAVE (NO_SAVE suppressed .hyp); pandas-3 datetime[us] scaling in parse.
 - **Follow-ups:** reference-catalog comparison; magnitudes; optional HypoDD.
+
+## [2026-07-04] export | Data-driven 1-D velocity (Wadati + VELEST)
+
+- **Trigger:** User asked to derive 1-D velocity from distance–arrival-time via
+  travel-time method (e.g. VELEST).
+- **Files:** `wiki/outputs/yogya-2006-1d-velocity-model.md` (new); `wiki/index.md`.
+  Deliverables `eqt/full/{arrivals.csv,ttime_analysis.png}`, `eqt/velest/*`;
+  scripts `parse_arrivals.py`, `gen_velest.py`, `parse_velest.py`.
+- **Key result:** Wadati Vp/Vs=1.735; apparent Vp=5.93/Vs=3.39 km/s. VELEST
+  minimum-1D (built from source, arm64) converged RMS 0.358→0.152 s: Vp 4.9→6.1
+  km/s over 0–8 km, Vp/Vs~1.74, geologically sensible station corrections
+  (TF18 +1.47 s basin … TF11b −0.55 s). Gotcha: VELEST longitude is West-positive
+  (enter East as negative olon).
+- **Follow-ups:** relocate with data-driven model + station corrections; resolve
+  >12 km layers needs larger-offset data.
