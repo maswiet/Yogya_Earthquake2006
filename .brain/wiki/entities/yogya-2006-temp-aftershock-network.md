@@ -62,6 +62,35 @@ Reconstructed from per-day GPS (`eqt/scripts/reloc_coords.py` →
 - Location must assign each pick the site valid for its day (implemented by
   period-specific station codes, e.g. `TF07a`/`TF07b`, in association).
 
+## Official FDSN metadata (network XN, provided 2026-07-04)
+
+Network **XN** (GFZ:XN2006). Real station codes map to our TF-codes by coordinate
+(`eqt/config/stations_xn_meta.txt`):
+
+| XN | our code | lat | lon | start |
+|----|----------|-----|-----|-------|
+| WON | TF12 | -7.88691 | 110.43568 | 05-30 |
+| PEL | TF13 | -7.83628 | 110.30560 | 05-30 |
+| RAT | TF14 | -8.02800 | 110.34200 | 05-30 |
+| WAN | TF16 | -7.91245 | 110.52201 | 05-30 |
+| BUM | TF18 | -7.91793 | 110.19823 | 05-30 |
+| PAL | TF19 | -7.99540 | 110.48708 | 05-30 |
+| NGL | TF15a | -7.86430 | 110.55864 | 05-30 |
+| PRA | TF10a | -7.74983 | 110.49333 | 05-30 |
+| IMO | TF10b | -7.92250 | 110.39362 | 05-30 |
+| BOG | TF17 | -7.95415 | 110.56620 | 06-01 |
+| KRI | TF11b | -7.77720 | 110.64080 | 06-07 |
+| KEM | TF07b | -8.11674 | 110.56060 | 06-09 |
+| KARA | TF09b | -7.95470 | 110.36675 | 06-10 |
+
+- **Instrument (all stations):** Mark/Sercel **L4-3D** 1 Hz geophone,
+  velocity sensitivity **1.7e8 counts/(m/s)**, 100 Hz, channels HHZ/HHN/HHE.
+  → enables **ML** via Wood-Anderson simulation (see
+  [[wiki/outputs/yogya-2006-eqt-catalog]] magnitudes).
+- Note: PRA(TF10a) and IMO(TF10b) are the two sites of the relocated logger
+  tf3010; NGL(TF15a) is TF15's first site. Early sites of TF07a/TF09a have no XN
+  code (pre-deployment/transit before the logger reached its named site).
+
 ## Links
 
 - [[wiki/sources/yogya-2006-aftershock-edl-dataset]]
