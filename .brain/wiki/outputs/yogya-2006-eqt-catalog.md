@@ -67,8 +67,24 @@ Vp/Vs=1.75 (S from P grids). Ran in ~8 min.
 - NLLoc locations use the default Central Java 1-D model; swapping in the
   reference-study model would sharpen absolute depths. HypoDD double-difference
   relocation is the natural next refinement for fine fault structure.
-- **No magnitudes:** raw miniSEED lacks instrument response → no calibrated ML or
-  magnitude of completeness. Needs sensor gain/response to add.
+- ~~No magnitudes~~ → **RESOLVED (2026-07-04):** instrument response provided
+  (XN network, L4-3D geophone, 1.7e8 counts/(m/s)). **ML computed** for all events
+  via Wood-Anderson simulation — see Magnitudes below.
+
+## Magnitudes (ML) — 2026-07-04
+
+- Response: L4-3D 1 Hz geophone (PAZ f0=1, h=0.707, sens 1.7e8 counts/(m/s)).
+  Per pick: remove response → Wood-Anderson simulate → peak |A| in S-window →
+  ML = log10(A_mm) + 1.110·log10(R/100) + 0.00189·(R−100) + 3.0 (Hutton & Boore 1987).
+  Per event = median over ≥3 stations. 97,692 amplitude readings.
+- **16,876 events with ML.** ML median **0.07**, max **3.65** (mostly microearthquakes).
+- **Gutenberg-Richter:** **Mc = 0.20**, **b = 0.96 ± 0.01** (N≥Mc = 6600) — a
+  textbook near-1.0 b-value, confirming catalog quality.
+- Files: `eqt/full/catalog_magnitude.csv`, `eqt/full/amplitudes.csv`,
+  `eqt/figures/magnitude_gutenberg_richter.png`; scripts
+  `eqt/scripts/{build_amplitudes,compute_magnitudes}.py`.
+- Caveat: Hutton-Boore (S. California) distance term used as default (no local ML
+  scale for Java); the short-period L4-3D may slightly clip the largest events.
 - **Comparison pending:** need a reference Yogya 2006 aftershock catalog to make
   the Mousavi/Tottori-style "N× more events" statement quantitative
   ([[wiki/claims/eqtransformer-doubles-detections-tottori]]).

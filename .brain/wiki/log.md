@@ -136,3 +136,21 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   (enter East as negative olon).
 - **Follow-ups:** relocate with data-driven model + station corrections; resolve
   >12 km layers needs larger-offset data.
+
+## [2026-07-04] export | ML magnitudes + relief map + VELEST relocation
+
+- **Trigger:** User provided XN station metadata + L4-3D instrument response;
+  asked for improved relief map (labels) and magnitudes.
+- **Files:** `wiki/entities/yogya-2006-temp-aftershock-network.md` (XN names +
+  response), `wiki/outputs/yogya-2006-eqt-catalog.md` (Magnitudes),
+  `wiki/outputs/yogya-2006-1d-velocity-model.md` (VELEST reloc). Figures under
+  `eqt/figures/` (all committed to GitHub): aftershock_distribution,
+  aftershock_relief_map, velest_1d_model, velest_relocation_compare,
+  magnitude_gutenberg_richter. Scripts: build_amplitudes, compute_magnitudes,
+  plot_relief, gen_velest_reloc, compare_reloc.
+- **Key results:** VELEST-model relocation (depths bias deep +5.4 km from deep-
+  layer artifact); PyGMT relief map (light relief, blue sea, XN labels);
+  **ML for 16,876 events (median 0.07, max 3.65); Gutenberg-Richter Mc=0.20,
+  b=0.96±0.01.**
+- **Follow-ups:** local ML calibration for Java; refine VELEST deep layers;
+  reference-catalog comparison; HypoDD.
