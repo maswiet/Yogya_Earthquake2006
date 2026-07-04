@@ -57,6 +57,11 @@ def main():
     ap.add_argument("--min_sta", type=int, default=3)
     a=ap.parse_args()
     amp=pd.read_csv(a.amp)
+    # use REFINED-catalog distances: merge measured amp_mm with refined dist+depth
+    pk=pd.read_csv(f"{ROOT}/full/picks_for_amp.csv")
+    pk["hypo_ref"]=np.sqrt(pk["dist"]**2 + pk["depth"]**2)
+    amp=amp.merge(pk[["evid","sta","hypo_ref"]], on=["evid","sta"], how="left")
+    amp["hypo_km"]=amp["hypo_ref"].fillna(amp["hypo_km"])   # fallback to stored if unmatched
     amp["ml"]=ml_pick(amp.amp_mm, amp.hypo_km)
     g=amp.groupby("evid")
     ev=g.agg(ML=("ml","median"), ML_std=("ml","std"), n_sta=("ml","size")).reset_index()
