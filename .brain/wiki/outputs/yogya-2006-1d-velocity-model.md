@@ -48,6 +48,28 @@ Java model with a data-driven one.
 VELEST uses **West-positive longitude**: the origin `olon` must be entered as
 **negative** for East (−110.44 for 110.44°E), else station x-coordinates overflow.
 
+## Refined, geologically-constrained model (2026-07-04)
+
+Rebuilt with a priori geology (fixing BOTH shallow and deep layers; inverting only
+the well-sampled mid-crust), which also fixes the earlier deep artifact:
+
+- **Shallow FIXED (damp 999):** Merapi sediment — 2.5 km/s (−2 km), 2.9 (0 km),
+  4.3 at the **~0.7 km sediment base** (user's constraint). Lateral W/E
+  sediment-vs-limestone contrast is carried by station corrections + elevation.
+- **Mid-crust INVERTED:** 4.65 (2 km) → 5.49 (4–7 km) → 6.30 (10 km) → 6.39 (13 km).
+- **Deep FIXED (damp 999):** 6.55 (16 km), 6.80 (22 km), 7.20 (30 km), 8.0 (40 km)
+  — realistic crust, **removes the earlier 7.16 km/s @ 12 km artifact**.
+- Vp/Vs ≈ 1.73. Elevation corrections ON (real station elevations 44–260 m).
+  Converged RMS **0.142 s** (slightly better than the free-deep run's 0.152).
+
+### Station corrections ↔ Opak-fault geology
+
+`eqt/scripts/interpret_stacorr.py` → `eqt/figures/station_corrections_opak.png`.
+Clear at the extremes: **far-west BUM/TF09a/PEL slow (+0.5…+0.8 s = Merapi
+sediment)**; **far-east KRI/TF11/KEM fast (−0.6…−1.25 s = limestone)**. Mean W−E
+contrast ≈ +0.34 s (west slower), consistent with thick (>700 m) western sediment.
+Mid-zone stations near the fault are mixed (transition + relocated-site sites).
+
 ## Relocation with the VELEST model (2026-07-04)
 
 Rebuilt NLLoc P & S travel-time grids from the VELEST model and applied the
@@ -66,6 +88,21 @@ VELEST station corrections via `LOCDELAY`; relocated all 16,876 events
   aftershock zone.
 - **Recommended fix:** re-invert VELEST with the deep layers (≥12 km) fixed to
   ~6.3–6.6 km/s (or add larger-offset/blast data), then re-relocate.
+
+### Re-relocation with the REFINED model (2026-07-04) — bias fixed
+
+Rebuilt grids from the refined (fixed-shallow + fixed-deep) model + elevation-aware
+station corrections; relocated all 16,876 events. **Depth bias removed:**
+
+| Model | depth median | well-constrained | RMS | errH |
+|-------|-------------|------------------|-----|------|
+| VELEST v1 (7.16 artifact) | 15.0 km | 8,919 | 0.132 | 2.3 km |
+| **VELEST refined** | **10.5 km** | **12,447** | **0.113** | **1.4 km** |
+| Central-Java (ref) | 9.4 km | 12,844 | 0.079 | 1.1 km |
+
+Depth vs Central-Java now only +1.0 km (was +5.4). `catalog_velest.csv` = refined;
+`catalog_velest_v1.csv` = old biased. Relief map `aftershock_relief_map.png` and
+`velest_relocation_compare.png` regenerated with refined depths.
 
 ## Next steps
 

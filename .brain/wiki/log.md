@@ -154,3 +154,18 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   b=0.96±0.01.**
 - **Follow-ups:** local ML calibration for Java; refine VELEST deep layers;
   reference-catalog comparison; HypoDD.
+
+## [2026-07-04] maintenance | Refined VELEST model (geology) + de-biased relocation
+
+- **Trigger:** User asked to fix VELEST shallow + deep layers using Opak-fault
+  geology (W = Merapi sediment >700 m slow; E = limestone fast).
+- **Files:** `wiki/outputs/yogya-2006-1d-velocity-model.md`. Figures (committed):
+  velest_1d_model, station_corrections_opak, aftershock_relief_map,
+  velest_relocation_compare. Scripts: gen_velest (fixed shallow sediment @0.7 km +
+  fixed deep + elevations + iuseelev), interpret_stacorr.
+- **Key result:** Refined model — shallow sediment fixed (2.5→4.3 to 0.7 km), deep
+  fixed realistic (6.55→8.0, artifact gone), mid-crust inverted; RMS 0.142.
+  Station corrections show W-sediment slow (+0.5..0.8 s BUM/PEL) vs E-limestone
+  fast (−0.6..−1.25 s KRI/TF11/KEM). **Re-relocation de-biased depths: 15.0 →
+  10.5 km**, RMS 0.132→0.113, well-constrained 8.9k→12.4k.
+- **Follow-ups:** HypoDD; local ML scale.
