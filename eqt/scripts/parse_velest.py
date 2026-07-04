@@ -44,9 +44,9 @@ for l in lines[idx+2:idx+8]:
 print(f"\nstation P-corrections: {len(cor)} stations, "
       f"range {min(cor.values()):+.2f}..{max(cor.values()):+.2f} s")
 
-# ---- starting model (from gen_velest) ----
-START = [(-2.0,4.00),(0.0,4.50),(3.0,5.20),(6.0,5.70),(9.0,6.00),(12.0,6.20),
-         (16.0,6.40),(20.0,6.70),(28.0,7.20),(40.0,8.00)]
+# ---- starting model (from gen_velest, geologically-constrained) ----
+START = [(-2.0,2.50),(0.0,2.90),(0.7,4.30),(2.0,5.20),(4.0,5.70),(7.0,5.95),
+         (10.0,6.20),(13.0,6.40),(16.0,6.55),(22.0,6.80),(30.0,7.20),(40.0,8.00)]
 
 def step(mod):
     z=[]; v=[]

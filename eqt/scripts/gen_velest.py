@@ -16,11 +16,23 @@ import numpy as np
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OLAT, OLON = -7.92, 110.44
 VPVS = 1.735
-# starting model: depth(km, top of layer), Vp(km/s), vdamp
-# invert well-sampled shallow crust (damp 1.0); fix poorly-sampled deep layers (damp 999)
-MODEL = [(-2.0,4.00,1.0),(0.0,4.50,1.0),(3.0,5.20,1.0),(6.0,5.70,1.0),
-         (9.0,6.00,1.0),(12.0,6.20,1.0),(16.0,6.40,1.0),
-         (20.0,6.70,999.0),(28.0,7.20,999.0),(40.0,8.00,999.0)]
+# Geologically-constrained model: depth(km, top of layer), Vp(km/s), vdamp.
+#  - SHALLOW sediment FIXED a priori (Merapi volcaniclastics, >700 m base): damp 999.
+#    (lateral W/E sediment-vs-limestone contrast is carried by STATION CORRECTIONS.)
+#  - DEEP crust FIXED to realistic values (removes the earlier 7.16 km/s artifact): damp 999.
+#  - Only the well-sampled MID-CRUST (2-13 km) is inverted (damp 1).
+MODEL = [(-2.0,2.50,999.0),   # near-surface sediment (fixed)
+         ( 0.0,2.90,999.0),   # Merapi sediment (fixed)
+         ( 0.7,4.30,100.0),   # base of ~700 m sediment -> bedrock (lightly damped)
+         ( 2.0,5.20,1.0),     # --- invert mid-crust ---
+         ( 4.0,5.70,1.0),
+         ( 7.0,5.95,1.0),
+         (10.0,6.20,1.0),
+         (13.0,6.40,20.0),    # transition (semi-fixed)
+         (16.0,6.55,999.0),   # --- fixed deep crust ---
+         (22.0,6.80,999.0),
+         (30.0,7.20,999.0),
+         (40.0,8.00,999.0)]
 
 def parse_hyps():
     events = []
@@ -44,6 +56,11 @@ def parse_hyps():
             events.append(dict(ot=ot,lat=lat,lon=lon,dep=dep,gap=gap,rms=rms,phs=phs))
     return events
 
+# station elevations (m) by our code (from XN metadata; unmapped early sites approx)
+ELEV = {"TF18":44,"TF13":130,"TF14":50,"TF16":230,"TF19":175,"TF12":120,
+        "TF15a":260,"TF10a":172,"TF10b":73,"TF17":200,"TF11b":200,"TF07b":120,
+        "TF09b":55,"TF07a":110,"TF09a":60,"TF11a":200,"TF15b":172}
+
 def write_stations(path):
     periods=json.load(open(f"{ROOT}/config/stations_periods.json"))
     lines=["(a6,f7.4,a1,1x,f8.4,a1,1x,i4,1x,i1,1x,i3,1x,f5.2,2x,f5.2)"]
@@ -53,7 +70,8 @@ def write_stations(path):
         la=s["lat"]; lo=s["lon"]; ns="N"; ew="E"
         if la<0: ns="S"; la=-la
         if lo<0: ew="W"; lo=-lo
-        lines.append(f"{code:<6}{la:7.4f}{ns} {lo:8.4f}{ew} {0:4d} {1:1d} {idx:3d} {0.0:5.2f}  {0.0:5.2f}")
+        elev=ELEV.get(code,120)
+        lines.append(f"{code:<6}{la:7.4f}{ns} {lo:8.4f}{ew} {elev:4d} {1:1d} {idx:3d} {0.0:5.2f}  {0.0:5.2f}")
         idx+=1; codes.append(code)
     for code,info in periods.items():
         sites=info.get("sites",[])
@@ -113,7 +131,7 @@ Yogya 2006 EQT minimum-1D inversion
 ***   othet   xythet    zthet    vthet   stathet
       0.01    0.01      0.01     1.00     1.00
 *** nsinv   nshcor   nshfix     iuseelev    iusestacorr
-       1       0       0           0            1
+       1       0       0           1            1
 *** iturbo    icnvout   istaout   ismpout
        1         1         1        0
 *** irayout   idrvout   ialeout   idspout   irflout   irfrout   iresout
