@@ -77,9 +77,13 @@ Vp/Vs=1.75 (S from P grids). Ran in ~8 min.
   Per pick: remove response → Wood-Anderson simulate → peak |A| in S-window →
   ML = log10(A_mm) + 1.110·log10(R/100) + 0.00189·(R−100) + 3.0 (Hutton & Boore 1987).
   Per event = median over ≥3 stations. 97,692 amplitude readings.
-- **16,876 events with ML.** ML median **0.07**, max **3.65** (mostly microearthquakes).
-- **Gutenberg-Richter:** **Mc = 0.20**, **b = 0.96 ± 0.01** (N≥Mc = 6600) — a
-  textbook near-1.0 b-value, confirming catalog quality.
+- **16,876 events with ML.** (ML recomputed 2026-07-04 with refined-model
+  distances: median **−0.07**, max **3.48**, **Mc ≈ 0.0**, **b = 0.88 ± 0.01**.
+  Earlier v1-depth values were median 0.07 / b 0.96.)
+- **Omori decay:** daily rate ~300 → ~20/day; fitted **p ≈ 1.05** (c poorly
+  constrained — deployment began ~6 days post-mainshock). Peak 382/day on Jun 17.
+- Figures: `magnitude_gutenberg_richter.png`, `aftershock_magnitude_map.png`
+  (size~ML, colour~depth), `aftershock_rate_decay.png`.
 - Files: `eqt/full/catalog_magnitude.csv`, `eqt/full/amplitudes.csv`,
   `eqt/figures/magnitude_gutenberg_richter.png`; scripts
   `eqt/scripts/{build_amplitudes,compute_magnitudes}.py`.
