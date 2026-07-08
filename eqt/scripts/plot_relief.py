@@ -25,7 +25,7 @@ def main():
     a = ap.parse_args()
 
     e = pd.read_csv(a.catalog)
-    e = e.rename(columns={"lat": "latitude", "lon": "longitude"})   # accept HypoDD cols
+    e = e.rename(columns={"lat": "latitude", "lon": "longitude", "dep": "depth"})  # accept HypoDD/GrowClust cols
     if "gap" in e:
         e = e[(e.gap < 180) & (e.get("errh_km", 0) < 5) & (e.rms < 0.5)]
     region = [110.15, 110.72, -8.12, -7.70]

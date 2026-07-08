@@ -27,3 +27,8 @@ eqt/hypodd/hypoDD.reloc
 eqt/hypodd/hypoDD.loc
 eqt/hypodd/event.*
 eqt/hypodd/*.log
+eqt/growclust/IN/xcordata.txt
+eqt/growclust/dt.ct
+eqt/growclust/*.out
+eqt/growclust/OUT/
+eqt/growclust/TT/
