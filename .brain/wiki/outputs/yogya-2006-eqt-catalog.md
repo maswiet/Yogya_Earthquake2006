@@ -119,6 +119,18 @@ hardware walls — small binary, allocatable memory, no dyld/array limits.
   the earlier answer that batching is invalid but full simultaneous relocation is
   achievable with a memory-efficient method.
 
+### Tectonic/structural map (2026-07-08)
+
+`figures/growclust_tectonic_map.png` (`plot_tectonic_map.py`): GrowClust catalog
+(depth-coloured 0–25 km, paper colour scheme) on grayscale hillshade, with the
+four faults **Opak / Oyo / Ngalang / Nglipar** + Muria–Progo lineament digitized
+from **Ramdhan et al. (2025)** Fig. 1, plus the four mainshock epicentres
+(BMKG/GFZ/USGS/GCMT), cities, and XN stations. Aftershocks delineate the
+**Opak–Ngalang fault zone** (cloud between Opak and Ngalang), matching the paper's
+source interpretation; shallow-SW → deep-NE gradient. Full Rahardjo et al. (1995)
+lithology not reproduced (needs source shapefile); only a generalized Southern
+Mountains limestone domain is shaded.
+
 ## Caveats / next steps
 
 - NLLoc locations use the default Central Java 1-D model; swapping in the
