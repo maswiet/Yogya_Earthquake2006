@@ -119,6 +119,19 @@ hardware walls — small binary, allocatable memory, no dyld/array limits.
   the earlier answer that batching is invalid but full simultaneous relocation is
   achievable with a memory-efficient method.
 
+### GrowClust bootstrap uncertainties (nboot=100, 2026-07-08)
+
+Re-ran GrowClust with **nboot=100** bootstrap resamples of the differential-time
+data → relative-location uncertainties for 13,251 clustered events:
+- **horizontal eh: median 274 m** (90th pct 426 m)
+- **vertical ez: median 305 m** (90th pct 471 m)
+- **origin-time et: median 47 ms** (90th pct 86 ms)
+
+Sub-500 m relative precision confirms the sharp fault plane is well-resolved.
+`catalog_growclust.csv` now carries eh/ez/et; figure
+`figures/growclust_uncertainty.png` (`plot_gc_uncertainty.py`). Bootstrap run
+took ~70 min (100 re-clusterings of 368k pairs).
+
 ### Tectonic/structural map (2026-07-08)
 
 `figures/growclust_tectonic_map.png` (`plot_tectonic_map.py`): GrowClust catalog
