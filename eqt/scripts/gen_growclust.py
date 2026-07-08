@@ -18,7 +18,7 @@ for d in ("IN", "OUT", "TT"): os.makedirs(f"{GC}/{d}", exist_ok=True)
 VPVS = 1.735
 # refined VELEST model layers (top depth, Vp) -> piecewise constant to 26 km
 LAYERS = [(0.0,2.90),(0.7,4.30),(2.0,4.65),(4.0,5.49),(10.0,6.30),
-          (13.0,6.39),(16.0,6.55),(22.0,6.80),(26.0,6.80)]
+          (13.0,6.39),(16.0,6.55),(22.0,6.80),(26.0,7.20),(30.0,7.20),(40.0,8.00)]
 GAPMAX=float(os.environ.get("GC_GAP","200")); NPHMIN=int(os.environ.get("GC_NPH","6"))
 NMAX=int(os.environ.get("GC_NMAX","16500"))
 
@@ -124,7 +124,7 @@ TT/tt.sg
 * vpvs_factor  rayparam_min
   {VPVS}       0.0
 * tt_dep0 tt_dep1 tt_ddep
-  0.  26.  1.
+  0.  40.  1.
 * tt_del0 tt_del1 tt_ddel
   0.  200.  2.
 * rmin delmax rmsmax
@@ -132,7 +132,7 @@ TT/tt.sg
 * rpsavgmin rmincut ngoodmin iponly
   0  0  0  0
 * nboot nbranch_min
-  0  1
+  100  1
 * fout_cat
 OUT/out.growclust_cat
 * fout_clust
