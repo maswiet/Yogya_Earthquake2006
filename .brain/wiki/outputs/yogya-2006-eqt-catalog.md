@@ -99,6 +99,26 @@ Sharpened the fault with catalog-differential-time double-difference relocation
   2017) — hierarchical relative relocation, far lower memory, built for large
   datasets — or a machine with more RAM / no sandbox. Recommended follow-up.
 
+## GrowClust — full-catalog double-difference relocation (2026-07-08) ✅
+
+GrowClust (built from source, dttrugman/GrowClust) succeeded where HypoDD hit
+hardware walls — small binary, allocatable memory, no dyld/array limits.
+
+- Inputs: **13,716 events** (gap<200, ≥6 phases; ph2dt rebuilt to MEV=17000) →
+  368k pairs, **3.56 M catalog differential times** (dt.ct → GrowClust xcordata,
+  tdif=tt1−tt2). Refined VELEST 1-D model (extended to 40 km), Vp/Vs=1.735.
+- **Ran in ~8 s.** **13,251 events (97%) relocated** in 543 clusters; largest
+  cluster **6,917 events** (the main fault). Depth median stable (10.6→10.7 km).
+- Across-strike section collapses the diffuse ±7 km cloud into a sharp,
+  steeply-dipping fault plane for the FULL catalog (≈4× the 3,445-event HypoDD run).
+- Files: `full/catalog_growclust.csv`, `growclust/OUT/out.growclust_cat`,
+  `figures/growclust_relocation.png`, `figures/growclust_relief_map.png`; scripts
+  `gen_growclust.py`, `plot_growclust.py`.
+- **Conclusion:** GrowClust is the correct tool for the full catalog here; it
+  relocated all detected quality events simultaneously (not batched), confirming
+  the earlier answer that batching is invalid but full simultaneous relocation is
+  achievable with a memory-efficient method.
+
 ## Caveats / next steps
 
 - NLLoc locations use the default Central Java 1-D model; swapping in the
