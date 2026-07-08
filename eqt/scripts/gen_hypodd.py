@@ -59,12 +59,15 @@ def main():
         i=np.argmin(np.abs(mt-ot.timestamp))
         return mlv[i] if abs(mt[i]-ot.timestamp)<2 else 0.0
     # select high quality, main cluster
+    import os as _os
+    GAPMAX=float(_os.environ.get("HD_GAP","150")); RMSMAX=float(_os.environ.get("HD_RMS","0.22"))
+    NPHMIN=int(_os.environ.get("HD_NPH","12")); NMAX=int(_os.environ.get("HD_NMAX","3500"))
     sel=[]
     for e in evs:
         d=math.hypot(e["lat"]-CLAT, e["lon"]-CLON)
-        if e.get("gap",999)<150 and e.get("rms",9)<0.22 and e.get("nphs",0)>=12 and d<0.30 and e["dep"]<25:
+        if e.get("gap",999)<GAPMAX and e.get("rms",9)<RMSMAX and e.get("nphs",0)>=NPHMIN and d<0.35 and e["dep"]<25:
             sel.append(e)
-    sel=sel[:3500]
+    sel=sel[:NMAX]
     print(f"{len(evs)} events -> {len(sel)} selected for HypoDD")
 
     # station.dat (per-period codes)
@@ -91,10 +94,12 @@ def main():
                 f.write(f"{sta:<7}{tt:7.3f} {wt:.2f} {ph}\n")
 
     # ph2dt.inp
+    import os as _os2
+    ngh=_os2.environ.get("HD_MAXNGH","50"); mobs=_os2.environ.get("HD_MAXOBS","100")
     open(f"{HD}/ph2dt.inp","w").write(
         "* ph2dt.inp\nstation.dat\nhypoDD.pha\n"
         "*MINWGHT MAXDIST MAXSEP MAXNGH MINLNK MINOBS MAXOBS\n"
-        "   0      120     10     50     8      8     100\n")
+        f"   0      120     10     {ngh}     8      8     {mobs}\n")
 
     # hypoDD.inp with refined 1-D model (exact format: ONLY the dt.cc line is blank)
     top=" ".join(f"{d:.2f}" for d in MTOP); vel=" ".join(f"{v:.2f}" for v in MVEL)

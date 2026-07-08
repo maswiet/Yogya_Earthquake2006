@@ -83,6 +83,22 @@ Sharpened the fault with catalog-differential-time double-difference relocation
 - Build note: hypoDD's large static arrays stress the dyld shared-cache mapping
   in this sandbox; a smaller build (MAXEVE=4000, MAXDATA=1.5 M) loads reliably.
 
+### Can HypoDD be staged/batched for all ~10k events? (2026-07-08)
+
+- **No valid batch-then-merge** for a single connected cluster: double-difference
+  solves *relative* positions within a linked cluster; arbitrary batches lose
+  inter-batch links and each gets its own arbitrary datum → merge is inconsistent.
+  The correct way to add events is a **single simultaneous** run.
+- **3,500 quality events is scientifically sufficient** (standard practice; adding
+  poorly-constrained events adds noise, not resolution).
+- **Scaling up demonstrably fails on this hardware:** binaries sized for >8k events
+  fail to load (dyld shared-cache mapping); at 5.5–7.8k events they load but the
+  LSQR **crashes at runtime** (stack/memory). **Reliable ceiling ≈ 3,500–4,000
+  events** here.
+- **Proper path for the full ~10k+ catalog:** use **GrowClust** (Trugman & Shearer
+  2017) — hierarchical relative relocation, far lower memory, built for large
+  datasets — or a machine with more RAM / no sandbox. Recommended follow-up.
+
 ## Caveats / next steps
 
 - NLLoc locations use the default Central Java 1-D model; swapping in the
