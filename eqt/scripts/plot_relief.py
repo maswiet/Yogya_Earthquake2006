@@ -21,9 +21,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--catalog", default=f"{ROOT}/full/catalog_velest.csv")
     ap.add_argument("--out", default=f"{ROOT}/figures/aftershock_relief_map.png")
+    ap.add_argument("--title", default="Yogyakarta 2006 aftershocks (VELEST reloc")
     a = ap.parse_args()
 
     e = pd.read_csv(a.catalog)
+    e = e.rename(columns={"lat": "latitude", "lon": "longitude"})   # accept HypoDD cols
     if "gap" in e:
         e = e[(e.gap < 180) & (e.get("errh_km", 0) < 5) & (e.rms < 0.5)]
     region = [110.15, 110.72, -8.12, -7.70]
@@ -54,7 +56,7 @@ def main():
     fig.colorbar(cmap=True, frame=["x+ltopography", "y+lm"],
                  position="JBC+o0c/1.2c+w8c/0.35c+h")
     fig.text(x=region[0]+0.015, y=region[3]-0.015,
-             text=f"Yogyakarta 2006 aftershocks (VELEST reloc, n={len(e)})",
+             text=f"{a.title}, n={len(e)})",
              font="12p,Helvetica-Bold,black", justify="TL", offset="0.1c/-0.1c",
              fill="white@20", pen="0.5p,black")
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
