@@ -73,7 +73,13 @@ Sharpened the fault with catalog-differential-time double-difference relocation
   single-event errH) — the fault plane collapses to a sharp, steeply-dipping
   structure; across-strike core width visibly narrows.
 - Depth median 9.9 km. Files: `full/catalog_hypodd.csv`, `hypodd/hypoDD.reloc`,
-  `figures/hypodd_relocation.png`; scripts `gen_hypodd.py`, `plot_hypodd.py`.
+  `figures/hypodd_relocation.png`, `figures/hypodd_relief_map.png` (over topo);
+  scripts `gen_hypodd.py`, `plot_hypodd.py`.
+- **Temporal analysis** (`figures/temporal_aftershocks.png`, `plot_temporal.py`):
+  map coloured by time + along-strike-vs-time, depth-vs-time, daily-rate/cumulative.
+  Whole fault (~N57°E) activated early and decayed (Omori); activity persisted in
+  the central zone; depth range (0–18 km) stable over time; no strong along-strike
+  migration front.
 - Build note: hypoDD's large static arrays stress the dyld shared-cache mapping
   in this sandbox; a smaller build (MAXEVE=4000, MAXDATA=1.5 M) loads reliably.
 
