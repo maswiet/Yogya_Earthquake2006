@@ -62,6 +62,21 @@ Vp/Vs=1.75 (S from P grids). Ran in ~8 min.
   (well-constrained), `eqt/full/nll_compare.png`. Pipeline: `eqt/nll/` control
   files + `eqt/scripts/{gen_nll,parse_nll}.py`; NLL build in `eqt/tools/`.
 
+## HypoDD double-difference relocation (2026-07-08)
+
+Sharpened the fault with catalog-differential-time double-difference relocation
+(HypoDD v2.1b built from source, refined VELEST 1-D model).
+
+- Input: 3,500 high-quality events (gap<150, rms<0.22, ≥12 phases) → ph2dt →
+  1.45 M differential times → **3,445 events relocated**.
+- **Relative precision:** formal errors **ex≈18 m, ey≈17 m, ez≈20 m** (vs ~1.4 km
+  single-event errH) — the fault plane collapses to a sharp, steeply-dipping
+  structure; across-strike core width visibly narrows.
+- Depth median 9.9 km. Files: `full/catalog_hypodd.csv`, `hypodd/hypoDD.reloc`,
+  `figures/hypodd_relocation.png`; scripts `gen_hypodd.py`, `plot_hypodd.py`.
+- Build note: hypoDD's large static arrays stress the dyld shared-cache mapping
+  in this sandbox; a smaller build (MAXEVE=4000, MAXDATA=1.5 M) loads reliably.
+
 ## Caveats / next steps
 
 - NLLoc locations use the default Central Java 1-D model; swapping in the
