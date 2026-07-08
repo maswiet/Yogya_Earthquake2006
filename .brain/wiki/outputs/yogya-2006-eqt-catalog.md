@@ -144,6 +144,19 @@ source interpretation; shallow-SW → deep-NE gradient. Full Rahardjo et al. (19
 lithology not reproduced (needs source shapefile); only a generalized Southern
 Mountains limestone domain is shaded.
 
+### Geology-overlay map (2026-07-08) — real lithology
+
+User provided the **Rahardjo et al. (1995) geology shapefile** (WGS84;
+`eqt/data/geology_yogyakarta/`). `plot_geology_map.py` clips it to the region and
+groups the 24 local map units into the paper's 8 age-classes (e.g. Tmwl=Wonosari
+limestone, Tmng/Tms=Semilir/Nglanggeran Miocene volcaniclastics, Teon=Eocene
+Nanggulan, KTm1=pre-Tertiary metamorphics, Tpdi=Pendul diorite), overlain on
+hillshade with faults + GrowClust events + legend.
+`figures/growclust_geology_map.png`.
+**Finding:** aftershocks concentrate in the **Lower–Mid Miocene volcaniclastics**
+along the boundary with the **Southern Mountains limestone**, within the
+Opak–Oyo–Ngalang fault zone; shallow (W, near GFZ/Bantul) → deep (NE, Ngalang).
+
 ## Caveats / next steps
 
 - NLLoc locations use the default Central Java 1-D model; swapping in the
