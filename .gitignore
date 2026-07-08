@@ -3,3 +3,27 @@
 
 # OS / editor cruft
 .DS_Store
+
+# afk-research generated artifacts
+.outputs/
+
+# Node dependencies
+node_modules/
+
+# EQTransformer pipeline: heavy outputs, built tools, external-data-derived artifacts
+eqt/full/
+eqt/pilot/
+eqt/logs/
+eqt/nll/loc/
+eqt/nll/time/
+eqt/nll/model/
+eqt/tools/
+eqt/velest/yogya.OUT
+eqt/velest/velest
+eqt/velest/*.png
+eqt/hypodd/dt.ct
+eqt/hypodd/*.out
+eqt/hypodd/hypoDD.reloc
+eqt/hypodd/hypoDD.loc
+eqt/hypodd/event.*
+eqt/hypodd/*.log
