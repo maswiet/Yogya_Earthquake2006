@@ -154,8 +154,15 @@ Nanggulan, KTm1=pre-Tertiary metamorphics, Tpdi=Pendul diorite), overlain on
 hillshade with faults + GrowClust events + legend.
 `figures/growclust_geology_map.png`.
 **Finding:** aftershocks concentrate in the **Lower–Mid Miocene volcaniclastics**
-along the boundary with the **Southern Mountains limestone**, within the
-Opak–Oyo–Ngalang fault zone; shallow (W, near GFZ/Bantul) → deep (NE, Ngalang).
+along the boundary with the **Southern Mountains limestone**; shallow (W, near
+GFZ/Bantul) → deep (NE).
+
+**Update (2026-07-08):** removed the hand-digitized fault traces (their positions
+were unreliable) and added the **GCMT focal mechanism** beachball — 2006 Yogya
+Mw 6.4, NP1 323/77/−176, **NP2 232/86/−13** (near-vertical **left-lateral
+strike-slip**; Ekström et al. 2012). The NE–SW nodal plane (strike 232≈N52E)
+matches the N57E aftershock lineament. Proper fault traces need a verified
+fault GIS layer (deferred).
 
 ## Caveats / next steps
 
