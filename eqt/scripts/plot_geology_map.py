@@ -40,6 +40,10 @@ CITIES=[("Yogyakarta",110.366,-7.797),("Bantul",110.328,-7.888),("Sleman",110.35
         ("Klaten",110.606,-7.703),("Kulon Progo",110.175,-7.840),("Gunungkidul",110.601,-7.966)]
 MAIN=[("BMKG",110.330,-8.050,"yellow"),("GFZ",110.420,-8.005,"red"),
       ("USGS",110.468,-7.960,"gold"),("GCMT",110.555,-8.010,"steelblue")]
+# mainshock focal mechanisms: name, star lon/lat, beachball lon/lat, fill(=star colour), Mw, (strike,dip,rake)
+MECA=[("GFZ", 110.420,-8.005, 110.480,-8.050, "red",       6.3, (229,85,-9)),
+      ("USGS",110.468,-7.960, 110.588,-8.050, "gold",      6.5, (231,87,3)),
+      ("GCMT",110.555,-8.010, 110.692,-8.050, "steelblue", 6.4, (232,86,-13))]
 
 def load_xn():
     r=[]
@@ -56,10 +60,12 @@ def main():
     e = pd.read_csv(f"{ROOT}/full/catalog_growclust.csv").rename(columns={"lat":"latitude","lon":"longitude","dep":"depth"})
 
     fig = pygmt.Figure()
+    pygmt.config(FONT_TITLE="15p,Helvetica-Bold")
     grid = pygmt.datasets.load_earth_relief(resolution="03s", region=REGION)
     pygmt.makecpt(cmap="gray", series=[-3000,2400], continuous=True)
-    fig.grdimage(grid, region=REGION, projection=PROJ, cmap=True,
-                 shading="+a315+nt0.7", frame=["WSne","xa0.25f0.05","ya0.25f0.05"])
+    fig.grdimage(grid, region=REGION, projection=PROJ, cmap=True, shading="+a315+nt0.7",
+                 frame=["WSne+tYogyakarta 2006 aftershocks - GrowClust double-difference relocation "
+                        f"(n={len(e)})", "xa0.25f0.05","ya0.25f0.05"])
     # geology polygons (semi-transparent so hillshade + events show)
     for k,color,_ in GRP:
         sub = g[g.grp==k]
@@ -75,29 +81,28 @@ def main():
     for nm,lo,la,c in MAIN:
         fig.plot(x=[lo],y=[la],style="a0.55c",fill=c,pen="1p,black")
         fig.text(x=lo,y=la,text=nm,font="8p,Helvetica-Bold,black",justify="TL",offset="0.16c/-0.04c",fill="white@40")
-    # GCMT focal mechanism (2006 Yogya Mw6.4; NP2 strike232/dip86/rake-13 -> left-lateral strike-slip)
-    fig.meca(spec={"strike":232,"dip":86,"rake":-13,"magnitude":6.4}, scale="1.3c",
-             longitude=110.555, latitude=-8.010, depth=12,
-             plot_longitude=110.665, plot_latitude=-8.080, offset=True,
-             compressionfill="45/85/165", extensionfill="white", pen="0.7p,black")
-    fig.text(x=110.665,y=-8.128,text="GCMT  M@-w@- 6.4",font="8.5p,Helvetica-Bold,black",justify="MC",fill="white@35")
+    # mainshock focal mechanisms (GFZ, USGS, GCMT) — near-vertical left-lateral strike-slip,
+    # beachball offset from its epicentre star, filled to match the star colour
+    for nm,slo,sla,plo,pla,col,mw,(st,dp,rk) in MECA:
+        fig.meca(spec={"strike":st,"dip":dp,"rake":rk,"magnitude":mw}, scale="1.0c",
+                 longitude=slo, latitude=sla, depth=12, plot_longitude=plo, plot_latitude=pla,
+                 offset="0.6p,gray20", compressionfill=col, extensionfill="white", pen="0.6p,black")
+        fig.text(x=plo, y=pla-0.052, text=nm, font="7.5p,Helvetica-Bold,black", justify="MC", fill="white@35")
     for nm,lo,la in CITIES:
         fig.plot(x=[lo],y=[la],style="s0.26c",fill="firebrick",pen="0.6p,black")
         fig.text(x=lo,y=la,text=nm,font="9p,Helvetica-Bold,20/20/90",justify="LM",offset="0.2c/0c",fill="white@45")
     # depth colorbar
     fig.colorbar(cmap=True, frame=["x+lFocal depth","y+lkm"], position="JMR+o0.7c/2.6c+w7c/0.35c")
-    # geology legend (panel over the SW sea)
-    fig.plot(data=[[110.156,-7.858],[110.388,-7.858],[110.388,-8.075],[110.156,-8.075]],
-             fill="white@12", close=True, pen="0.6p,black")
-    x0,ytop=110.172,-7.885; dy=0.0262
-    for i,(k,color,lab) in enumerate(GRP):
-        yy=ytop-i*dy
-        fig.plot(x=[x0],y=[yy],style="s0.26c",fill=color,pen="0.4p,black")
-        fig.text(x=x0+0.013,y=yy,text=lab,font="7.3p,Helvetica,black",justify="LM")
-    fig.basemap(map_scale="jBL+w20k+o0.6c/0.5c+f+u")
-    fig.text(x=REGION[0]+0.008,y=REGION[3]-0.008,
-             text=f"GrowClust aftershocks (n={len(e)}) \\267 geology: Rahardjo 1995 \\267 GCMT: Ekstrom+ 2012",
-             font="9.5p,Helvetica-Bold,black",justify="TL",offset="0.12c/-0.12c",fill="white@20",pen="0.5p")
+    fig.basemap(map_scale="jTL+w20k+o0.6c/0.6c+f+u")
+    # geology legend BELOW the map (outside the frame)
+    legspec = f"{ROOT}/growclust/geol_legend.txt"
+    with open(legspec,"w") as lf:
+        lf.write("H 9p,Helvetica-Bold Geology (Rahardjo et al. 1995)\nD 0.1c 0.5p\nN 2\n")
+        for k,color,lab in GRP:
+            lf.write(f"S 0.30c s 0.30c {color} 0.3p,black 0.95c {lab}\n")
+    fig.legend(spec=legspec, position="JBC+jTC+o0c/-1.35c+w13.5c", box="+gwhite+p0.8p,black")
+    fig.text(position="BC", text="focal mechanisms: GFZ / USGS / GCMT  \\267  relocation: GrowClust (Trugman & Shearer 2017)",
+             font="8p,Helvetica-Oblique,gray20", offset="0c/-4.5c", no_clip=True)
     out=f"{ROOT}/figures/growclust_geology_map.png"
     fig.savefig(out,dpi=230); print(f"n={len(e)}, geology polys={len(g)}; wrote {out}")
 
