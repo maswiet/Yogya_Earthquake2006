@@ -66,9 +66,6 @@ def main():
         if len(sub): fig.plot(data=sub, fill=color, transparency=42, pen="0.2p,80/80/80@50")
     fig.coast(region=REGION, projection=PROJ, water="170/200/224",
               shorelines="0.7p,black", resolution="f")
-    # faults
-    for nm,pts in FAULTS.items(): fig.plot(data=[[x,y] for x,y in pts], pen="2.2p,black")
-    fig.plot(data=[[x,y] for x,y in MURIA], pen="1.6p,black,--")
     # aftershocks
     pygmt.makecpt(cmap="jet", series=[0,25], reverse=True)
     fig.plot(x=e.longitude, y=e.latitude, fill=e.depth, cmap=True, style="c0.05c",
@@ -78,8 +75,12 @@ def main():
     for nm,lo,la,c in MAIN:
         fig.plot(x=[lo],y=[la],style="a0.55c",fill=c,pen="1p,black")
         fig.text(x=lo,y=la,text=nm,font="8p,Helvetica-Bold,black",justify="TL",offset="0.16c/-0.04c",fill="white@40")
-    for nm,(lo,la,ang) in FLABEL.items():
-        fig.text(x=lo,y=la,text=nm,angle=ang,font="10p,Helvetica-BoldOblique,black",fill="white@55",pen="0.2p")
+    # GCMT focal mechanism (2006 Yogya Mw6.4; NP2 strike232/dip86/rake-13 -> left-lateral strike-slip)
+    fig.meca(spec={"strike":232,"dip":86,"rake":-13,"magnitude":6.4}, scale="1.3c",
+             longitude=110.555, latitude=-8.010, depth=12,
+             plot_longitude=110.665, plot_latitude=-8.080, offset=True,
+             compressionfill="45/85/165", extensionfill="white", pen="0.7p,black")
+    fig.text(x=110.665,y=-8.128,text="GCMT  M@-w@- 6.4",font="8.5p,Helvetica-Bold,black",justify="MC",fill="white@35")
     for nm,lo,la in CITIES:
         fig.plot(x=[lo],y=[la],style="s0.26c",fill="firebrick",pen="0.6p,black")
         fig.text(x=lo,y=la,text=nm,font="9p,Helvetica-Bold,20/20/90",justify="LM",offset="0.2c/0c",fill="white@45")
@@ -93,9 +94,9 @@ def main():
         yy=ytop-i*dy
         fig.plot(x=[x0],y=[yy],style="s0.26c",fill=color,pen="0.4p,black")
         fig.text(x=x0+0.013,y=yy,text=lab,font="7.3p,Helvetica,black",justify="LM")
-    fig.basemap(map_scale="jBR+w20k+o0.6c/0.6c+f+u")
+    fig.basemap(map_scale="jBL+w20k+o0.6c/0.5c+f+u")
     fig.text(x=REGION[0]+0.008,y=REGION[3]-0.008,
-             text=f"GrowClust aftershocks (n={len(e)}) \\267 geology: Rahardjo 1995 \\267 faults: Ramdhan 2025",
+             text=f"GrowClust aftershocks (n={len(e)}) \\267 geology: Rahardjo 1995 \\267 GCMT: Ekstrom+ 2012",
              font="9.5p,Helvetica-Bold,black",justify="TL",offset="0.12c/-0.12c",fill="white@20",pen="0.5p")
     out=f"{ROOT}/figures/growclust_geology_map.png"
     fig.savefig(out,dpi=230); print(f"n={len(e)}, geology polys={len(g)}; wrote {out}")
