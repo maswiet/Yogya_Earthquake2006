@@ -164,6 +164,13 @@ strike-slip**; Ekström et al. 2012). The NE–SW nodal plane (strike 232≈N52E
 matches the N57E aftershock lineament. Proper fault traces need a verified
 fault GIS layer (deferred).
 
+**Layout update (2026-07-08):** moved the geology legend and the title OUTSIDE the
+map frame (legend below, 2-col; title above) so they no longer cover hypocentres;
+added **three agency beachballs** — GFZ (red ≈229/85/−9), USGS (gold 231/87/3),
+GCMT (blue 232/86/−13) — each colour-matched to its epicentre star and offset with
+a connector. All three are near-vertical left-lateral strike-slip and mutually
+consistent. Scale bar moved to top-left.
+
 ## Caveats / next steps
 
 - NLLoc locations use the default Central Java 1-D model; swapping in the
