@@ -169,3 +169,19 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   fast (−0.6..−1.25 s KRI/TF11/KEM). **Re-relocation de-biased depths: 15.0 →
   10.5 km**, RMS 0.132→0.113, well-constrained 8.9k→12.4k.
 - **Follow-ups:** HypoDD; local ML scale.
+
+## [2026-07-14] query | Pangandaran Mw7.7 triggering test on Yogya aftershocks
+
+- **Trigger:** User asked whether the 17 Jul 2006 Pangandaran Mw7.7 tsunami
+  earthquake perturbed the Yogya aftershock population (deep stress-triggering
+  analysis). USGS event usp000ensm.
+- **Files:** `wiki/outputs/yogya-2006-pangandaran-triggering.md` (new),
+  `wiki/index.md`. Code (committed to repo): `eqt/scripts/analyze_pangandaran.py`,
+  `eqt/figures/pangandaran_rate.png`.
+- **Key result:** NO detectable static or dynamic triggering. β-vs-ML-threshold
+  shows the apparent post-17-Jul small-event deficit vanishes above Mc
+  (β≈−6 at ML≥0 → ≈0 at ML≥1.0) = completeness/coda-masking artifact, not real.
+  Robust ML≥1.0 rate unchanged (β≈+0.1). Static Coulomb ~3e-12 bar (negligible);
+  dynamic ~0.86 bar (above threshold yet no observed rate change).
+- **Follow-ups:** confirm mid-July station up-time (completeness) from log;
+  regional PGV record for Yogya if available.
