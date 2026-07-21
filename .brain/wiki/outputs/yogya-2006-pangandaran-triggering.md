@@ -21,6 +21,15 @@ NP1 290/10/102) perturbed the ongoing **Yogyakarta 2006 aftershock** rate.
 post-17-Jul drop in small-event rate is a **catalog-completeness artifact**, not a
 real change in seismicity.
 
+> **Re-run 2026-07-20 on the corrected magnitude catalog** (taper + hum + station
+> corrections + MBS Mc — see [[wiki/outputs/yogya-2006-eqt-catalog]]). Conclusion
+> **unchanged and slightly strengthened**: β ≈ −4.5 at ML≥0.3 over +10 d (deficit
+> confined below completeness), while the robust **ML≥1.0 rate rose** (pre 10 d
+> 4.7/d → post 3 d 6.33/d, ratio **1.35**). A deficit that only appears below Mc
+> and reverses above it is a completeness artifact, not triggering. Specific β
+> values below are from the pre-correction catalog and are superseded in
+> magnitude but not in sign/interpretation.
+
 Script: `eqt/scripts/analyze_pangandaran.py` → `eqt/figures/pangandaran_rate.png`,
 `eqt/full/pangandaran_summary.txt`. Catalog: `full/catalog_magnitude.csv`
 (gap<180). Pangandaran falls at **t = 51.4 d** after the Yogya mainshock

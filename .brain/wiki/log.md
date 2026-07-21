@@ -185,3 +185,39 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   dynamic ~0.86 bar (above threshold yet no observed rate change).
 - **Follow-ups:** confirm mid-July station up-time (completeness) from log;
   regional PGV record for Yogya if available.
+
+## [2026-07-20] maintenance | Magnitude pipeline: 3 measurement bugs fixed + station corrections (pre-SRL)
+
+- **Trigger:** Preparing an SRL submission; user asked to see example waveforms
+  of the sub-ML-1 "tail". Plotting them exposed that the smallest catalog events
+  were strong earthquakes (SNR 100–1000), not noise — starting a bug hunt.
+- **Files (repo):** `eqt/scripts/build_amplitudes.py` (per-pick windowed
+  deconvolution + 1–20 Hz bandpass + volume auto-detect),
+  `compute_magnitudes.py` (station corrections + `mbs_mc` b-stability Mc),
+  `screen_catalog.py` (new), `station_ml_corrections.py` (new),
+  `plot_noise_floor.py` (new), `plot_example_waveforms.py` (new),
+  `plot_decay.py` (Mc from mbs). New data: `eqt/full/catalog_quality.csv`,
+  `eqt/config/station_ml_corrections.json`. Figures regenerated.
+- **Files (brain):** `wiki/outputs/yogya-2006-eqt-catalog.md` (Magnitudes section
+  rewritten), `wiki/outputs/yogya-2006-pangandaran-triggering.md` (re-run note),
+  `wiki/index.md`, `wiki/log.md`.
+- **Key results:**
+  - **Bug 1 — simulate() taper on 24-h traces:** 5% cosine taper = 72 min/end;
+    events near a day boundary suppressed up to ~200× (+2.3 ML). 39% of ML<−1
+    events were within ±10 min of midnight (28× enrichment). Fixed by
+    deconvolving a padded per-pick window; midnight enrichment → 0.0%.
+  - **Bug 2 — 50 Hz mains hum** (TF10b, 200 Hz): unfiltered peak set weak-event
+    amplitudes (+0.27 ML @ ML<0). Fixed by 1–20 Hz bandpass.
+  - **Bug 3 — max-curvature underestimates Mc by ~0.6.** b climbs 0.77→0.91 with
+    cut-off ⇒ residual incompleteness. Replaced with b-stability (MBS).
+  - Per-station ML corrections (−0.37 TF16 … +0.35 TF17); scatter 0.185→0.128.
+    **r=−0.03 vs VELEST P corrections** (amplitude vs travel-time site response
+    decoupled).
+  - **Final: Mc=+0.50, b=0.89±0.02 (N=2258); ML −1.81..3.55.** Old Mc≈0/b=0.88
+    superseded. Quality screen: 11,790/16,876 pass (69.9%). Sub-Mc events are
+    real (SNR 12–34) — sample incomplete, detections genuine.
+  - **Ramdhan 2025 comparison NOT yet defensible:** ratio is 5.51× (all) but
+    0.83× at our Mc=+0.50 vs their 2,141. Need their FMD/Mc — critical path.
+- **Follow-ups:** obtain Ramdhan Mc/catalog; investigate FMD roll-off >ML1.5
+  (L4-3D clipping ⇒ max ML is a lower bound); resolve TF16 −0.37 gain anomaly;
+  apply station corrections consistently in any future ML recompute.

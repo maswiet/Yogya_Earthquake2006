@@ -3,7 +3,7 @@
 
 This is the content map for the `.brain` second brain. Read this file before answering from or editing the wiki. Update it on every ingest and every durable query that changes the vault.
 
-Last updated: 2026-07-03
+Last updated: 2026-07-20
 
 ## Start Here
 
@@ -62,7 +62,7 @@ Last updated: 2026-07-03
 
 ## Outputs
 
-- [[wiki/outputs/yogya-2006-eqt-catalog]] - EQTransformer Yogya 2006 aftershock catalog v1 (16,876 located events).
+- [[wiki/outputs/yogya-2006-eqt-catalog]] - EQTransformer Yogya 2006 aftershock catalog (16,876 located; 11,790 quality-passed). Magnitudes corrected 2026-07-20: Mc=+0.50, b=0.89±0.02.
 - [[wiki/outputs/yogya-2006-1d-velocity-model]] - Data-driven 1-D velocity (Wadati Vp/Vs=1.735; VELEST minimum-1D + station corrections).
 - [[wiki/outputs/yogya-2006-pangandaran-triggering]] - Pangandaran Mw7.7 (17 Jul 2006) triggering test: no detectable triggering; small-event deficit is a completeness artifact.
 
@@ -76,6 +76,8 @@ Last updated: 2026-07-03
 ## Open Threads
 
 - Assess whether EQTransformer generalizes to Yogyakarta 2006 aftershock data — see [[wiki/questions/applying-eqtransformer-to-yogya-2006]].
+- **SRL critical path:** obtain Ramdhan et al. 2025 Mc / frequency-magnitude distribution. Our catalog is 5.51× their 2,141 events over all detections but only 0.83× at our Mc=+0.50 — no "N× more events" claim is defensible without their completeness. See [[wiki/outputs/yogya-2006-eqt-catalog]].
+- Open magnitude issues (2026-07-20): FMD roll-off above ML~1.5 (L4-3D clipping ⇒ max ML is a lower bound); TF16 reads 0.37 low, uncorrelated with VELEST — possible instrument-gain problem.
 - `needs-review`: EQTransformer's exact architecture, training-set name/size, and per-station Tottori metrics were not captured from a primary source — fill in from the full paper/methods.
 - Keep all second-brain work inside `.brain`, with content organized under only `raw/` and `wiki/`.
 - Brain operations that change `.brain` must commit and push those `.brain` changes to the repository remote before reporting completion.

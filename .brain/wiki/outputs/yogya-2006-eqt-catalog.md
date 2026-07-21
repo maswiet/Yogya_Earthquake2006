@@ -180,27 +180,92 @@ consistent. Scale bar moved to top-left.
   (XN network, L4-3D geophone, 1.7e8 counts/(m/s)). **ML computed** for all events
   via Wood-Anderson simulation — see Magnitudes below.
 
-## Magnitudes (ML) — 2026-07-04
+## Magnitudes (ML) — 2026-07-04, **substantially corrected 2026-07-20**
 
 - Response: L4-3D 1 Hz geophone (PAZ f0=1, h=0.707, sens 1.7e8 counts/(m/s)).
-  Per pick: remove response → Wood-Anderson simulate → peak |A| in S-window →
+  Per pick: remove response → Wood-Anderson simulate → **bandpass 1–20 Hz** →
+  peak |A| in S-window →
   ML = log10(A_mm) + 1.110·log10(R/100) + 0.00189·(R−100) + 3.0 (Hutton & Boore 1987).
-  Per event = median over ≥3 stations. 97,692 amplitude readings.
-- **16,876 events with ML.** (ML recomputed 2026-07-04 with refined-model
-  distances: median **−0.07**, max **3.48**, **Mc ≈ 0.0**, **b = 0.88 ± 0.01**.
-  Earlier v1-depth values were median 0.07 / b 0.96.)
-- **Omori decay:** daily rate ~300 → ~20/day; fitted **p ≈ 1.05** (c poorly
-  constrained — deployment began ~6 days post-mainshock). Peak 382/day on Jun 17.
-- Figures: `magnitude_gutenberg_richter.png`, `aftershock_magnitude_map.png`
-  (size~ML, colour~depth), `aftershock_rate_decay.png`.
-- Files: `eqt/full/catalog_magnitude.csv`, `eqt/full/amplitudes.csv`,
-  `eqt/figures/magnitude_gutenberg_richter.png`; scripts
-  `eqt/scripts/{build_amplitudes,compute_magnitudes}.py`.
+  Per event = median over ≥3 stations, **minus a per-station ML correction**.
+  97,691 amplitude readings.
+
+### ⚠️ Three measurement bugs found & fixed 2026-07-20 (pre-submission)
+
+Triggered by plotting example waveforms of the ML<−1 "tail": the smallest events
+turned out to be strong earthquakes (SNR 100–1000), not noise. Root causes:
+
+1. **`obspy.simulate()` taper on 24-h traces.** Deconvolution was run on the
+   merged day-long trace; the default 5% cosine taper = 72 min at each end, so
+   events near a day boundary were suppressed up to ~200× (**+2.3 ML**). 39% of
+   ML<−1 events fell within ±10 min of midnight (28× enrichment, confined to
+   that band). Fix: deconvolve a padded per-pick window (`wa_window`, ±60 s).
+   Midnight enrichment for ML<−1 → **0.0%** after fix.
+2. **50 Hz mains hum** (esp. TF10b, 200 Hz sampling). Peak was measured on an
+   unfiltered trace, so hum set the amplitude of weak events (+0.27 ML bias at
+   ML<0 for TF10b). Fix: 1–20 Hz bandpass before the peak. TF10b weak-event
+   amplitude drops ~15×; strong events untouched (×1.1).
+3. **Max-curvature underestimates Mc by ~0.6.** MaxC gives Mc=−0.20 but b then
+   climbs monotonically with the cut-off (0.77→0.91) = residual incompleteness.
+   Replaced with **b-value stability (MBS, Woessner & Wiemer 2005)**: `mbs_mc()`.
+
+- **Also applied:** per-station ML corrections (`station_ml_corrections.py`,
+  alternating-median solve, datum = amplitude-weighted mean zero). Range −0.37
+  (TF16) … +0.35 (TF17); tightens per-event station scatter 0.185 → 0.128 (raw),
+  final per-event ML_std median **0.230**. **r = −0.03 with VELEST P travel-time
+  corrections** — amplitude and travel-time site response are decoupled here.
+
+### Final magnitude results (2026-07-20)
+
+- **16,876 events with ML.** Range **−1.81 … 3.55**, median **−0.22**.
+- **Mc = +0.50** (b-stability), **b = 0.89 ± 0.02** (N = 2,258). MaxC value
+  (Mc=−0.20, b=0.75) retained for reference only. Old value **Mc≈0.0 / b=0.88
+  is superseded and was contaminated by the taper bug + wrong Mc estimator.**
+- The single-station ambient noise floor at the median nearest-station distance
+  (11.9 km) is ML **−0.11**; network Mc sits **0.6 units above** it — the cost of
+  requiring detection at enough stations to associate + locate (≥8 phases, ≥3
+  amplitudes). A single-station floor is a lower bound on Mc, not an estimate.
+- Sub-Mc events are **real, not spurious**: example ML −1.01 event has SNR 12–34.
+  The sample is incomplete below Mc; the detections are genuine.
+- **Omori decay:** fitted **p ≈ 1.05**; peak 382/day on Jun 17.
+
+### Quality screen & false-detection rate (`screen_catalog.py`)
+
+- **11,790 / 16,876 pass (69.9%).** Scale-free criteria: ≤25% phases badly
+  fitted (|res|>0.5 s), RMS≤0.5 s, ≥8 phases, ≥2 S, gap≤180°.
+- **Do NOT threshold on max|res|**: it scales with phase count (median nphs
+  10→21, max|res| 0.61→1.41 from ML<0 to ML>1), so it rejects the best-recorded
+  events and inverts the pass-rate vs magnitude. Scale-free screen gives the
+  physically expected rising pass rate (65%→78%→73%). Dominant reject reason is
+  **gap>180° (4,299)** — network geometry, not detection quality.
+
+### Ramdhan et al. 2025 comparison — ⚠️ claim not yet defensible
+
+Ramdhan et al. (Nat. Hazards 121, 2025, s11069-025-07440-8) relocated
+**2,141 events**. Our size ratio depends entirely on the completeness threshold:
+
+| threshold | our events (quality-passed) | ratio vs 2,141 |
+|---|---|---|
+| all detections | 11,790 | 5.51× |
+| ML ≥ 0.0 | ~4,600 | 2.15× |
+| **ML ≥ +0.50 (our Mc)** | **~1,770** | **0.83×** |
+
+At a defensible common completeness the catalogues are **comparable, not
+7.8× larger**. **Blocking need:** Ramdhan's magnitude-of-completeness / FMD —
+without it no "N× more events" statement can be made. This is now the critical
+path to publication, not an optional extra.
+([[wiki/claims/eqtransformer-doubles-detections-tottori]])
+
+- Figures: `magnitude_gutenberg_richter.png`, `aftershock_magnitude_map.png`,
+  `aftershock_rate_decay.png`, `detection_noise_floor.png` (4-panel noise-floor /
+  FMD / nearest-station diagnostic), `example_waveforms.png` (P/S + SNR for 3
+  ML bands), `station_ml_corrections.png`.
+- Files: `eqt/full/{catalog_magnitude,amplitudes,catalog_quality}.csv`,
+  `eqt/config/station_ml_corrections.json`; scripts
+  `eqt/scripts/{build_amplitudes,compute_magnitudes,screen_catalog,station_ml_corrections,plot_noise_floor,plot_example_waveforms}.py`.
 - Caveat: Hutton-Boore (S. California) distance term used as default (no local ML
-  scale for Java); the short-period L4-3D may slightly clip the largest events.
-- **Comparison pending:** need a reference Yogya 2006 aftershock catalog to make
-  the Mousavi/Tottori-style "N× more events" statement quantitative
-  ([[wiki/claims/eqtransformer-doubles-detections-tottori]]).
+  scale for Java). **FMD rolls off above ML~1.5** — consistent with L4-3D clipping
+  the largest events, so **max ML 3.55 is a lower bound**. TF16 reads 0.37 low
+  and is uncorrelated with VELEST — possible instrument-gain issue, still open.
 
 ## Links
 
