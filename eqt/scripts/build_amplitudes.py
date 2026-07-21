@@ -15,7 +15,12 @@ import obspy
 from obspy.core import UTCDateTime
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-BASE = "/Volumes/Untitled 1/DATA-GFZ-Gempa-JOgja-tahap-2"
+# The EDL volume has mounted under different labels across sessions; take the
+# first one that exists, or an explicit EDL_BASE override.
+_CANDIDATES = ["/Volumes/Untitled/DATA-GFZ-Gempa-JOgja-tahap-2",
+               "/Volumes/Untitled 1/DATA-GFZ-Gempa-JOgja-tahap-2"]
+BASE = os.environ.get("EDL_BASE") or next(
+    (p for p in _CANDIDATES if os.path.isdir(p)), _CANDIDATES[0])
 COMP = {"pri1": "N", "pri2": "E"}          # horizontals (p1=N, p2=E)
 year_re = re.compile(r"e\d{4}(\d{2})\d+\.pri1$")
 
@@ -61,8 +66,25 @@ def parse_picks():
 def folder_for(sta):            # TF07a -> tf3007
     return f"tf30{sta[2:4]}"
 
-def build_day_wa(folder, jday):
-    """Read horizontals for one logger-day, remove L4 response, simulate WA."""
+# Half-length of the window deconvolved around each pick. The instrument
+# simulation must NOT be run on the merged day-long trace: obspy's simulate()
+# applies a 5% cosine taper, which over 24 h suppresses everything within
+# ~72 min of the day boundary (up to ~200x, i.e. >2 magnitude units, for events
+# in the first few minutes of a day). Deconvolving a short window instead keeps
+# the taper far away from the measured S phase.
+PAD_S = 60.0
+
+# Amplitudes are measured on a band-passed WA trace. Without this the peak is
+# taken from the raw simulation, and stations sitting near power lines (TF10b
+# carries a strong 50 Hz mains tone, sampled at 200 Hz) have their small-event
+# amplitudes set by the hum rather than by the S phase -- a +0.27 ML bias at
+# ML<0 for TF10b. 1-20 Hz spans the S-wave corner frequencies of local
+# microearthquakes at 10-30 km while putting 50 Hz far into the stop band.
+BP_LO, BP_HI, BP_CORNERS = 1.0, 20.0, 4
+
+
+def build_day_raw(folder, jday):
+    """Read + merge the raw horizontals for one logger-day (no deconvolution)."""
     dpath=os.path.join(BASE, folder, f"{jday:03d}")
     if not os.path.isdir(dpath): return None
     st=obspy.Stream()
@@ -81,11 +103,23 @@ def build_day_wa(folder, jday):
         st+=s
     if len(st)==0: return None
     st.detrend("demean")
+    return st
+
+
+def wa_window(raw, t0, t1, folder="", jday=0):
+    """Wood-Anderson displacement (mm) for [t0,t1], deconvolved on a padded
+    window so the simulate() taper never reaches the measurement interval."""
+    seg=raw.slice(t0-PAD_S, t1+PAD_S)
+    seg=obspy.Stream([tr for tr in seg if tr.stats.npts > 100])
+    if len(seg)==0: return None
+    seg=seg.copy(); seg.detrend("demean")
     try:
-        st.simulate(paz_remove=PAZ_L4, paz_simulate=PAZ_WA, water_level=10)
+        seg.simulate(paz_remove=PAZ_L4, paz_simulate=PAZ_WA, water_level=10)
+        seg.filter("bandpass", freqmin=BP_LO, freqmax=BP_HI,
+                   corners=BP_CORNERS, zerophase=True)
     except Exception as ex:
         print(f"  sim fail {folder} {jday}: {ex}", file=sys.stderr); return None
-    return st   # amplitude now in mm (Wood-Anderson)
+    return seg
 
 def main():
     ap=argparse.ArgumentParser()
@@ -109,12 +143,14 @@ def main():
         key=f"{folder}:{jday}"
         if key in done and not a.only: continue
         g=groups.get_group((folder,jday))
-        wa=build_day_wa(folder,jday)
-        if wa is None:
+        raw=build_day_raw(folder,jday)
+        if raw is None:
             fp.write(key+"\n"); fp.flush(); continue
         n=0
         for _,r in g.iterrows():
             t0=UTCDateTime(r["arr"])-1.0; t1=UTCDateTime(r["arr"])+15.0
+            wa=wa_window(raw, t0, t1, folder, jday)
+            if wa is None: continue
             peak=0.0
             for tr in wa:
                 seg=tr.slice(t0,t1)

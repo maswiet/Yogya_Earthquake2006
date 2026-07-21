@@ -42,6 +42,27 @@ def maxc_mc(mags, dM=0.1):
     h,_=np.histogram(mags,bins=bins)
     return bins[np.argmax(h)]+0.2
 
+def mbs_mc(mags, dM=0.1, span=0.5, min_n=200):
+    """Mc by b-value stability (Woessner & Wiemer 2005).
+
+    Maximum curvature badly underestimates completeness for this catalogue:
+    it returns Mc=-0.20, but b then climbs monotonically with the cut-off
+    (0.77 at -0.2 -> 0.91 at +0.4), the signature of residual incompleteness.
+    MBS instead takes the lowest Mc at which b stops drifting: b(Mc) must sit
+    within one standard deviation of the mean of b over [Mc, Mc+span].
+    """
+    grid=np.arange(np.floor(mags.min()*10)/10, mags.max()-span, dM)
+    bs={}
+    for x in grid:
+        b,u,n=b_value(mags,x,dM)
+        if n>=min_n and np.isfinite(b): bs[round(x,2)]=(b,u)
+    for x in sorted(bs):
+        fwd=[bs[y][0] for y in sorted(bs) if x<=y<=x+span+1e-9]
+        if len(fwd)<max(3,int(span/dM)-1): continue
+        if abs(bs[x][0]-np.mean(fwd))<=bs[x][1]:
+            return round(x,2)
+    return maxc_mc(mags,dM)
+
 def b_value(mags, mc, dM=0.1):
     m=mags[mags>=mc-1e-9]
     if len(m)<20: return np.nan, np.nan, len(m)
@@ -55,6 +76,8 @@ def main():
     ap.add_argument("--out", default=f"{ROOT}/full/catalog_magnitude.csv")
     ap.add_argument("--fig", default=f"{ROOT}/figures/magnitude_gutenberg_richter.png")
     ap.add_argument("--min_sta", type=int, default=3)
+    ap.add_argument("--stacorr", default=f"{ROOT}/config/station_ml_corrections.json",
+                    help="station ML corrections to subtract; '' to disable")
     a=ap.parse_args()
     amp=pd.read_csv(a.amp)
     # use REFINED-catalog distances: merge measured amp_mm with refined dist+depth
@@ -63,6 +86,19 @@ def main():
     amp=amp.merge(pk[["evid","sta","hypo_ref"]], on=["evid","sta"], how="left")
     amp["hypo_km"]=amp["hypo_ref"].fillna(amp["hypo_km"])   # fallback to stored if unmatched
     amp["ml"]=ml_pick(amp.amp_mm, amp.hypo_km)
+    # Site response makes the same event read up to 0.7 magnitude units apart
+    # between stations (TF16 -0.37, TF17 +0.35). Removing it tightens the
+    # per-event scatter by ~30% and is what station_ml_corrections.py solves for.
+    ncorr=0
+    if a.stacorr and os.path.exists(a.stacorr):
+        import json
+        corr=json.load(open(a.stacorr))
+        amp["ml"]=amp.ml - amp.sta.map(corr).fillna(0.0)
+        ncorr=int(amp.sta.isin(corr).sum())
+        print(f"applied station ML corrections to {ncorr}/{len(amp)} readings "
+              f"({len(corr)} stations) from {os.path.relpath(a.stacorr, ROOT)}")
+    else:
+        print("no station ML corrections applied")
     g=amp.groupby("evid")
     ev=g.agg(ML=("ml","median"), ML_std=("ml","std"), n_sta=("ml","size")).reset_index()
     ev=ev[ev.n_sta>=a.min_sta]
@@ -76,10 +112,13 @@ def main():
     ev.to_csv(a.out, index=False)
 
     M=ev.ML.values
-    mc=maxc_mc(M); b,berr,nb=b_value(M,mc)
+    mc_maxc=maxc_mc(M); mc=mbs_mc(M)
+    b,berr,nb=b_value(M,mc); b_mc,_,n_mc=b_value(M,mc_maxc)
     print(f"events with ML: {len(ev)}  (>= {a.min_sta} stations)")
     print(f"ML range {M.min():.2f}..{M.max():.2f}  median {np.median(M):.2f}")
-    print(f"Mc = {mc:.2f} | b-value = {b:.2f} +/- {berr:.2f}  (N>=Mc = {nb})")
+    print(f"median per-event station scatter: {ev.ML_std.median():.3f} ML")
+    print(f"Mc (max-curvature) = {mc_maxc:+.2f} -> b = {b_mc:.2f}  (N = {n_mc})")
+    print(f"Mc (b-stability)   = {mc:+.2f} -> b = {b:.2f} +/- {berr:.2f}  (N = {nb})   <- used")
 
     # figure: FMD + histogram + ML-time + ML-map
     fig,ax=plt.subplots(2,2,figsize=(14,11))

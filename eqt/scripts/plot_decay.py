@@ -9,7 +9,9 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 e = pd.read_csv(f"{ROOT}/full/catalog_magnitude.csv")
 e["t"] = pd.to_datetime(e["time"], utc=True)
 e = e[e.gap < 180]
-mc = 0.0
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from compute_magnitudes import mbs_mc
+mc = float(mbs_mc(e.ML.values))          # b-stability completeness
 daily = e.set_index("t").resample("D").size()
 daily_mc = e[e.ML >= mc].set_index("t").resample("D").size().reindex(daily.index, fill_value=0)
 
