@@ -221,3 +221,29 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** obtain Ramdhan Mc/catalog; investigate FMD roll-off >ML1.5
   (L4-3D clipping ⇒ max ML is a lower bound); resolve TF16 −0.37 gain anomaly;
   apply station corrections consistently in any future ML recompute.
+
+## [2026-07-20] query | Resolved FMD roll-off (no clipping) + TF16 anomaly (site effect)
+
+- **Trigger:** Two open magnitude threads before SRL, after Ramdhan data proved
+  hard to obtain: (a) does the L4-3D clip the largest events, and (b) is TF16's
+  −0.37 deficit an instrument fault?
+- **Files (repo):** `eqt/scripts/check_clipping.py` (new),
+  `eqt/scripts/diagnose_tf16.py` (new); figures `clipping_check.png`,
+  `tf16_diagnostic.png`.
+- **Files (brain):** `wiki/outputs/yogya-2006-eqt-catalog.md` (two caveats
+  retracted/resolved), `wiki/index.md`, `wiki/log.md`.
+- **Key results:**
+  - **No clipping.** Digitiser rail = 2^23 counts; largest event (ML 3.55) peaks
+    at 16% of rail (median of 12 largest = 8%), no flat-topping. Band-widening
+    changes large-event amplitude <3%. ⇒ **max ML 3.55 is real**, and the GR
+    roll-off (obs/GR 1.0→0.09 from Mc to ML 3.0) is a finite-catalogue / real
+    max-magnitude effect. Retracts the "clipping ⇒ lower bound" caveat.
+  - **TF16 is a site/path effect, not a gain fault.** Deficit grows with distance
+    (−0.21<10 km → −0.48 at 20–30 km), stable in time, both horizontals healthy
+    (N/E 0.89). Hard limestone E of Opak; decoupled from VELEST P-corr (different
+    sampling depth). Absorbed by station correction. Retracts "instrument-gain
+    issue".
+  - Minor: 20 Hz upper corner mildly under-measures the smallest events
+    (ML~−0.4 lose 47–65% vs 1–45 Hz); kept as standard.
+- **Follow-ups:** Ramdhan FMD/Mc remains the only blocker for the "N× events"
+  claim; consider a modified-GR (tapered) fit to report a corner magnitude.

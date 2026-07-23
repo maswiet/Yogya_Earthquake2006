@@ -263,9 +263,35 @@ path to publication, not an optional extra.
   `eqt/config/station_ml_corrections.json`; scripts
   `eqt/scripts/{build_amplitudes,compute_magnitudes,screen_catalog,station_ml_corrections,plot_noise_floor,plot_example_waveforms}.py`.
 - Caveat: Hutton-Boore (S. California) distance term used as default (no local ML
-  scale for Java). **FMD rolls off above ML~1.5** — consistent with L4-3D clipping
-  the largest events, so **max ML 3.55 is a lower bound**. TF16 reads 0.37 low
-  and is uncorrelated with VELEST — possible instrument-gain issue, still open.
+  scale for Java).
+
+### FMD roll-off above ML~1.5 is REAL, not clipping (resolved 2026-07-20)
+
+`check_clipping.py` read raw counts for the 12–15 largest events at their nearest
+stations. Digitiser rail = **2^23 = 8,388,608 counts**; the largest event
+(ML 3.55) peaks at 1.37e6 = **16% of the rail** (median of the 12 largest: 8%),
+with **no flat-topping** (≤2 samples within 1% of peak per S window). Widening the
+1–20 Hz measurement band to 0.3–20 or 1–45 Hz changes large-event amplitude by
+**<3%** — so no low-frequency content is lost either. **The events do not clip;
+max ML 3.55 is a real upper value, not an instrument-limited lower bound.** The
+GR deficit (obs/GR-pred 1.0 at Mc → 0.09 at ML 3.0) is a finite-catalogue /
+genuine-maximum-magnitude effect. Figure `clipping_check.png`. *(Retracts the
+earlier "L4-3D clipping ⇒ max ML is a lower bound" caveat.)*
+- Minor: at the 20 Hz upper corner the SMALLEST events (ML~−0.4) lose 47–65%
+  amplitude vs a 1–45 Hz band (their corner freq > 20 Hz) — a mild low bias on
+  the smallest magnitudes; 20 Hz kept as the standard (noise trade-off).
+
+### TF16 −0.37 deficit is a site/path effect, not an instrument fault (resolved 2026-07-20)
+
+`diagnose_tf16.py`: the deficit **grows with distance** (−0.21 at <10 km →
+−0.48 at 20–30 km; a gain error would be flat), is **stable in time** (no drift,
+−0.32…−0.49 across weeks 22–34; not a failing sensor), and both horizontals are
+healthy (**N/E amplitude ratio 0.89** over 1,696 readings; not a one-channel
+wiring/gain fault). ⇒ a **genuine site/path response** — hard limestone east of
+the Opak fault, de-amplifying 1–20 Hz S — fully absorbed by the station ML
+correction. Explains the r=−0.03 vs VELEST P corrections: amplitude (near-surface
+kappa) and P travel-time (deeper velocity) sample different depths. Figure
+`tf16_diagnostic.png`. *(Retracts the earlier "possible instrument-gain issue".)*
 
 ## Links
 

@@ -77,7 +77,7 @@ Last updated: 2026-07-20
 
 - Assess whether EQTransformer generalizes to Yogyakarta 2006 aftershock data — see [[wiki/questions/applying-eqtransformer-to-yogya-2006]].
 - **SRL critical path:** obtain Ramdhan et al. 2025 Mc / frequency-magnitude distribution. Our catalog is 5.51× their 2,141 events over all detections but only 0.83× at our Mc=+0.50 — no "N× more events" claim is defensible without their completeness. See [[wiki/outputs/yogya-2006-eqt-catalog]].
-- Open magnitude issues (2026-07-20): FMD roll-off above ML~1.5 (L4-3D clipping ⇒ max ML is a lower bound); TF16 reads 0.37 low, uncorrelated with VELEST — possible instrument-gain problem.
+- ~~Open magnitude issues: FMD roll-off / TF16 anomaly~~ **RESOLVED 2026-07-20**: FMD roll-off is real (events reach only 16% of the digitiser rail, no clipping ⇒ max ML 3.55 is real, not a lower bound); TF16 −0.37 is a genuine site/path effect (distance-dependent, time-stable, both components healthy), absorbed by the station correction. See [[wiki/outputs/yogya-2006-eqt-catalog]].
 - `needs-review`: EQTransformer's exact architecture, training-set name/size, and per-station Tottori metrics were not captured from a primary source — fill in from the full paper/methods.
 - Keep all second-brain work inside `.brain`, with content organized under only `raw/` and `wiki/`.
 - Brain operations that change `.brain` must commit and push those `.brain` changes to the repository remote before reporting completion.
