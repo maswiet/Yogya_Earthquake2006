@@ -34,6 +34,7 @@ Last updated: 2026-07-20
 - [[wiki/sources/earthquake-transformer-mousavi-2020]] - EQTransformer: deep-learning model for simultaneous earthquake detection + P/S phase picking (Nat. Commun. 2020).
 - [[wiki/sources/eqtransformer-github-repo]] - Official MIT-licensed Python package (TensorFlow/ObsPy) implementing EQTransformer with pretrained models.
 - [[wiki/sources/yogya-2006-aftershock-edl-dataset]] - Raw GFZ EDL aftershock recordings (external volume); layout + critical data-hygiene facts.
+- [[wiki/sources/diambama-2019-yogya-tomography]] - **Our group's own 2019 GJI tomography** — first proposed the Ngalang Fault association (6 yr before Ramdhan 2025); same dataset; Anggraini 2013 manual picks = pick-validation ground truth.
 
 ## Concepts
 
@@ -77,7 +78,7 @@ Last updated: 2026-07-20
 ## Open Threads
 
 - Assess whether EQTransformer generalizes to Yogyakarta 2006 aftershock data — see [[wiki/questions/applying-eqtransformer-to-yogya-2006]].
-- **SRL paper (reframed 2026-07-20):** methodology + open data product, not a count comparison — see [[wiki/outputs/yogya-2006-srl-paper-plan]]. Ramdhan FMD no longer blocking. **Main remaining task: pick validation vs manual ground truth** (biggest reviewer risk for an ML-picker paper). Then Zenodo DOI release.
+- **SRL paper (reframed 2026-07-20):** our group's own program — Diambama et al. 2019 first named the Ngalang Fault; this study images it at sub-500 m from 13,251 events. See [[wiki/outputs/yogya-2006-srl-paper-plan]] + [[wiki/sources/diambama-2019-yogya-tomography]]. **Main remaining task: pick validation vs Anggraini 2013 manual picks** (in-house benchmark; needs the pick files). Then Zenodo DOI release.
 - ~~Open magnitude issues: FMD roll-off / TF16 anomaly~~ **RESOLVED 2026-07-20**: FMD roll-off is real (events reach only 16% of the digitiser rail, no clipping ⇒ max ML 3.55 is real, not a lower bound); TF16 −0.37 is a genuine site/path effect (distance-dependent, time-stable, both components healthy), absorbed by the station correction. See [[wiki/outputs/yogya-2006-eqt-catalog]].
 - `needs-review`: EQTransformer's exact architecture, training-set name/size, and per-station Tottori metrics were not captured from a primary source — fill in from the full paper/methods.
 - Keep all second-brain work inside `.brain`, with content organized under only `raw/` and `wiki/`.

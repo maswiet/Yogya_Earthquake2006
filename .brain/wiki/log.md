@@ -264,3 +264,24 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   Draft abstract + section→asset outline + pre-submission checklist recorded.
 - **Follow-ups:** pick validation vs manual ground truth (top reviewer risk);
   Zenodo DOI release; confirm SRL article type; optional tapered-GR corner mag.
+
+## [2026-07-20] ingest | Diambama et al. 2019 (GJI) — our group's Ngalang Fault priority
+
+- **Trigger:** User provided their group's own 2019 GJI paper
+  (`/Users/maswiet/Documents/Manuscript/GJI_Wiwit_.pdf`) noting "our group first
+  proposed the Ngalang fault."
+- **Files (brain):** `wiki/sources/diambama-2019-yogya-tomography.md` (new),
+  `wiki/outputs/yogya-2006-srl-paper-plan.md` (priority narrative),
+  `wiki/index.md`, `wiki/log.md`.
+- **Key result:** Diambama, Anggraini, Nukman, Lühr & Suryanto (2019, GJI 216,
+  439–452) explicitly associated the 2006 source with the **Ngalang Fault**
+  (§5.2, Conclusion, Fig. 14) — **6 years before Ramdhan et al. 2025**. Same GFZ
+  L4-3D/EDL deployment, same aftershock dataset (Anggraini 2013). Tomography
+  resolved the fault to only 5–7 km; the new EQTransformer catalogue images the
+  same structure to sub-500 m over 0–18 km. Paper reframed as the resolution
+  culmination of our own program, with Ramdhan as independent corroboration.
+  Two unlocks: (1) priority is ours; (2) **Anggraini 2013 manual picks (3,769 P
+  + 3,407 S, 588 events) = in-house pick-validation ground truth.** Max ML 3.55
+  matches our catalogue exactly (magnitude cross-check).
+- **Follow-ups:** obtain Anggraini 2013 pick files for EQTransformer
+  precision/recall validation; add Diambama 2019 + Anggraini 2013 to references.

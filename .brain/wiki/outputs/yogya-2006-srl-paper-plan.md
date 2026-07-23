@@ -22,6 +22,31 @@ events than Ramdhan" framing is dropped. The paper is reframed as a
 Letters*, with fault structure as independent corroboration rather than a
 head-to-head count. This removes the single blocking dependency.
 
+## MAJOR strengthening (2026-07-20): this is OUR GROUP's own program
+
+Our group first proposed the **Ngalang Fault** association for the 2006 source in
+**Diambama, Anggraini, Nukman, Lühr & Suryanto (2019, GJI 216, 439–452)** — six
+years before Ramdhan et al. (2025) named it as the mainshock source. See
+[[wiki/sources/diambama-2019-yogya-tomography]]. That 2019 tomography (same GFZ
+L4-3D/EDL deployment, Anggraini 2013 manual catalogue) resolved the fault only
+to 5–7 km depth. **The new EQTransformer study is the continuation of that same
+program**, imaging the SAME fault with 13,251 GrowClust-relocated events at
+sub-500 m relative precision over 0–18 km. So the narrative is:
+
+> *We named the Ngalang Fault in 2019 from sparse tomography; here we return to
+> the same archive with deep-learning phase picking and image it at an order of
+> magnitude finer resolution.*
+
+This is a far stronger hook than "methodology + data product" alone, and it makes
+Ramdhan a corroborating parallel study, not a competitor. Two concrete wins:
+- **Priority is ours** — cite Diambama et al. 2019 as first, Ramdhan 2025 as
+  independent confirmation, this study as the high-resolution culmination.
+- **Pick validation ground truth exists in-house**: Anggraini (2013) manual
+  P/S picks (3,769 P + 3,407 S, 588 events) on the SAME raw data. Obtaining
+  these closes the top reviewer risk.
+- **Independent magnitude cross-check**: their catalogue max ML 3.55 equals ours
+  exactly — supports our high-end scale and the no-clipping finding.
+
 ## One-line contribution
 
 > The first EQTransformer-derived, quality-screened, double-difference-relocated
@@ -47,24 +72,26 @@ head-to-head count. This removes the single blocking dependency.
    with completeness fully characterised (Mc = +0.50 by b-stability, b = 0.89 ±
    0.02) and a physical detection-floor model. Released on Zenodo with a DOI.
    SRL explicitly values reusable data products.
-3. **Independent structural corroboration.** 13,251 precisely relocated events
-   (543 clusters; main-fault cluster 6,917 events) independently support the
-   Opak–Ngalang source zone that Ramdhan et al. inferred from 2,141 events —
-   strike N57°E, matching GCMT NP2 (232/86/−13, near-vertical left-lateral),
-   with a shallow-SW → deep-NE gradient, aftershocks concentrated in the
+3. **High-resolution imaging of the Ngalang Fault WE named.** 13,251 precisely
+   relocated events (543 clusters; main-fault cluster 6,917 events) image the
+   NE–SW (N57°E) Ngalang Fault — first proposed by our group (Diambama et al.
+   2019) and independently confirmed by Ramdhan et al. (2025) — at sub-500 m
+   relative precision over 0–18 km, versus the 5–7 km tomographic resolution of
+   the 2019 study. Strike matches GCMT NP2 (232/86/−13, near-vertical
+   left-lateral); shallow-SW → deep-NE gradient; aftershocks concentrated in the
    Lower–Mid Miocene volcaniclastics at the Southern Mountains limestone
-   boundary. Corroboration from an independent, ~6× denser catalogue is a
-   result in its own right — and needs only their published fault interpretation,
-   not their magnitude data.
+   boundary. This is the resolution culmination of our own decade-long program.
 
-## Positioning vs Ramdhan et al. (2025)
+## Positioning: our program, with Ramdhan as parallel confirmation
 
-**Complementary, not competing.** They established the fault interpretation; we
-provide (i) an independent, denser, openly-released relocated catalogue that
-corroborates it, and (ii) the reproducible magnitude/completeness methodology
-their study did not detail. Cite them as the reference interpretation we test.
-Explicitly avoid any "more events" claim — state that a like-for-like catalogue
-comparison awaits a common completeness threshold (their FMD not available).
+**Priority chain:** Diambama et al. (2019, our group) first proposed the Ngalang
+Fault association → Ramdhan et al. (2025) independently named it as the source
+from 2,141 events → this study images it at sub-500 m from 13,251 events. Cite
+Diambama 2019 as the origin of the interpretation, Ramdhan 2025 as independent
+corroboration, this study as the high-resolution culmination. Explicitly avoid
+any "more events" claim — a like-for-like catalogue comparison awaits a common
+completeness threshold (Ramdhan FMD not available), which is fine because the
+contribution no longer rests on the count.
 
 ## Draft abstract (skeleton, ~200 words)
 
@@ -88,8 +115,11 @@ comparison awaits a common completeness threshold (their FMD not available).
 
 ## Section outline → existing assets
 
-1. **Introduction** — 2006 Yogya Mw 6.4; the Opak/Ngalang/Oyo source debate;
-   the case for reprocessing legacy temporary-array data with ML pickers.
+1. **Introduction** — 2006 Yogya Mw 6.4; the Opak vs Ngalang source debate; our
+   group's 2019 tomography (Diambama et al.) first proposing the Ngalang
+   association, resolved to 5–7 km; Ramdhan et al. 2025 independent confirmation;
+   the case for returning to the same archive with ML picking for higher
+   resolution. [[wiki/sources/diambama-2019-yogya-tomography]]
 2. **Data & network** — XN 12-station L4-3D array; `stations_periods.json`
    (station relocations mid-deployment); data hygiene.
 3. **Detection, association, location** — EQTransformer/SeisBench → PyOcto →
@@ -113,7 +143,9 @@ comparison awaits a common completeness threshold (their FMD not available).
 ## Pre-submission checklist
 
 - [ ] **Pick validation vs manual ground truth** — precision/recall + P/S
-  residuals on ~100–200 events. Reviewers WILL ask for an ML-picker paper.
+  residuals vs the **Anggraini (2013) manual picks** (3,769 P + 3,407 S, same
+  raw archive; in-house via the group). Reviewers WILL ask for an ML-picker
+  paper; the benchmark now exists — just needs the pick files.
 - [ ] Zenodo release (picks, magnitudes, quality flags, relocations, model) + DOI.
 - [ ] Local-ML caveat: Hutton-Boore distance term (no Java-specific scale) —
   state and bound the effect.
