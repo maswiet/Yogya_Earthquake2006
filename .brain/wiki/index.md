@@ -65,6 +65,7 @@ Last updated: 2026-07-20
 - [[wiki/outputs/yogya-2006-eqt-catalog]] - EQTransformer Yogya 2006 aftershock catalog (16,876 located; 11,790 quality-passed). Magnitudes corrected 2026-07-20: Mc=+0.50, b=0.89±0.02.
 - [[wiki/outputs/yogya-2006-1d-velocity-model]] - Data-driven 1-D velocity (Wadati Vp/Vs=1.735; VELEST minimum-1D + station corrections).
 - [[wiki/outputs/yogya-2006-pangandaran-triggering]] - Pangandaran Mw7.7 (17 Jul 2006) triggering test: no detectable triggering; small-event deficit is a completeness artifact.
+- [[wiki/outputs/yogya-2006-srl-paper-plan]] - SRL paper plan (2026-07-20): reframed as methodology + open data product; "N× more events" claim dropped; pick validation is the main remaining task.
 
 ## Templates
 
@@ -76,7 +77,7 @@ Last updated: 2026-07-20
 ## Open Threads
 
 - Assess whether EQTransformer generalizes to Yogyakarta 2006 aftershock data — see [[wiki/questions/applying-eqtransformer-to-yogya-2006]].
-- **SRL critical path:** obtain Ramdhan et al. 2025 Mc / frequency-magnitude distribution. Our catalog is 5.51× their 2,141 events over all detections but only 0.83× at our Mc=+0.50 — no "N× more events" claim is defensible without their completeness. See [[wiki/outputs/yogya-2006-eqt-catalog]].
+- **SRL paper (reframed 2026-07-20):** methodology + open data product, not a count comparison — see [[wiki/outputs/yogya-2006-srl-paper-plan]]. Ramdhan FMD no longer blocking. **Main remaining task: pick validation vs manual ground truth** (biggest reviewer risk for an ML-picker paper). Then Zenodo DOI release.
 - ~~Open magnitude issues: FMD roll-off / TF16 anomaly~~ **RESOLVED 2026-07-20**: FMD roll-off is real (events reach only 16% of the digitiser rail, no clipping ⇒ max ML 3.55 is real, not a lower bound); TF16 −0.37 is a genuine site/path effect (distance-dependent, time-stable, both components healthy), absorbed by the station correction. See [[wiki/outputs/yogya-2006-eqt-catalog]].
 - `needs-review`: EQTransformer's exact architecture, training-set name/size, and per-station Tottori metrics were not captured from a primary source — fill in from the full paper/methods.
 - Keep all second-brain work inside `.brain`, with content organized under only `raw/` and `wiki/`.

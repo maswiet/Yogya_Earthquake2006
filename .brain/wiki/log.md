@@ -247,3 +247,20 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
     (ML~−0.4 lose 47–65% vs 1–45 Hz); kept as standard.
 - **Follow-ups:** Ramdhan FMD/Mc remains the only blocker for the "N× events"
   claim; consider a modified-GR (tapered) fit to report a corner magnitude.
+
+## [2026-07-20] planning | Reframe SRL paper: methodology + open data product
+
+- **Trigger:** Ramdhan et al. 2025 FMD/Mc hard to obtain; user chose to reframe
+  away from the "N× more events" claim rather than block on it.
+- **Files (brain):** `wiki/outputs/yogya-2006-srl-paper-plan.md` (new),
+  `wiki/index.md`, `wiki/log.md`.
+- **Key result:** New framing = 3 legs — (1) reproducible ML workflow documenting
+  three deep-learning-reprocessing pitfalls (taper on day-long traces, mains hum,
+  MaxC-underestimates-Mc); (2) open, quality-screened, GrowClust-relocated
+  catalogue with characterised completeness (Mc=+0.50, b=0.89); (3) independent
+  structural corroboration of the Opak–Ngalang source (N57°E ≈ GCMT NP2) from a
+  ~6× denser catalogue. Ramdhan positioned as complementary reference, not
+  competitor — needs only their fault interpretation, not their magnitudes.
+  Draft abstract + section→asset outline + pre-submission checklist recorded.
+- **Follow-ups:** pick validation vs manual ground truth (top reviewer risk);
+  Zenodo DOI release; confirm SRL article type; optional tapered-GR corner mag.
