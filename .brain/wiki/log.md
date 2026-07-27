@@ -285,3 +285,23 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   matches our catalogue exactly (magnitude cross-check).
 - **Follow-ups:** obtain Anggraini 2013 pick files for EQTransformer
   precision/recall validation; add Diambama 2019 + Anggraini 2013 to references.
+
+## [2026-07-20] query | Compare EQT catalogue vs Anggraini 2013 manual catalogue
+
+- **Trigger:** User provided the Anggraini dissertation catalogue
+  (`~/Downloads/Bantul2006_Aftershock_Catalogue.xlsx`).
+- **Files:** `eqt/scripts/compare_anggraini.py` + `figures/compare_anggraini.png`
+  (repo); `wiki/sources/diambama-2019-yogya-tomography.md`,
+  `wiki/outputs/{yogya-2006-eqt-catalog,yogya-2006-srl-paper-plan}.md`,
+  `wiki/index.md`, `wiki/log.md` (brain).
+- **Key result:** Catalogue = 590 events (Absolute) / 524 (DD), **3–7 Jun 2006
+  only**, columns date+lon+lat+depth+ML — **no origin times, no picks** (so no
+  pick-level precision/recall; event pairing impossible, NN ML r=0.06). In the
+  3–7 Jun window: **strong detection recovery** (576/590 co-located same-day) +
+  spatial/depth agreement (same NE–SW Ngalang structure) = event-level
+  validation. **⚠️ Systematic ML offset: our absolute ML ~0.9–1.25 units BELOW
+  Anggraini's manual scale** (matched-median +0.86; FMD-tail +1.25). b-value is
+  offset-invariant so b=0.89 stands; absolute Mc/magnitudes need a local tie.
+- **Follow-ups:** determine Anggraini's magnitude method (ML vs duration Md) to
+  explain the offset; obtain phase-pick files for true pick validation; decide
+  recalibrate-vs-report for the absolute scale.

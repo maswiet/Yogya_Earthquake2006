@@ -142,10 +142,16 @@ contribution no longer rests on the count.
 
 ## Pre-submission checklist
 
-- [ ] **Pick validation vs manual ground truth** — precision/recall + P/S
-  residuals vs the **Anggraini (2013) manual picks** (3,769 P + 3,407 S, same
-  raw archive; in-house via the group). Reviewers WILL ask for an ML-picker
-  paper; the benchmark now exists — just needs the pick files.
+- [x] **Event-level validation vs Anggraini (2013) manual catalogue** (done
+  2026-07-20): strong detection recovery (576/590 co-located) + spatial/depth
+  agreement over 3–7 Jun. See [[wiki/sources/diambama-2019-yogya-tomography]].
+- [ ] **Pick-level validation** still ideal (precision/recall + P/S residuals)
+  but needs the Anggraini *phase-pick* files — the xlsx catalogue has locations
+  + ML only, no picks and no origin times. Ask the group for the pick files.
+- [ ] **⚠️ Resolve the ~1-unit ML offset vs the Anggraini scale** (NEW, must-fix):
+  determine Anggraini's magnitude method (ML vs duration Md); then either
+  recalibrate our absolute scale to the local one or report the tie explicitly.
+  b-value is unaffected (offset-invariant); absolute Mc/magnitudes are.
 - [ ] Zenodo release (picks, magnitudes, quality flags, relocations, model) + DOI.
 - [ ] Local-ML caveat: Hutton-Boore distance term (no Java-specific scale) —
   state and bound the effect.

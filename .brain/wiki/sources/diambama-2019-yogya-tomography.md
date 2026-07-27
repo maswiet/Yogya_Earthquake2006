@@ -80,6 +80,33 @@ Ramdhan et al. (2025) later named the Ngalang Fault as the mainshock source from
    ([[wiki/outputs/yogya-2006-srl-paper-plan]]). Need to obtain the Anggraini
    2013 pick files / catalogue from the group.
 
+## Anggraini catalogue obtained + compared (2026-07-20)
+
+`Bantul2006_Aftershock_Catalogue.xlsx` (2 sheets: Absolute_location 590 events;
+DD_location 524 HypoDD-relocated). Columns: date/month/year, lon, lat, depth, ML.
+**No sub-day origin time and no phase picks** → event-by-event pairing impossible
+(nearest-neighbour ML correlation r=0.06 = matches co-located but different
+events). Covers **only 3–7 June 2006** (5 days, ~118/day); our catalogue spans
+3 Jun–29 Aug, so the comparison window is 3–7 Jun. Script
+`eqt/scripts/compare_anggraini.py`, figure `figures/compare_anggraini.png`.
+
+**Findings (distributional):**
+- **Detection recovery strong:** 576/590 manual events have a co-located
+  same-day counterpart; we add ~324 more (914 QC events vs 590). Spatial and
+  depth distributions agree (both delineate the NE–SW Ngalang structure). This
+  is our event-level validation in lieu of pick-level precision/recall.
+- **⚠️ Systematic ML offset ~0.9–1.25 units: our absolute ML reads LOW vs the
+  Anggraini manual scale.** Matched-location median offset +0.86; FMD-tail
+  alignment +1.25. b-value is offset-invariant (both ≈0.76–0.77 once tied), so
+  our **b = 0.89 stands**, but our **absolute Mc/magnitudes need a tie to the
+  local scale**. This makes the "no local Java ML scale (Hutton-Boore
+  California)" caveat quantitative and material.
+- **Open question — Anggraini's magnitude METHOD is unknown.** If she used a
+  duration/coda magnitude (Md, common in Indonesia) rather than Wood-Anderson
+  ML, a ~1-unit systematic difference is expected and is a convention difference,
+  NOT an error in our ML. Must determine her method (dissertation text) before
+  deciding whether to recalibrate our scale or simply report the tie.
+
 ## Links
 
 - [[wiki/outputs/yogya-2006-eqt-catalog]]
