@@ -409,3 +409,19 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   Zenodo deposit (Seismica community) with metadata.csv + waveforms.hdf5 +
   catalogue CSVs + preview PNGs; run `build_event_browser.py --all`; draft the
   Seismica Data Report manuscript.
+
+## [2026-08-14] planning | SRL Data Mine vs Seismica venue assessment
+
+- **Trigger:** User leaning toward SRL Data Mine instead of Seismica.
+- **Files (brain):** `wiki/outputs/yogya-2006-srl-paper-plan.md`, `wiki/log.md`.
+- **Key result:** Fetched SRL Data Mine author info. Max 6,000 words/10 figs,
+  fixed 8-section template, judged on data access + reusability, NO new
+  methods/hypothesis testing. Two honest concerns for our project: (1) it targets
+  *recent* deployments — ours is a 2006 legacy deployment reprocessed into a new
+  derived catalogue (confirm eligibility with the editor); (2) our pitfalls +
+  pick-validation must ride as data-quality notes, not headline methods (Seismica
+  would let them breathe). Both venues need the Zenodo DOI. Recorded the Data Mine
+  8-section -> asset map. Decision pending user.
+- **Follow-ups:** user to pick venue (+ optionally email Data Mine editor re
+  legacy-data eligibility); then draft to the chosen template; Zenodo deposit is
+  the shared next production step.

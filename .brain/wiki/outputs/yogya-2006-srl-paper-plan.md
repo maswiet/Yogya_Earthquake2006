@@ -14,7 +14,42 @@ tags:
   - deliverable
 ---
 
-## Venue update (2026-08-14): Seismica Data Report (Reports category)
+## Venue options (2026-08-14): SRL Data Mine vs Seismica Report
+
+User is leaning toward **SRL Data Mine**. Both are viable data-product venues;
+the DOI-citable Zenodo deposit is required either way. Trade-off:
+
+**SRL Data Mine** (author info fetched 2026-08-14): max **6,000 words, 10 figs**,
+fixed **8-section template** (Abstract; Intro/Motivation; Deployment & Details;
+Overall Data Quality & Availability; Initial Observations; Initial Results
+[optional]; Summary; Data & Resources). **Judged on data access + reusability**,
+NOT novelty. Hard rule: **must NOT contain hypothesis testing, extensive
+new-insight analysis, or fundamentally new methods.** Data must be public (or
+within 2 yr) in a well-recognized repository (IRIS DMC named); **DOI required for
+temporary deployments**.
+- **Concern 1 (raise with editor):** Data Mine documents *recent experiments*;
+  our deployment is 2006, already documented (Anggraini 2013, Diambama 2019). The
+  DATASET (EQT catalogue + ML archive) is new/derived, not freshly collected —
+  confirm a reprocessed legacy catalogue qualifies before submitting.
+- **Concern 2:** our distinctive work (3 processing pitfalls; pick validation)
+  must ride as *data-quality/QA notes*, not headline methods; Ngalang/tomography
+  trim to brief "initial observations." Seismica (10k words) would let them be
+  first-class.
+- **Upside:** SRL (high visibility, user's original target), shorter/faster, and
+  the core reusable dataset is exactly what Data Mine rewards.
+
+**Section map (Data Mine):** 2 Intro = 2006 Mw6.4 + ML-reprocessing case +
+Ngalang context; 3 Deployment = GFZ/GTF 12-station XN L4-3D/EDL (legacy
+provenance); **4 Data Quality (core)** = 16,876 events, Mc/b, +0.41 local tie,
+QC flags, pick validation (90%, P MAD 0.02s), taper/hum QA, SeisBench archive,
+Zenodo DOI; 5 Initial Obs = spatial/depth, Omori, FMD, Ngalang delineation;
+6 Initial Results (opt) = tomography-resolution feasibility + Pangandaran null
+(brief); 8 Data & Resources = Zenodo DOI + GitHub browser/code.
+
+**Decision: pending user.** Draft can target Data Mine's 8-section template;
+easy to expand to Seismica later if desired.
+
+## Venue detail: Seismica Data Report (Reports category)
 
 Target refined from SRL to a **Seismica "Report" (data-focused)** — a better fit
 for a validated, openly-released catalogue + waveform archive. Seismica criteria
