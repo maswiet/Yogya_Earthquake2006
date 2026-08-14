@@ -35,6 +35,7 @@ Last updated: 2026-07-20
 - [[wiki/sources/eqtransformer-github-repo]] - Official MIT-licensed Python package (TensorFlow/ObsPy) implementing EQTransformer with pretrained models.
 - [[wiki/sources/yogya-2006-aftershock-edl-dataset]] - Raw GFZ EDL aftershock recordings (external volume); layout + critical data-hygiene facts.
 - [[wiki/sources/diambama-2019-yogya-tomography]] - **Our group's own 2019 GJI tomography** — first proposed the Ngalang Fault association (6 yr before Ramdhan 2025); same dataset; Anggraini 2013 manual picks = pick-validation ground truth.
+- [[wiki/sources/zenodo-lotos-koulakov-2021]] - Zenodo release of the LOTOS tomography code (Koulakov; Gakkel Ridge variant) — a citable copy of the engine used in Diambama et al. 2019.
 
 ## Concepts
 
@@ -48,6 +49,7 @@ Last updated: 2026-07-20
 - [[wiki/entities/eqtransformer-model]] - The EQTransformer model / open-source package.
 - [[wiki/entities/2000-tottori-earthquake-sequence]] - Japan sequence used as EQTransformer's field-test dataset.
 - [[wiki/entities/yogya-2006-temp-aftershock-network]] - 12-station temp EDL array + coordinate table.
+- [[wiki/entities/lotos-tomography-code]] - LOTOS local-earthquake-tomography code (Koulakov 2009); the LOTOS-13 engine used in Diambama et al. 2019.
 
 ## Syntheses
 

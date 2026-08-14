@@ -305,3 +305,22 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** determine Anggraini's magnitude method (ML vs duration Md) to
   explain the offset; obtain phase-pick files for true pick validation; decide
   recalibrate-vs-report for the absolute scale.
+
+## [2026-08-14] ingest | Zenodo LOTOS code release (Koulakov 2021)
+
+- **Trigger:** User ran `/ingest https://zenodo.org/records/5338981`.
+- **Files (brain):** `raw/2026-08-14_zenodo-lotos-koulakov/provenance.md` (new),
+  `wiki/sources/zenodo-lotos-koulakov-2021.md` (new),
+  `wiki/entities/lotos-tomography-code.md` (new),
+  `wiki/sources/diambama-2019-yogya-tomography.md` (backlinks),
+  `wiki/index.md`, `wiki/log.md`.
+- **Key result:** Zenodo record = open (CC BY 4.0) LOTOS tomography code release by
+  Ivan Koulakov (DOI 10.5281/zenodo.5338981, 2021), the **Gakkel Ridge (Arctic)**
+  variant with a water layer — NOT Yogyakarta data. Relevant because LOTOS
+  (Koulakov 2009) is the SAME engine (LOTOS-13) our group used in Diambama et al.
+  2019. Captured metadata/provenance only (29.6 MB zip not downloaded); created a
+  source page + a LOTOS entity, cross-linked to the Diambama source and the 1-D
+  velocity-model output.
+- **Follow-ups (`needs-review`):** confirm which LOTOS version Diambama 2019 ran;
+  decide whether a re-run with a current LOTOS is worthwhile for the SRL paper's
+  velocity-model section.

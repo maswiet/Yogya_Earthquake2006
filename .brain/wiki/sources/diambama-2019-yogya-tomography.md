@@ -113,3 +113,5 @@ events). Covers **only 3–7 June 2006** (5 days, ~118/day); our catalogue spans
 - [[wiki/outputs/yogya-2006-srl-paper-plan]]
 - [[wiki/outputs/yogya-2006-1d-velocity-model]]
 - [[wiki/entities/yogya-2006-temp-aftershock-network]]
+- [[wiki/entities/lotos-tomography-code]] — the LOTOS-13 engine used for this tomography
+- [[wiki/sources/zenodo-lotos-koulakov-2021]] — citable LOTOS code release
