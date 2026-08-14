@@ -32,3 +32,6 @@ eqt/growclust/dt.ct
 eqt/growclust/*.out
 eqt/growclust/OUT/
 eqt/growclust/TT/
+
+# Per-event waveform previews (data product; archived on Zenodo, not git)
+eqt/figures/events/

@@ -14,6 +14,38 @@ tags:
   - deliverable
 ---
 
+## Venue update (2026-08-14): Seismica Data Report (Reports category)
+
+Target refined from SRL to a **Seismica "Report" (data-focused)** — a better fit
+for a validated, openly-released catalogue + waveform archive. Seismica criteria
+(from author guidelines, fetched 2026-08-14): ≤10,000 words + 10 display items;
+structure = background/motivation → deployment/experiment description → data
+description (with repository) → preliminary observations; **data MUST be in a
+DOI-citable repository (Zenodo / GFZ Data Services) — GitHub alone is explicitly
+NOT accepted as archival.** Seismica has its own Zenodo community.
+
+**Data-product architecture (decided):**
+- **Zenodo deposit (the citable product, ~3–10 GB, fits the 50 GB limit):**
+  (1) catalogue CSVs (locations, magnitudes with the +0.41 local tie, quality
+  flags, GrowClust relocations + uncertainties); (2) **ML-ready waveform archive**
+  — per-event multi-station windows in SeisBench/HDF5 format with P/S pick labels
+  + magnitudes (~2.8 GB downsampled) — directly usable to train/benchmark ML
+  pickers; (3) per-event preview PNGs (~0.9 GB QC).
+- **GitHub (code + browser only, NOT the data):** processing scripts + an
+  interactive event browser — sortable HTML table (time/loc/depth/ML/gap/QC) with
+  each event id linking to its waveform preview. POC built:
+  `eqt/scripts/build_event_browser.py` (generates previews + index.html; the
+  events/ output is gitignored → Zenodo). GitHub Pages can serve the browser with
+  images pulled from the Zenodo record.
+- **"Most events" framing is fine for a Data Report** — it is a factual dataset
+  descriptor (largest validated catalogue for this sequence), NOT a scientific
+  superiority claim, PROVIDED completeness (Mc, +0.41 tie, QC) is reported
+  honestly. The pick validation (90% recovery, P MAD 0.02 s) is the QA that makes
+  it credible.
+- **ML value:** the labelled waveform archive is the reusability headline —
+  usable for ML picker training/benchmarking, plus tomography (2–3 km core
+  resolution feasibility shown), b-value/statistical, and hazard studies.
+
 ## Decision (2026-07-20)
 
 Ramdhan et al. (2025) magnitude/FMD data is hard to obtain, so the "N× more

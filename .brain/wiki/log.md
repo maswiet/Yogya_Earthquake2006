@@ -368,3 +368,24 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Caveats/follow-ups:** straight-ray proxy + heuristic thresholds; a definitive
   answer needs a LOTOS/checkerboard run. Resolution is best INSIDE the source
   volume; margins and >15 km stay coarse regardless of catalogue size.
+
+## [2026-08-14] planning | Seismica Data Report + event-browser data product
+
+- **Trigger:** User asked whether the work is publication-worthy, targeting a
+  Seismica data-based Report, with a GitHub clickable event table -> per-event
+  waveform image, reusable for ML.
+- **Files:** `eqt/scripts/build_event_browser.py` (new POC), `.gitignore`
+  (ignore figures/events/), `wiki/outputs/yogya-2006-srl-paper-plan.md`,
+  `wiki/log.md` (brain).
+- **Key result:** Assessed as worth publishing — Seismica "Report" (data-focused)
+  is a strong fit. Grounded in Seismica guidelines: <=10k words/10 items; data
+  MUST be DOI-citable (Zenodo/GFZ), GitHub NOT archival. Architecture: Zenodo =
+  catalogue CSVs + ML-ready SeisBench/HDF5 waveform archive (~2.8 GB downsampled)
+  + preview PNGs; GitHub = code + interactive event browser (sortable HTML table
+  linking to previews). POC browser built (works; empty previews this run because
+  the raw EDL volume unmounted mid-session — pipeline itself proven earlier).
+  "Most events" is a valid Data Report descriptor given honest completeness
+  reporting + the pick validation QA.
+- **Follow-ups:** remount raw volume, run `build_event_browser.py --all` (hours);
+  build the SeisBench/HDF5 ML archive; create the Zenodo deposit (Seismica
+  community) for the DOI; wire GitHub Pages browser to Zenodo-hosted images.
