@@ -462,3 +462,15 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** user creates the Zenodo record (Seismica/SRL community) + DOI,
   fills the README placeholders (raw-data repo/DOI, citation), completes author
   list + references in the manuscript, publication-cleans the figures.
+
+## [2026-08-14] export | Zenodo deposit COMPLETE (7.4 GB, verified)
+
+- **Follow-up:** Gallery finished — **16,876 event previews (873 MB)** generated
+  from the SeisBench HDF5 + index.html. Full deposit at ~/Yogya2006_Zenodo =
+  **7.4 GB**: catalog/ (4 CSVs), waveforms_ml/ (6.6 GB hdf5 + metadata, 97,660
+  rows), event_browser/ (16,876 previews + sortable index), README.md. Integrity
+  verified: all previews present, median 51 KB (real waveforms), labels aligned.
+  **The full open data product is assembled and ready to upload to Zenodo.**
+- **All that remains is user-side:** create the Zenodo record + DOI; fill README/
+  manuscript placeholders (raw-data repo/DOI, authors, references); confirm Data
+  Mine legacy-data eligibility with the editor; publication-clean the figures.
