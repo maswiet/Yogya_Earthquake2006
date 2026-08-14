@@ -14,6 +14,11 @@ tags:
   - deliverable
 ---
 
+## Draft started (2026-08-14)
+
+Section-by-section Data Mine draft at `manuscript/yogya2006_datamine.md`
+(8-section template, ~1,720 body words; Zenodo DOI + refs pending).
+
 ## Venue options (2026-08-14): SRL Data Mine vs Seismica Report
 
 User is leaning toward **SRL Data Mine**. Both are viable data-product venues;
