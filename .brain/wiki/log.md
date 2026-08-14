@@ -440,3 +440,25 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** Zenodo deposit (Seismica/SRL Data Mine — catalogue CSVs +
   waveforms.hdf5 + metadata.csv + preview PNGs); run build_event_browser.py --all;
   publication-clean the figures.
+
+## [2026-08-14] export | Assemble Zenodo deposit folder
+
+- **Trigger:** User asked to run the full event browser and assemble the Zenodo
+  deposit; intended target /Volumes/Untitled 1 (large free space).
+- **Gotcha:** /Volumes/Untitled 1 is **NTFS, mounted read-only** on macOS — cannot
+  write there. Assembled instead at **~/Yogya2006_Zenodo** on the internal disk
+  (98 GB free; ~8 GB deposit). User can upload to Zenodo from there (browser/API
+  upload does not need the external drive) or copy to a Mac-formatted volume.
+- **Files:** `eqt/scripts/build_gallery.py` (new — previews + browser sourced
+  from the SeisBench HDF5, NOT the raw volume: fast, drive-independent, matches
+  deposited data), `manuscript/zenodo_deposit_README.md` (tracked copy of the
+  deposit README), `wiki/log.md`.
+- **Deposit contents (~/Yogya2006_Zenodo/):** catalog/ (magnitude, quality,
+  growclust CSVs + stations.csv), waveforms_ml/ (waveforms.hdf5 6.6 GB +
+  metadata.csv), event_browser/ (index.html + per-event previews), README.md.
+- **Design note:** the event gallery is generated from waveforms.hdf5, so
+  previews are guaranteed consistent with the archived data and no raw-volume
+  re-read (~hours) is needed. Full run launched (16,876 previews, ~60 min).
+- **Follow-ups:** user creates the Zenodo record (Seismica/SRL community) + DOI,
+  fills the README placeholders (raw-data repo/DOI, citation), completes author
+  list + references in the manuscript, publication-cleans the figures.
