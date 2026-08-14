@@ -35,3 +35,6 @@ eqt/growclust/TT/
 
 # Per-event waveform previews (data product; archived on Zenodo, not git)
 eqt/figures/events/
+
+# SeisBench ML waveform archive (data product; archived on Zenodo, not git)
+eqt/seisbench/
