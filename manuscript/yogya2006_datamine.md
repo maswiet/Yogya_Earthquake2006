@@ -75,7 +75,8 @@ Data Logger (EDL)** at 100–200 Hz, with GPS timing. Average inter-station spac
 was ~10 km (≈4 km near the Opak Fault, ≈16 km at the margins). A subset of
 stations was relocated during the deployment; we track the time-dependent station
 positions and use the position active at each event time. Station coordinates are
-provided with the data release.
+provided with the data release. **Figure 1** shows the network and the aftershock
+zone on regional relief.
 
 The reprocessing here uses the continuous vertical- and horizontal-component
 records for days 154–241 of 2006 (3 June–29 August), covering 944 station-days.
@@ -93,7 +94,8 @@ events with PyOcto and located with **NonLinLoc** (Lomax et al., 2000) in a
 data-driven 1-D velocity model derived for this sequence with **VELEST**
 (Kissling et al., 1994; V<sub>p</sub>/V<sub>s</sub> = 1.735), with station
 corrections that map the sediment-versus-limestone contrast across the Opak
-Fault. The procedure yields **16,876 located events** over 3 June–29 August 2006.
+Fault (**Figure 2**). The procedure yields **16,876 located events** over
+3 June–29 August 2006.
 
 ### 4.2 Quality screening
 
@@ -112,9 +114,11 @@ provided metrics.
 The full quality catalogue was relocated by double-difference with **GrowClust**
 (Trugman & Shearer, 2017) using 3.56 million catalogue differential times:
 **13,251 events (97 %) relocated** in 543 clusters (largest cluster 6,917
-events). Bootstrap resampling (n = 100) gives median relative uncertainties of
-**274 m horizontal, 305 m vertical, 47 ms origin time**. Relocated hypocentres,
-cluster IDs, and per-event uncertainties are included.
+events); the diffuse hypocentre cloud collapses onto a sharp, steeply dipping
+plane (**Figure 3**). Bootstrap resampling (n = 100) gives median relative
+uncertainties of **274 m horizontal, 305 m vertical, 47 ms origin time**
+(**Figure 4**). Relocated hypocentres, cluster IDs, and per-event uncertainties
+are included.
 
 ### 4.4 Local magnitudes and completeness
 
@@ -125,8 +129,10 @@ site corrections. Magnitudes span **M<sub>L</sub> −1.8 to 3.6** (median −0.2
 Completeness assessed by b-value stability (Woessner & Wiemer, 2005) is
 **M<sub>c</sub> ≈ 0.5**, with **b = 0.89 ± 0.02** (Aki–Utsu). The maximum-
 curvature estimate (M<sub>c</sub> = −0.2) is reported for reference but
-underestimates completeness for this network. *(Figure: frequency–magnitude
-distribution and detection-limit analysis.)*
+underestimates completeness for this network (**Figure 5**). Independently, the
+single-station instrumental noise floor at the median recording distance predicts
+a detection limit ~0.6 magnitude units below the network completeness — the cost
+of requiring detection at enough stations to associate and locate (**Figure 6**).
 
 Two site/processing effects are documented as data-quality notes and are already
 corrected in the released magnitudes: (i) instrument-simulation on day-long
@@ -146,7 +152,10 @@ Automatic picks match co-located manual picks with **median absolute residuals o
 matched magnitudes correlate at **r = 0.95** with a constant offset of **+0.41**
 (our M<sub>L</sub> reads 0.41 low relative to the manual scale); we provide both
 the raw M<sub>L</sub> and the local-scale-tied value. The b-value is invariant to
-this offset. *(Figure: pick-residual histograms + magnitude cross-plot.)*
+this offset (**Figure 7**). **Figure 8** shows representative events across the
+magnitude range (M<sub>L</sub> +1.7 to −1.0) with their P and S picks and
+signal-to-noise ratios, illustrating that events below the network completeness
+are genuine detections rather than noise triggers.
 
 ### 4.6 Data availability and formats
 
@@ -173,8 +182,8 @@ double-difference relocation the diffuse cloud collapses onto a steeply dipping
 plane consistent with the GCMT mechanism (near-vertical NE–SW left-lateral
 strike-slip) and with the Ngalang Fault association of Diambama et al. (2019).
 The daily event rate decays in an Omori-like manner (p ≈ 1.05) from a peak of
-382 events/day on 17 June. *(Figures: epicentre/relief map; depth cross-section;
-along-strike-vs-time; frequency–magnitude distribution.)*
+382 events/day on 17 June (**Figure 9**). The relocated epicentres and their
+depth section are shown in Figures 1 and 3.
 
 ---
 
@@ -185,8 +194,8 @@ catalogue's ~142,000 ray paths (≈20× the earlier manual dataset) support a
 velocity-model resolution of ~2–3 km in the source-volume core (4–14 km depth)
 and ~5 km across the aftershock footprint, versus the 5–10 km of prior tomography
 — a resolution improvement bounded by the fixed station geometry rather than
-event count. A definitive resolution test requires a full inversion and is left
-to future work. *(Figure: ray-coverage / azimuthal-diversity maps.)*
+event count (**Figure 10**). A definitive resolution test requires a full
+inversion and is left to future work.
 
 **Reusability for machine learning.** The labelled waveform archive (§4.6) is
 provided in a community-standard format for training and benchmarking
@@ -219,6 +228,45 @@ are at [GitHub URL]. EQTransformer is from Mousavi et al. (2020) via SeisBench
 et al. (1994); GrowClust from Trugman & Shearer (2017). The raw continuous data
 were collected by the GFZ German Task Force for Earthquakes with BMKG and UGM.
 [Note per Data Mine policy: state the raw-data repository/DOI and any embargo.]
+
+---
+
+## Figures
+
+Files are in `eqt/figures/` in the code repository (final versions to be
+deposited with the article).
+
+**Figure 1.** Temporary XN network and the aftershock zone on regional relief,
+with the south-Java coastline for geographic reference. *(`aftershock_relief_map.png`)* — §3
+
+**Figure 2.** Data-driven 1-D velocity model (VELEST minimum-1D) and station
+corrections used for location. *(`velest_1d_model.png`)* — §4.1
+
+**Figure 3.** GrowClust double-difference-relocated catalogue: map view and
+depth cross-section, showing collapse onto a steeply dipping NE–SW plane.
+*(`growclust_relocation.png`)* — §4.3, §5
+
+**Figure 4.** Bootstrap relative-location uncertainties (n = 100): horizontal,
+vertical, and origin-time distributions. *(`growclust_uncertainty.png`)* — §4.3
+
+**Figure 5.** Frequency–magnitude distribution: maximum-curvature vs b-value-
+stability M<sub>c</sub>, and b-value fit. *(`magnitude_gutenberg_richter.png`)* — §4.4
+
+**Figure 6.** Detection-limit analysis: instrumental noise floor vs network
+completeness, and nearest-station-distance diagnostic. *(`detection_noise_floor.png`)* — §4.4
+
+**Figure 7.** Validation against manual picks: P/S pick-residual histograms and
+event-matched magnitude cross-plot (r = 0.95, +0.41 tie). *(`pick_validation.png`)* — §4.5
+
+**Figure 8.** Representative events across the magnitude range with P/S picks,
+amplitude/noise windows, and SNR. *(`example_waveforms.png`)* — §4.5
+
+**Figure 9.** Daily aftershock rate (Omori decay, p ≈ 1.05) and cumulative count.
+*(`aftershock_rate_decay.png`)* — §5
+
+**Figure 10.** Tomographic-resolution feasibility from the catalogue's ray
+coverage: resolvable-fraction vs grid size, ray-hit and azimuthal-diversity maps.
+*(`tomo_resolution.png`)* — §6
 
 ---
 
