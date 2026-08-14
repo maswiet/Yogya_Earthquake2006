@@ -389,3 +389,23 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** remount raw volume, run `build_event_browser.py --all` (hours);
   build the SeisBench/HDF5 ML archive; create the Zenodo deposit (Seismica
   community) for the DOI; wire GitHub Pages browser to Zenodo-hosted images.
+
+## [2026-08-14] export | SeisBench ML waveform archive builder
+
+- **Trigger:** User approved building the SeisBench archive (the ML-ready data
+  product for the Seismica report); raw EDL volume remounted.
+- **Files:** `eqt/scripts/build_seisbench.py` (new), `.gitignore` (ignore
+  eqt/seisbench/), `wiki/log.md`. Output `eqt/seisbench/{metadata.csv,
+  waveforms.hdf5}` (gitignored -> Zenodo).
+- **Key result:** Writes one trace per (event, station): 3-component (ZNE) 60 s
+  window at 100 Hz around the P pick, P/S arrival-sample labels, full event +
+  station metadata (ML + the +0.41 local-scale tie, gap, QC flag, 80/10/10
+  train/dev/test split). Raw counts (STEAD/EQT convention). Verified round-trip
+  via seisbench.data.WaveformDataset: P@sample 1500, S-P gaps physical, splits
+  correct, waveforms (3,6000) float32. Event-browser POC also confirmed working
+  with real waveforms once the volume was remounted. Full run launched
+  (945 station-days, ~71k traces expected).
+- **Follow-ups:** on completion, spot-check a few waveforms + labels; create the
+  Zenodo deposit (Seismica community) with metadata.csv + waveforms.hdf5 +
+  catalogue CSVs + preview PNGs; run `build_event_browser.py --all`; draft the
+  Seismica Data Report manuscript.
