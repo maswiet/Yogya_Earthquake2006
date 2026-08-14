@@ -425,3 +425,18 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** user to pick venue (+ optionally email Data Mine editor re
   legacy-data eligibility); then draft to the chosen template; Zenodo deposit is
   the shared next production step.
+
+## [2026-08-14] export | SeisBench archive COMPLETE + verified (97,660 traces)
+
+- **Follow-up to the SeisBench builder entry above.** Full run finished:
+  **97,660 traces** (waveforms.hdf5 6.6 GB + metadata.csv 23 MB) from all 16,876
+  events, 17 stations. P labels on all traces; S on 94,051 (96%); 71,107 QC-passed
+  traces. Splits train 78,075 / dev 9,633 / test 9,952. Verified via
+  seisbench.data.WaveformDataset: S-P all positive (median 2.22 s), P-SNR ~5-9.5
+  at the P label, labels visually aligned with arrivals across ML +3.55..-0.25
+  (`eqt/figures/seisbench_check.png`). The ML-ready data product is ready for the
+  Zenodo deposit. 6.6 GB at 100 Hz fits Zenodo (50 GB); optional downsample if
+  desired.
+- **Follow-ups:** Zenodo deposit (Seismica/SRL Data Mine — catalogue CSVs +
+  waveforms.hdf5 + metadata.csv + preview PNGs); run build_event_browser.py --all;
+  publication-clean the figures.
