@@ -31,6 +31,35 @@ def to_km(lat, lon): return (lon-LON0)*KML*np.cos(np.radians(LAT0)), (lat-LAT0)*
 XMIN, XMAX, YMIN, YMAX, ZMIN, ZMAX = -18, 18, -18, 18, 0, 20
 
 
+def coastline():
+    """Yogya coastline segments in local km (from GMT GSHHG, eqt/data/coastline_yogya.xy)."""
+    path = f"{ROOT}/data/coastline_yogya.xy"
+    if not os.path.exists(path):
+        return []
+    segs = []; cur = []
+    for line in open(path):
+        if line.startswith(">"):
+            if len(cur) > 1:
+                segs.append(np.array(cur))
+            cur = []
+        else:
+            f = line.split()
+            if len(f) == 2:
+                try:
+                    lon, lat = float(f[0]), float(f[1])
+                    cur.append(to_km(lat, lon))
+                except ValueError:
+                    pass
+    if len(cur) > 1:
+        segs.append(np.array(cur))
+    return segs
+
+
+def draw_coast(ax, segs, color="white", lw=1.3):
+    for s in segs:
+        ax.plot(s[:, 0], s[:, 1], color=color, lw=lw, alpha=0.9, zorder=6)
+
+
 def stations():
     st = {}
     for line in open(f"{ROOT}/nll/stations_gtsrce.txt"):
@@ -106,7 +135,9 @@ def resolvable_fraction(hit, az):
 
 def main():
     ev = rays()
-    print(f"QC events with rays: {len(ev)}")
+    coast = coastline()
+    stpos = np.array(list(stations().values()))
+    print(f"QC events with rays: {len(ev)}  coastline segments: {len(coast)}")
     # fixed random subset of 588 (Diambama size); index-based, deterministic
     idx_full = range(len(ev))
     stride = max(1, len(ev)//588)
@@ -146,9 +177,14 @@ def main():
                        extent=[XMIN, XMAX, YMIN, YMAX], cmap="viridis", aspect="equal")
         ax.contour(np.linspace(XMIN, XMAX, m.shape[1]), np.linspace(YMIN, YMAX, m.shape[0]),
                    (resF[:, :, iz].T).astype(float), levels=[0.5], colors="white", linewidths=1)
+        draw_coast(ax, coast, color="cyan")
+        ax.scatter(stpos[:, 0], stpos[:, 1], marker="v", s=22, c="red",
+                   edgecolor="k", lw=0.4, zorder=7)
         fig.colorbar(im, ax=ax, label="log10 rays/cell")
-        ax.set_title(f"B{k}  Ray hits @ {ttl}, 2 km grid\n(white = resolvable)", fontsize=9)
+        ax.set_title(f"B{k}  Ray hits @ {ttl}, 2 km grid\n"
+                     f"(white=resolvable, cyan=coast, ▽=stations)", fontsize=9)
         ax.set_xlabel("E (km)"); ax.set_ylabel("N (km)")
+        ax.set_xlim(XMIN, XMAX); ax.set_ylim(YMIN, YMAX)
 
     # D: cross-section hit count (N-S slice through x~0), 2 km
     ax = fig.add_subplot(2, 3, 5)
@@ -165,9 +201,13 @@ def main():
     iz = int((10-ZMIN)/dx)
     im = ax.imshow(aF[:, :, iz].T, origin="lower", extent=[XMIN, XMAX, YMIN, YMAX],
                    cmap="magma", vmin=0, vmax=8, aspect="equal")
+    draw_coast(ax, coast, color="cyan")
+    ax.scatter(stpos[:, 0], stpos[:, 1], marker="v", s=22, c="red",
+               edgecolor="k", lw=0.4, zorder=7)
     fig.colorbar(im, ax=ax, label="azimuth sectors (of 8)")
     ax.set_title("E  Ray-azimuth diversity @ 10 km, 2 km grid", fontsize=9)
     ax.set_xlabel("E (km)"); ax.set_ylabel("N (km)")
+    ax.set_xlim(XMIN, XMAX); ax.set_ylim(YMIN, YMAX)
 
     fig.suptitle("Tomographic resolution feasibility from the EQTransformer catalogue "
                  "(straight-ray coverage proxy)", fontsize=12)
