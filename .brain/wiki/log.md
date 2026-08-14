@@ -346,3 +346,25 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** manual stations NGL/TRI (964+528 picks) are outside our XN set
   — decide whether to add; spot-check the 10% unmatched events; decide whether to
   report ML raw and/or locally-tied (+0.41) in the paper.
+
+## [2026-08-14] query | Tomographic resolution feasibility from the EQT catalogue
+
+- **Trigger:** User asked how fine a velocity model the new catalogue could
+  resolve if used for tomography.
+- **Files:** `eqt/scripts/tomo_resolution.py` + `figures/tomo_resolution.png`
+  (repo). Straight source->station ray coverage proxy (hit count + 45-deg
+  azimuth-sector diversity per cell); 588-event subset (Diambama size) run with
+  identical geometry to isolate the catalogue-size gain.
+- **Key result:** 142,032 rays (71k P + 71k S) from 11,790 QC events, 17 station
+  positions = **20x Diambama 2019's 7,176 rays**. Resolvable footprint
+  (hit>=20 & >=3/8 azimuth sectors): **5 km 87%, 3 km 69%, 2 km 62%, 1.5 km 56%**
+  (full) vs 58/48/39/36% for the 588-event subset. Azimuth diversity reaches
+  **7-8/8 sectors in the source-zone core**, dropping to 1-3 at the margins and
+  below ~15 km. **Verdict: ~2-3 km resolution achievable in the aftershock core
+  (4-14 km depth), 5 km across nearly the whole footprint** -- vs Diambama's
+  effective 5-10 km (5 km "center only"). The 20x ray gain buys ~1.5-2x
+  resolvable fraction, NOT 20x: the fixed 12-station geometry (azimuth diversity)
+  is the ceiling, not ray count.
+- **Caveats/follow-ups:** straight-ray proxy + heuristic thresholds; a definitive
+  answer needs a LOTOS/checkerboard run. Resolution is best INSIDE the source
+  volume; margins and >15 km stay coarse regardless of catalogue size.
