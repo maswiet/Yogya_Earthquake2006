@@ -80,7 +80,7 @@ Last updated: 2026-07-20
 ## Open Threads
 
 - Assess whether EQTransformer generalizes to Yogyakarta 2006 aftershock data — see [[wiki/questions/applying-eqtransformer-to-yogya-2006]].
-- **SRL paper (reframed 2026-07-20):** our group's own program — Diambama et al. 2019 first named the Ngalang Fault; this study images it at sub-500 m from 13,251 events. See [[wiki/outputs/yogya-2006-srl-paper-plan]] + [[wiki/sources/diambama-2019-yogya-tomography]]. **Main remaining task: pick validation vs Anggraini 2013 manual picks** (in-house benchmark; needs the pick files). Then Zenodo DOI release.
+- **SRL paper (reframed 2026-07-20):** our group's own program — Diambama et al. 2019 first named the Ngalang Fault; this study images it at sub-500 m from 13,251 events. See [[wiki/outputs/yogya-2006-srl-paper-plan]] + [[wiki/sources/diambama-2019-yogya-tomography]]. **Pick validation DONE (2026-08-14): 90% recovery, P MAD 0.02 s / S MAD 0.06 s, ML r=0.95 (+0.41 tie).** Remaining: Zenodo DOI release; decide raw-vs-local-tied ML reporting.
 - ~~Open magnitude issues: FMD roll-off / TF16 anomaly~~ **RESOLVED 2026-07-20**: FMD roll-off is real (events reach only 16% of the digitiser rail, no clipping ⇒ max ML 3.55 is real, not a lower bound); TF16 −0.37 is a genuine site/path effect (distance-dependent, time-stable, both components healthy), absorbed by the station correction. See [[wiki/outputs/yogya-2006-eqt-catalog]].
 - `needs-review`: EQTransformer's exact architecture, training-set name/size, and per-station Tottori metrics were not captured from a primary source — fill in from the full paper/methods.
 - Keep all second-brain work inside `.brain`, with content organized under only `raw/` and `wiki/`.

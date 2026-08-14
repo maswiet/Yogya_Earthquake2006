@@ -142,16 +142,16 @@ contribution no longer rests on the count.
 
 ## Pre-submission checklist
 
-- [x] **Event-level validation vs Anggraini (2013) manual catalogue** (done
-  2026-07-20): strong detection recovery (576/590 co-located) + spatial/depth
-  agreement over 3–7 Jun. See [[wiki/sources/diambama-2019-yogya-tomography]].
-- [ ] **Pick-level validation** still ideal (precision/recall + P/S residuals)
-  but needs the Anggraini *phase-pick* files — the xlsx catalogue has locations
-  + ML only, no picks and no origin times. Ask the group for the pick files.
-- [ ] **⚠️ Resolve the ~1-unit ML offset vs the Anggraini scale** (NEW, must-fix):
-  determine Anggraini's magnitude method (ML vs duration Md); then either
-  recalibrate our absolute scale to the local one or report the tie explicitly.
-  b-value is unaffected (offset-invariant); absolute Mc/magnitudes are.
+- [x] **Pick-level validation vs Anggraini (2013) manual picks — DONE
+  2026-08-14, passes cleanly** (`validate_picks.py`, `pick_validation.png`):
+  90% event recovery (528/588, ±5 s); pick precision P MAD 0.02 s / S MAD
+  0.06 s; ML r=0.95. This is the headline reviewer result — a whole Methods
+  subsection. See [[wiki/sources/diambama-2019-yogya-tomography]].
+- [x] **ML offset resolved**: event-matched +0.41 (r=0.95), a clean constant
+  tie to the local scale; b-value unaffected. Report the +0.41 tie; optionally
+  publish ML both raw and locally-tied. (Earlier 0.9–1.25 estimate superseded.)
+- [ ] Minor: confirm whether to add manual stations NGL/TRI (outside our XN set);
+  spot-check the 10% unmatched manual events.
 - [ ] Zenodo release (picks, magnitudes, quality flags, relocations, model) + DOI.
 - [ ] Local-ML caveat: Hutton-Boore distance term (no Java-specific scale) —
   state and bound the effect.

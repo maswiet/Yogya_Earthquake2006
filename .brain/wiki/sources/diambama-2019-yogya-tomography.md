@@ -95,17 +95,43 @@ events). Covers **only 3–7 June 2006** (5 days, ~118/day); our catalogue spans
   same-day counterpart; we add ~324 more (914 QC events vs 590). Spatial and
   depth distributions agree (both delineate the NE–SW Ngalang structure). This
   is our event-level validation in lieu of pick-level precision/recall.
-- **⚠️ Systematic ML offset ~0.9–1.25 units: our absolute ML reads LOW vs the
-  Anggraini manual scale.** Matched-location median offset +0.86; FMD-tail
-  alignment +1.25. b-value is offset-invariant (both ≈0.76–0.77 once tied), so
-  our **b = 0.89 stands**, but our **absolute Mc/magnitudes need a tie to the
-  local scale**. This makes the "no local Java ML scale (Hutton-Boore
-  California)" caveat quantitative and material.
-- **Open question — Anggraini's magnitude METHOD is unknown.** If she used a
-  duration/coda magnitude (Md, common in Indonesia) rather than Wood-Anderson
-  ML, a ~1-unit systematic difference is expected and is a convention difference,
-  NOT an error in our ML. Must determine her method (dissertation text) before
-  deciding whether to recalibrate our scale or simply report the tie.
+- **Systematic ML offset (now pinned by event-matched picks 2026-08-14): +0.41,
+  r=0.95** (see the pick-validation section below). Our absolute ML reads 0.41
+  low vs the manual scale; b-value is offset-invariant (b=0.89 stands). The
+  earlier distributional estimate here (+0.86 matched-location / +1.25 FMD-tail)
+  is SUPERSEDED — it was inflated by our catalogue's much greater small-event
+  completeness. Tie to the local scale by +0.41.
+
+## Pick-level validation done (2026-08-14) — the reviewer-critical result
+
+The group provided Anggraini's manual PICK files
+([[raw/2026-08-14_anggraini-picks/provenance]]): `phase_300.dat` (588 events,
+3776 P + 3414 S, with full h:m:s origin times), `station.dat`, `stat_ft.dat`.
+Script `eqt/scripts/validate_picks.py`, figure `figures/pick_validation.png`.
+Manual station codes mapped to our TF codes by June-3-7 coordinates
+(WON=TF12, PEL=TF13, RAT=TF14, WAN=TF16, PAL=TF19, BUM=TF18 are the exact
+co-located core; YOG=TF07, PRA=TF10 movers).
+
+**Results — EQTransformer passes cleanly:**
+- **Event recovery: 528/588 (90%)** matched to a manual event within ±5 s
+  origin time (independent of location — proper temporal match, not spatial).
+- **Pick precision (per-event demeaned): P MAD 0.02 s, S MAD 0.06 s**; 98% of P
+  and 83% of S within 0.3 s of the manual pick. 4,761 matched picks across the 6
+  co-located core stations, all with ~0.00 median (no mis-mapping). S has a small
+  positive tail (our S slightly late — normal for automatic S).
+- **ML: event-matched offset +0.41 (mean +0.43, std 0.19), r = 0.95.** This
+  SUPERSEDES the earlier distributional estimate (0.86–1.25), which was inflated
+  by completeness differences (our catalogue has many more small events). The
+  true tie to the local scale is **+0.41**; b-value is offset-invariant so
+  b=0.89 stands. Clean constant offset → easy calibration, not a distortion.
+
+**Notes / loose ends:**
+- Manual stations **NGL and TRI** (heavily used: 964 + 528 picks) do NOT
+  correspond to our processed XN stations and contributed no matched picks —
+  Anggraini's network included stations we did not process. Worth confirming
+  whether we should add them.
+- 60/588 (10%) manual events unmatched — candidates we missed or located as
+  time-outliers; worth a spot check.
 
 ## Links
 

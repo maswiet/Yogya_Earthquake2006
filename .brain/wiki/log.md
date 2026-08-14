@@ -324,3 +324,25 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups (`needs-review`):** confirm which LOTOS version Diambama 2019 ran;
   decide whether a re-run with a current LOTOS is worthwhile for the SRL paper's
   velocity-model section.
+
+## [2026-08-14] query | Pick-level validation vs Anggraini 2013 manual picks
+
+- **Trigger:** User provided Anggraini's manual pick files (phase_300.dat +
+  station.dat + stat_ft.dat) — the pick-level ground truth.
+- **Files:** `eqt/scripts/validate_picks.py` + `figures/pick_validation.png`
+  (repo); `raw/2026-08-14_anggraini-picks/` (immutable copies + provenance),
+  `wiki/sources/diambama-2019-yogya-tomography.md`,
+  `wiki/outputs/{yogya-2006-eqt-catalog,yogya-2006-srl-paper-plan}.md`,
+  `wiki/index.md`, `wiki/log.md` (brain).
+- **Key result — EQTransformer passes cleanly:** phase_300.dat = 588 events,
+  3776 P + 3414 S, with full h:m:s origin times (which the xlsx lacked).
+  Matched events by origin time (±5 s): **528/588 (90%) recovery**. Pick
+  precision (per-event demeaned): **P MAD 0.02 s, S MAD 0.06 s** (98% P / 83% S
+  within 0.3 s) over 4,761 matched picks on 6 co-located core stations
+  (WON/TF12, PEL/TF13, RAT/TF14, WAN/TF16, PAL/TF19, BUM/TF18). **Event-matched
+  ML: offset +0.41, r=0.95** — clean constant tie to the local scale; SUPERSEDES
+  the earlier distributional 0.86–1.25 (inflated by completeness). b-value
+  offset-invariant, unchanged.
+- **Follow-ups:** manual stations NGL/TRI (964+528 picks) are outside our XN set
+  — decide whether to add; spot-check the 10% unmatched events; decide whether to
+  report ML raw and/or locally-tied (+0.41) in the paper.

@@ -263,11 +263,12 @@ path to publication, not an optional extra.
   `eqt/config/station_ml_corrections.json`; scripts
   `eqt/scripts/{build_amplitudes,compute_magnitudes,screen_catalog,station_ml_corrections,plot_noise_floor,plot_example_waveforms}.py`.
 - Caveat: Hutton-Boore (S. California) distance term used as default (no local ML
-  scale for Java). **Quantified 2026-07-20:** our absolute ML sits ~0.9–1.25
-  units BELOW the Anggraini (2013) manual scale on the same 3–7 Jun data (b-value
-  unaffected — offset-invariant; absolute Mc/magnitudes need a local tie). See
-  [[wiki/sources/diambama-2019-yogya-tomography]]. Possible cause: H-B
-  calibration + 1–20 Hz bandpass, or Anggraini using duration magnitude (Md).
+  scale for Java). **Quantified via event-matched picks 2026-08-14:** our ML
+  correlates with the Anggraini (2013) manual ML at **r = 0.95** with a clean
+  constant offset of **+0.41** (our ML reads 0.41 low). Tie to the local scale by
+  +0.41; b-value is offset-invariant so b=0.89 stands. *(Supersedes the earlier
+  0.9–1.25 distributional estimate, which was inflated by completeness.)* See
+  [[wiki/sources/diambama-2019-yogya-tomography]].
 
 ### FMD roll-off above ML~1.5 is REAL, not clipping (resolved 2026-07-20)
 
