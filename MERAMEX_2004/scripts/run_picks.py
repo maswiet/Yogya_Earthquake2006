@@ -10,10 +10,11 @@ Usage:
   run_picks.py --out ../pilot/picks.csv --progress ../pilot/done.txt \
       --stations AI1,AI3,... --dmin 155 --dmax 165 --device mps
 """
-import argparse, csv, os, sys, time
+import argparse, csv, gc, os, sys, time
 
 import obspy
 import seisbench.models as sbm
+import torch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mxio import build_stream, load_index
@@ -36,6 +37,17 @@ def main():
     ap.add_argument("--dmax", type=int, default=282)
     ap.add_argument("--stations", default=None, help="comma list; default = all land")
     ap.add_argument("--kinds", default="EDL,SAM")
+    ap.add_argument("--duplicate-1c", action="store_true",
+                    help="for single-channel sites (the OBH hydrophones) copy the "
+                         "one trace onto all three components so the 3-component "
+                         "model runs. S picks from such sites are dropped: a "
+                         "hydrophone records pressure and cannot see shear waves")
+    ap.add_argument("--max-items", type=int, default=0,
+                    help="exit cleanly after N station-days (0 = no limit); the "
+                         "wrapper restarts, which bounds any accumulated GPU "
+                         "memory in a long unattended run")
+    ap.add_argument("--gc-every", type=int, default=25,
+                    help="release the torch/MPS cache every N station-days")
     ap.add_argument("--min-bytes", type=int, default=5_000_000,
                     help="skip station-days smaller than this (transit / dead days)")
     a = ap.parse_args()
@@ -53,6 +65,8 @@ def main():
             and r["nbytes"] >= a.min_bytes]
     work.sort(key=lambda r: (r["day"], r["station"]))
     todo = [r for r in work if f"{r['station']}/{r['day']}" not in done]
+    if a.max_items:
+        todo = todo[:a.max_items]
     print(f"{len(work)} station-days selected, {len(todo)} still to do "
           f"({sum(r['nbytes'] for r in todo)/1e9:.1f} GB to read)", flush=True)
     if not todo:
@@ -80,12 +94,23 @@ def main():
             print(f"  {key}: READ FAILED {e}", flush=True)
             st = None
         n = 0
+        ntr = 0 if st is None else len(st)
+        one_c = ntr == 1 and a.duplicate_1c
+        if one_c:
+            base = st[0]
+            st = obspy.Stream()
+            for comp in "ZNE":
+                tr = base.copy()
+                tr.stats.channel = base.stats.channel[:-1] + comp
+                st += tr
         if st is not None and len(st) >= 3:
             try:
                 picks = model.classify(st, batch_size=a.batch,
                                        P_threshold=a.pthr, S_threshold=a.sthr,
                                        detection_threshold=a.dthr).picks
                 ch = ",".join(sorted({t.stats.channel for t in st}))
+                if one_c:
+                    picks = [p for p in picks if p.phase == "P"]
                 for p in picks:
                     w.writerow(dict(station=r["station"], kind=r["kind"], day=r["day"],
                                     phase=p.phase, peak_time=str(p.peak_time),
@@ -94,13 +119,20 @@ def main():
                 n = len(picks)
             except Exception as e:
                 print(f"  {key}: PICK FAILED {e}", flush=True)
+        del st
+        if a.gc_every and i % a.gc_every == 0:
+            gc.collect()
+            if a.device == "mps" and hasattr(torch, "mps"):
+                torch.mps.empty_cache()
+            elif a.device == "cuda":
+                torch.cuda.empty_cache()
         fh.flush()
         pf.write(key + "\n")
         pf.flush()
         npick_tot += n
         el = time.time() - t_start
         eta = el / i * (len(todo) - i)
-        print(f"[{i}/{len(todo)}] {key:12s} ntr={0 if st is None else len(st)} "
+        print(f"[{i}/{len(todo)}] {key:12s} ntr={ntr} "
               f"picks={n:5d}  {time.time()-t0:5.1f}s  total={npick_tot}  "
               f"ETA {eta/60:.0f} min", flush=True)
 
