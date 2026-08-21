@@ -13,6 +13,7 @@ ROOT="$(cd "$HERE/.." && pwd)"
 WHAT="${1:-land}"
 CHUNK="${CHUNK:-1500}"
 MAXTRIES="${MAXTRIES:-60}"
+export PYTHONPATH="$HERE:${PYTHONPATH:-}"
 
 case "$WHAT" in
   land) KINDS="EDL,SAM"; THR=0.3; EXTRA="" ;;
@@ -32,11 +33,10 @@ for try in $(seq 1 "$MAXTRIES"); do
       --pthr "$THR" --sthr "$THR" --dthr "$THR" $EXTRA \
       --max-items "$CHUNK" >> "$LOG" 2>&1
   rc=$?
-  left=$(grep -c "still to do" /dev/null 2>/dev/null; \
-         tail -200 "$LOG" | grep -oE "[0-9]+ still to do" | tail -1 | grep -oE "^[0-9]+")
   done_n=$(wc -l < "$PROG" 2>/dev/null || echo 0)
-  echo "  pass $try rc=$rc | done=$done_n | remaining at pass start=${left:-?}" | tee -a "$LOG"
-  if [ "${left:-1}" = "0" ]; then
+  left=$(python "$HERE/remaining.py" "$PROG" "$KINDS")
+  echo "  pass $try rc=$rc | done=$done_n | remaining=$left" | tee -a "$LOG"
+  if [ "$left" = "0" ]; then
     echo "ALL DONE ($WHAT): $done_n station-days" | tee -a "$LOG"
     break
   fi
