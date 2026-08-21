@@ -56,9 +56,15 @@ logs/     run logs
 | 6. locate | `Vel2Grid`/`Grid2Time`/`NLLoc` | — | `nll/loc/*.hyp` |
 | 7. catalog | `parse_nll.py` | base | `*/catalog_nll.csv` |
 | 8. summary figure | `plot_pilot.py` | base | `figures/*_summary.png` |
-| 9. GMT map | `plot_map_gmt.py` | `gmt` | `figures/*_map_gmt.png` |
-| 10. slab sections | `plot_slab_section.py` | `gmt` | `figures/*_slab_section.png` |
+| 9. relocation inputs | `gen_reloc.py` | base | `hypodd/`, `growclust/` |
+| 10. cross-correlation dt | `xcorr_dt.py` | `eqt` | `hypodd/dt.cc`, `growclust/IN/xcordata.txt` |
+| 11. relocate | `ph2dt`/`hypoDD`/`growclust` | — | `hypoDD.reloc`, `out.growclust_cat` |
+| 12. relocated catalog | `parse_reloc.py` | base | `*/catalog_hypodd.csv`, `*/catalog_growclust.csv` |
+| 13. GMT map | `plot_map_gmt.py` | `gmt` | `figures/*_map_gmt.png` |
+| 14. slab sections | `plot_slab_section.py` | `gmt` | `figures/*_slab_section.png` |
+| 15. before/after | `plot_reloc.py` | `gmt` | `figures/*_reloc.png` |
 
+`run_reloc.sh` chains steps 9–12 (`TAG=full bash run_reloc.sh`).
 `run_pilot.sh` chains steps 4–8 for any working set:
 `WORK=full TAG=full bash run_pilot.sh`. Shared archive I/O lives in `mxio.py`.
 `plot_event.py` draws a record section for one associated event, and
@@ -84,6 +90,37 @@ count** (+18 % events but ×2.9 more that pass the quality cut) — see
 [`wide11/SUMMARY.md`](wide11/SUMMARY.md). The full run therefore scales with
 *time*, and the OBS are the addition that matters for the offshore majority of
 the catalogue.
+
+### Relocation
+
+`gen_reloc.py` writes both codes' inputs from the NLLoc per-event `.hyp` files
+(`nllio.read_events`, not the `.sum.` file, which carries no phase blocks).
+Defaults are looser than the 2006 Yogyakarta settings — `MAXSEP` 20 km,
+`MAXDIST` 400 km, `MINLNK` 6 — because MERAMEX seismicity is spread over ~500 km
+and 0–250 km depth rather than concentrated in one aftershock volume, and the
+tight 2006 limits leave almost nothing linked. `--zmax` keeps relocation inside
+the depth range where the near-parallel-ray assumption behind double difference
+is defensible.
+
+`ct2xcor.py` re-formats ph2dt's catalog differential times for GrowClust, so a
+catalog-only relocation can run before any waveform work and act as the baseline
+that the cross-correlation pass has to beat.
+
+`xcorr_dt.py` measures waveform differential times directly. It reads through
+`mxio.read_window`, which parses the segment start time out of the filename and
+opens only the one or two 30-minute segments covering a window — roughly 100×
+faster than loading a whole station-day for a 2-second cut. **Its default
+`--cc-min` is 0.55, not the usual 0.7:** measured on close MERAMEX pairs
+(1.4–4.0 km apart) the correlation coefficients run 0.3–0.8 with a median near
+0.4. These are not repeating earthquakes — they are subduction events with
+differing mechanisms — so demanding aftershock-grade similarity would discard
+almost every link.
+
+Expect relative relocation to sharpen *clusters*, not the whole catalogue. On the
+11-day control set (52 selected events) HypoDD linked only 10 of them, in 3
+clusters — but for those it cut the median horizontal error from 6.4 km to
+0.42 km. The full campaign, with ~10× the events in the same volume, is where
+this becomes a structural image rather than a demonstration.
 
 ### OBS handling
 

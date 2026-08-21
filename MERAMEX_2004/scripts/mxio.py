@@ -66,6 +66,83 @@ def discover(path):
     return sorted(found)
 
 
+def segment_start(name, kind, year, julday):
+    """Absolute start time encoded in a segment filename, or None.
+
+    All three families put the segment start in the name, so a short window can
+    be read from the one or two segments that cover it instead of loading the
+    whole 24-hour station-day:
+
+      EDL  E<4-digit serial><yymmddhhmmss>.PRI0
+      SAM  <STA>.IN.<CHA>.<YYYY>.<DDD>.<hhmmss>
+      OBS  <STA>.IN.<CHA>.D.<YYYY>.<DDD>.<hhmm>
+    """
+    try:
+        if kind == "EDL":
+            stamp = name.split(".")[0][5:]            # drop 'E' + 4-digit serial
+            hh, mm, ss = int(stamp[6:8]), int(stamp[8:10]), int(stamp[10:12])
+        else:
+            tail = name.split(".")[-1]
+            if len(tail) == 6:
+                hh, mm, ss = int(tail[:2]), int(tail[2:4]), int(tail[4:6])
+            elif len(tail) == 4:
+                hh, mm, ss = int(tail[:2]), int(tail[2:4]), 0
+            else:
+                return None
+    except (ValueError, IndexError):
+        return None
+    return obspy.UTCDateTime(year=year, julday=julday) + hh * 3600 + mm * 60 + ss
+
+
+def read_window(path, station, kind, t0, t1, component=None, pad=5.0):
+    """Read just the segments covering [t0, t1] from one station-day directory.
+
+    Returns a merged Stream (possibly empty). This is the hot path for
+    cross-correlation, where a 2-second window is needed from a directory
+    holding 144 files.
+    """
+    files = discover(path)
+    if not files:
+        return obspy.Stream()
+    year, julday = t0.year, t0.julday
+    starts = []
+    for name, comp in files:
+        if component and comp != component:
+            continue
+        ts = segment_start(name, kind, year, julday)
+        starts.append((ts, name, comp))
+    known = [x for x in starts if x[0] is not None]
+    if not known:                       # unparsable names: fall back to the day
+        st = build_stream(path, station, kind)
+        return (st or obspy.Stream()).slice(t0 - pad, t1 + pad)
+
+    known.sort(key=lambda x: (x[2], x[0]))
+    wanted = []
+    for comp in {c for _, _, c in known}:
+        seq = [x for x in known if x[2] == comp]
+        for idx, (ts, name, _) in enumerate(seq):
+            nxt = seq[idx + 1][0] if idx + 1 < len(seq) else ts + 86400
+            if ts <= t1 + pad and nxt >= t0 - pad:
+                wanted.append((name, comp))
+
+    st = obspy.Stream()
+    for name, comp in wanted:
+        try:
+            seg = obspy.read(os.path.join(path, name), format="MSEED")
+        except Exception:
+            continue
+        for tr in seg:
+            tr.stats.network = NETWORK
+            tr.stats.station = station
+            tr.stats.location = ""
+            tr.stats.channel = f"{_band_code(tr.stats.sampling_rate, kind)}H{comp}"
+        st += seg
+    if not len(st):
+        return st
+    st.merge(method=1, fill_value=0)
+    return st.slice(t0 - pad, t1 + pad)
+
+
 def _band_code(sampling_rate, kind):
     """SEED band code: E for 100 Hz short-period, H for 100 Hz broadband,
     S/B for the 50 Hz OBS records."""

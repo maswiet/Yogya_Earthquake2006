@@ -54,3 +54,5 @@ MERAMEX_2004/*/picks.csv
 MERAMEX_2004/*/done.txt
 MERAMEX_2004/*/events_assignments.csv
 MERAMEX_2004/**/gmt.history
+MERAMEX_2004/hypodd/
+MERAMEX_2004/growclust/
