@@ -137,10 +137,36 @@ def read_window(path, station, kind, t0, t1, component=None, pad=5.0):
             tr.stats.location = ""
             tr.stats.channel = f"{_band_code(tr.stats.sampling_rate, kind)}H{comp}"
         st += seg
+    st, _ = drop_out_of_day(st, day_bounds(path, year=t0.year))
     if not len(st):
         return st
     st.merge(method=1, fill_value=0)
     return st.slice(t0 - pad, t1 + pad)
+
+
+def day_bounds(path, year=2004, margin=3600.0):
+    """Time window a station-day directory is allowed to cover, from its name.
+
+    Some segments carry a pre-GPS-lock clock: BG1/146 holds three traces stamped
+    2002-10-19, which stretches the day's span to 584 days. Merging that with
+    fill_value=0 allocates ~20 GB per component and the process is killed, so
+    every reader filters against these bounds first.
+    """
+    name = os.path.basename(os.path.normpath(path))
+    if not (name.isdigit() and len(name) == 3):
+        return None
+    t0 = obspy.UTCDateTime(year=year, julday=int(name))
+    return t0 - margin, t0 + 86400 + margin
+
+
+def drop_out_of_day(st, bounds):
+    """Remove traces whose timestamps fall outside the directory's day."""
+    if bounds is None or not len(st):
+        return st, 0
+    lo, hi = bounds
+    keep = obspy.Stream([tr for tr in st
+                         if tr.stats.starttime >= lo and tr.stats.endtime <= hi])
+    return keep, len(st) - len(keep)
 
 
 def _band_code(sampling_rate, kind):
@@ -151,7 +177,7 @@ def _band_code(sampling_rate, kind):
     return "B" if kind in ("SAM", "OBS") else "S"
 
 
-def build_stream(path, station, kind, merge_fill=0):
+def build_stream(path, station, kind, merge_fill=0, year=2004):
     """Read one station-day directory into a relabelled, merged Stream.
 
     Returns None when the directory holds no readable waveform data.
@@ -176,6 +202,10 @@ def build_stream(path, station, kind, merge_fill=0):
         return None
 
     st = st.select(component="[ZNE]")
+    st, ndrop = drop_out_of_day(st, day_bounds(path, year=year))
+    if ndrop:
+        print(f"  {station}/{os.path.basename(path)}: dropped {ndrop} segment(s) "
+              f"with out-of-day timestamps", flush=True)
     if not len(st):
         return None
     st.merge(method=1, fill_value=merge_fill)
