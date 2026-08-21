@@ -49,6 +49,7 @@ MERAMEX_2004/dryrun/
 MERAMEX_2004/**/octo_tmp/
 MERAMEX_2004/scripts/__pycache__/
 MERAMEX_2004/full/picks_*.csv
+!MERAMEX_2004/full/*.md
 MERAMEX_2004/full/done_*.txt
 MERAMEX_2004/*/picks.csv
 MERAMEX_2004/*/done.txt
