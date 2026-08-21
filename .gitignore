@@ -38,3 +38,19 @@ eqt/figures/events/
 
 # SeisBench ML waveform archive (data product; archived on Zenodo, not git)
 eqt/seisbench/
+
+# MERAMEX 2004 pipeline: heavy outputs and regenerable intermediates
+MERAMEX_2004/nll/time/
+MERAMEX_2004/nll/model/
+MERAMEX_2004/nll/loc/
+MERAMEX_2004/nll/obs/
+MERAMEX_2004/logs/
+MERAMEX_2004/dryrun/
+MERAMEX_2004/**/octo_tmp/
+MERAMEX_2004/scripts/__pycache__/
+MERAMEX_2004/full/picks_*.csv
+MERAMEX_2004/full/done_*.txt
+MERAMEX_2004/*/picks.csv
+MERAMEX_2004/*/done.txt
+MERAMEX_2004/*/events_assignments.csv
+MERAMEX_2004/**/gmt.history
