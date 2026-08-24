@@ -47,7 +47,9 @@ def main():
                  MAP_FRAME_TYPE="plain")
     pygmt.makecpt(cmap="lajolla", series=[0, 200, 5], reverse=True, background=True)
 
-    with fig.subplot(nrows=2, ncols=3, figsize=("24c", "15c"), margins=["0.5c", "0.9c"],
+    # Mercator aspect ratio: height/width ~ 1.189 at this latitude
+    # panels need to be taller to keep proper shape
+    with fig.subplot(nrows=2, ncols=3, figsize=("24c", "18c"), margins=["0.4c", "0.7c"],
                      frame="lrtb"):
         for panel, zc in enumerate(depths):
             k = int(np.clip(zc / dz, 0, nz - 1))
@@ -57,16 +59,16 @@ def main():
                     x=np.repeat(lon, nlat), y=np.tile(lat, nlon),
                     z=layer.T.ravel(), region=region,
                     spacing=(float(g["dlon"]), float(g["dlat"])))
-                fig.grdimage(grd, region=region, projection="M7.2c",
+                fig.grdimage(grd, region=region, projection="M8.0c",
                              cmap=True, nan_transparent=True)
                 fig.grdcontour(grd, levels=[a.minhit], pen="0.9p,black",
-                               annotation=None)
-                fig.coast(region=region, projection="M7.2c", shorelines="0.4p,gray30",
+                               annotation=None, region=region, projection="M8.0c")
+                fig.coast(region=region, projection="M8.0c", shorelines="0.4p,gray30",
                           frame=["WSne", "xa1f0.5", "ya1f0.5"])
                 fig.plot(x=sta.longitude, y=sta.latitude, style="t0.16c",
-                         fill="white", pen="0.3p,black")
+                         fill="white", pen="0.3p,black", region=region, projection="M8.0c")
                 fig.plot(x=obs.lon, y=obs.lat, style="i0.20c",
-                         fill="yellow", pen="0.4p,black")
+                         fill="yellow", pen="0.4p,black", region=region, projection="M8.0c")
                 nres = int((layer >= a.minhit).sum())
                 fig.text(position="TL", offset="0.15c/-0.15c", justify="TL",
                          text=f"{zc:.0f} km   {nres} cells >= {a.minhit} rays",
