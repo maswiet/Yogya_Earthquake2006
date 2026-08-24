@@ -1,0 +1,2 @@
+station  slope_s_per_sec  intercept_s  rmse_s  n_pairs
+OS12       -3.062677e-07   311.325489    9.646       10

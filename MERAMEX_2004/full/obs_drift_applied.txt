@@ -1,0 +1,6 @@
+=== OBS Drift Corrections Applied ===
+Station: OS12
+Drift: -0.026 s/day
+Constant offset: +311.325 s
+Formula: t_corrected = t_measured - (-3.009259e-07 * t_measured + 311.325)
+Picks corrected: 12756
