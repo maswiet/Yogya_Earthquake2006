@@ -57,3 +57,9 @@ MERAMEX_2004/*/events_assignments.csv
 MERAMEX_2004/**/gmt.history
 MERAMEX_2004/hypodd/
 MERAMEX_2004/growclust/
+MERAMEX_2004/tomo*/G_*.npz
+MERAMEX_2004/tomo*/meta_*.npy
+MERAMEX_2004/tomo*/cov_*.npz
+MERAMEX_2004/tomo*/coverage.npz
+MERAMEX_2004/tomo*/events.npy
+MERAMEX_2004/tomo*/checker_*.npz
