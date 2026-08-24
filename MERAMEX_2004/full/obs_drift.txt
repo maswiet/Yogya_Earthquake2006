@@ -1,0 +1,3 @@
+station  slope_s_per_sec  intercept_s  rmse_s
+OS08        4.546170e-07  -526.278780    8.215
+OS12       -3.062677e-07   311.325489    9.646
