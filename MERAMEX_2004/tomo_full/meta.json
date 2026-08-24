@@ -1,0 +1,10 @@
+{
+  "n_events": 1005,
+  "n_rays_p": 11772,
+  "n_rays_s": 9591,
+  "n_active_cells": 7062,
+  "damping": 1.0,
+  "smoothing": 3.0,
+  "iterations": 50,
+  "residual": 2.350971994768579
+}
