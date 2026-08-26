@@ -1,0 +1,646 @@
+<meta charset="utf-8">
+<title>Opak Slab Volume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef1f4;
+    --panel:#ffffff;
+    --panel-2:#f5f7f9;
+    --ink:#131a21;
+    --muted:#5a6b7c;
+    --accent:#0f7f92;
+    --accent-ink:#ffffff;
+    --line:#d7dee5;
+    --shadow: 0 1px 2px rgba(20,30,40,0.06), 0 8px 24px rgba(20,30,40,0.06);
+    --fast:#b2182b;
+    --slow:#2166ac;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0a0f14;
+      --panel:#11181f;
+      --panel-2:#161f28;
+      --ink:#e6edf3;
+      --muted:#7c8fa3;
+      --accent:#3fb8c9;
+      --accent-ink:#06232a;
+      --line:#223040;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px rgba(0,0,0,0.45);
+      --fast:#e0687a;
+      --slow:#5b9bd9;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0f14;
+    --panel:#11181f;
+    --panel-2:#161f28;
+    --ink:#e6edf3;
+    --muted:#7c8fa3;
+    --accent:#3fb8c9;
+    --accent-ink:#06232a;
+    --line:#223040;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px rgba(0,0,0,0.45);
+    --fast:#e0687a;
+    --slow:#5b9bd9;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    overflow:hidden;
+    height:100vh;
+    width:100vw;
+    position:relative;
+  }
+  .mono{font-family:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;}
+
+  #stage{
+    position:absolute; inset:0;
+    display:block;
+    touch-action:none;
+    cursor:grab;
+  }
+  #stage:active{cursor:grabbing;}
+
+  .panel{
+    position:absolute;
+    background:color-mix(in srgb, var(--panel) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border:1px solid var(--line);
+    border-radius:10px;
+    box-shadow:var(--shadow);
+  }
+
+  #hud-left{
+    top:18px; left:18px;
+    width:272px;
+    padding:18px 18px 16px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    letter-spacing:0.11em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  h1{
+    margin:2px 0 0;
+    font-size:19px;
+    line-height:1.25;
+    font-weight:700;
+    text-wrap:balance;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    margin:0;
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--muted);
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 10px;
+    padding-top:10px;
+    border-top:1px solid var(--line);
+  }
+  .stat b{
+    display:block;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:15px;
+    font-weight:600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing:-0.01em;
+  }
+  .stat span{
+    display:block;
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:0.02em;
+    margin-top:1px;
+  }
+
+  .section-label{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--muted);
+    padding-top:2px;
+  }
+
+  .legend{
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .legend-bar{
+    height:10px;
+    border-radius:3px;
+    background:linear-gradient(90deg, var(--slow), color-mix(in srgb, var(--slow) 25%, var(--panel-2)) 42%, var(--panel-2) 50%, color-mix(in srgb, var(--fast) 25%, var(--panel-2)) 58%, var(--fast));
+    border:1px solid var(--line);
+  }
+  .legend-ticks{
+    display:flex; justify-content:space-between;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:9.5px;
+    color:var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .legend-caption{
+    font-size:10.5px;
+    color:var(--muted);
+    line-height:1.4;
+  }
+
+  .toggles{
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .toggle-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px;
+  }
+  .toggle-row .lbl{
+    font-size:12px;
+    color:var(--ink);
+  }
+  .seg{
+    display:inline-flex;
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .seg button{
+    appearance:none; border:none; background:var(--panel-2);
+    color:var(--muted);
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px; font-weight:600;
+    padding:5px 9px;
+    cursor:pointer;
+    letter-spacing:0.03em;
+  }
+  .seg button + button{ border-left:1px solid var(--line); }
+  .seg button.active{ background:var(--accent); color:var(--accent-ink); }
+  .seg button:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+
+  .switch{
+    position:relative;
+    width:32px; height:18px;
+    border-radius:999px;
+    background:var(--line);
+    border:none;
+    cursor:pointer;
+    flex:none;
+    padding:0;
+  }
+  .switch::after{
+    content:"";
+    position:absolute; top:2px; left:2px;
+    width:14px; height:14px;
+    border-radius:50%;
+    background:var(--panel);
+    box-shadow:0 1px 2px rgba(0,0,0,0.3);
+    transition:transform .16s ease;
+  }
+  .switch.on{ background:var(--accent); }
+  .switch.on::after{ transform:translateX(14px); background:var(--accent-ink); }
+  .switch:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  #resetBtn{
+    appearance:none;
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:12px; font-weight:600;
+    border-radius:7px;
+    padding:8px 10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  #resetBtn:hover{ border-color:var(--accent); color:var(--accent); }
+  #resetBtn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  #hud-bottom-left{
+    left:18px; bottom:18px;
+    padding:10px 14px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    color:var(--muted);
+    display:flex; gap:16px;
+    font-variant-numeric: tabular-nums;
+  }
+  #hud-bottom-left b{ color:var(--ink); font-weight:600; }
+
+  #hud-bottom-right{
+    right:18px; bottom:18px;
+    padding:9px 13px;
+    font-size:11px;
+    color:var(--muted);
+    max-width:300px;
+    line-height:1.45;
+  }
+
+  #caption-top-right{
+    top:18px; right:18px;
+    padding:8px 12px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:0.02em;
+  }
+
+  @media (max-width: 720px){
+    #hud-left{ width: calc(100vw - 36px); }
+    #hud-bottom-right{ display:none; }
+  }
+</style>
+
+<canvas id="stage"></canvas>
+
+<div class="panel" id="hud-left">
+  <div>
+    <div class="eyebrow">MERAMEX 2004 · LOTOS Tomography</div>
+    <h1>Opak Slab Volume</h1>
+    <p class="sub">P/S velocity anomaly beneath central Java, land + ocean-bottom rays. Drag to rotate, scroll to zoom.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>1,005</b><span>events located</span></div>
+    <div class="stat"><b>21,363</b><span>rays traced</span></div>
+    <div class="stat"><b>7,062</b><span>active cells</span></div>
+    <div class="stat"><b>10 km</b><span>cell size</span></div>
+  </div>
+
+  <div>
+    <div class="section-label">Velocity anomaly</div>
+    <div class="legend" style="margin-top:8px;">
+      <div class="legend-bar"></div>
+      <div class="legend-ticks">
+        <span>−3%</span><span>0</span><span>+3%</span>
+      </div>
+      <div class="legend-caption" id="phaseCaption">Red = faster (cool slab core) · Blue = slower (hot mantle wedge)</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-label">Display</div>
+    <div class="toggles" style="margin-top:8px;">
+      <div class="toggle-row">
+        <span class="lbl">Wave type</span>
+        <div class="seg" role="group" aria-label="Wave type">
+          <button id="btnP" class="active" type="button">Vp</button>
+          <button id="btnS" type="button">Vs</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="lbl">Hypocentres</span>
+        <button id="swEvents" class="switch on" type="button" aria-pressed="true"></button>
+      </div>
+      <div class="toggle-row">
+        <span class="lbl">Coastline</span>
+        <button id="swCoast" class="switch on" type="button" aria-pressed="true"></button>
+      </div>
+      <div class="toggle-row">
+        <span class="lbl">Auto-rotate</span>
+        <button id="swSpin" class="switch on" type="button" aria-pressed="true"></button>
+      </div>
+    </div>
+  </div>
+
+  <button id="resetBtn" type="button">Reset view</button>
+</div>
+
+<div class="panel" id="hud-bottom-left">
+  <span>az <b id="rAz" class="mono">0°</b></span>
+  <span>tilt <b id="rTilt" class="mono">0°</b></span>
+  <span>depth <b id="rDepth" class="mono">0–200 km</b></span>
+</div>
+
+<div class="panel" id="hud-bottom-right">
+  Gold markers: 2004 events inside the future 2006 Opak-fault rupture box — 2 of 789 locatable events, despite the network's densest station coverage there.
+</div>
+
+<div class="panel" id="caption-top-right">108.8–112.3°E · 10.0–6.0°S</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CELLS = __CELLS_DATA__;   // flat [lat,lon,depth,vp%,vs%, ...]
+  var EVENTS = __EVENTS_DATA__; // flat [lat,lon,depth,inbox, ...]
+  var COAST = __COAST_DATA__;   // array of [[lat,lon], ...] segments
+
+  var LAT0=-10.0, LAT1=-5.952873459843511, LON0=108.8, LON1=112.25115997443183, DMAX=200.0;
+  var LAT_C=(LAT0+LAT1)/2, LON_C=(LON0+LON1)/2;
+  var KM=111.19, COSLAT=Math.cos(LAT_C*Math.PI/180);
+
+  function toXYZ(lat, lon, depth){
+    var x = (lon-LON_C)*KM*COSLAT;
+    var y = (lat-LAT_C)*KM;
+    var z = -depth; // shallow = up
+    return [x,y,z];
+  }
+
+  // ---- unpack cells ----
+  var nCells = CELLS.length/5;
+  var cellPos = new Float32Array(nCells*3);
+  var cellVp = new Float32Array(nCells);
+  var cellVs = new Float32Array(nCells);
+  for(var i=0;i<nCells;i++){
+    var lat=CELLS[i*5], lon=CELLS[i*5+1], dep=CELLS[i*5+2];
+    var p = toXYZ(lat,lon,dep);
+    cellPos[i*3]=p[0]; cellPos[i*3+1]=p[1]; cellPos[i*3+2]=p[2];
+    cellVp[i]=CELLS[i*5+3];
+    cellVs[i]=CELLS[i*5+4];
+  }
+
+  // ---- unpack events ----
+  var nEv = EVENTS.length/4;
+  var evPos = new Float32Array(nEv*3);
+  var evBox = new Uint8Array(nEv);
+  for(var e=0;e<nEv;e++){
+    var p2 = toXYZ(EVENTS[e*4], EVENTS[e*4+1], EVENTS[e*4+2]);
+    evPos[e*3]=p2[0]; evPos[e*3+1]=p2[1]; evPos[e*3+2]=p2[2];
+    evBox[e]=EVENTS[e*4+3];
+  }
+
+  // ---- unpack coastline ----
+  var coastSegs = COAST.map(function(seg){
+    return seg.map(function(pt){ return toXYZ(pt[0], pt[1], 0); });
+  });
+
+  // ---- bounding box corners for wireframe ----
+  var bx0=(LON0-LON_C)*KM*COSLAT, bx1=(LON1-LON_C)*KM*COSLAT;
+  var by0=(LAT0-LAT_C)*KM, by1=(LAT1-LAT_C)*KM;
+  var bz0=0, bz1=-DMAX;
+  var corners = [
+    [bx0,by0,bz0],[bx1,by0,bz0],[bx1,by1,bz0],[bx0,by1,bz0],
+    [bx0,by0,bz1],[bx1,by0,bz1],[bx1,by1,bz1],[bx0,by1,bz1]
+  ];
+  var boxEdges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+  var depthTicks = [0,50,100,150,200];
+
+  // Opak rupture box, shallow slab (approx 0-30km) for context
+  var OBOX_LAT=[-8.01,-7.87], OBOX_LON=[110.35,110.53];
+  var obCorners=[];
+  [0,25].forEach(function(dd){
+    OBOX_LAT.forEach(function(la){
+      OBOX_LON.forEach(function(lo){
+        obCorners.push(toXYZ(la,lo,dd));
+      });
+    });
+  });
+
+  // ---- canvas setup ----
+  var canvas = document.getElementById("stage");
+  var ctx = canvas.getContext("2d");
+  var DPR = Math.min(window.devicePixelRatio||1, 2);
+  var W,H;
+  function resize(){
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.style.width = W+"px";
+    canvas.style.height = H+"px";
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  // ---- interaction state ----
+  var az = 0.7, tilt = 0.36, zoom = 1.0;
+  var azInit=az, tiltInit=tilt, zoomInit=zoom;
+  var dragging=false, lastX=0, lastY=0;
+  var spinning = true;
+  var phase = "P";
+  var showEvents = true, showCoast = true;
+
+  canvas.addEventListener("pointerdown", function(ev){
+    dragging = true; lastX=ev.clientX; lastY=ev.clientY;
+    spinning = false; setSwitch(swSpin, false);
+    canvas.setPointerCapture(ev.pointerId);
+  });
+  canvas.addEventListener("pointermove", function(ev){
+    if(!dragging) return;
+    var dx = ev.clientX-lastX, dy = ev.clientY-lastY;
+    lastX=ev.clientX; lastY=ev.clientY;
+    az += dx*0.006;
+    tilt = Math.max(-1.4, Math.min(1.4, tilt - dy*0.006));
+  });
+  window.addEventListener("pointerup", function(){ dragging=false; });
+  canvas.addEventListener("wheel", function(ev){
+    ev.preventDefault();
+    zoom *= Math.pow(1.0012, -ev.deltaY);
+    zoom = Math.max(0.35, Math.min(4.0, zoom));
+  }, {passive:false});
+
+  function setSwitch(el, on){
+    el.classList.toggle("on", on);
+    el.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+
+  var swSpin = document.getElementById("swSpin");
+  swSpin.addEventListener("click", function(){
+    spinning = !spinning; setSwitch(swSpin, spinning);
+  });
+  var swEvents = document.getElementById("swEvents");
+  swEvents.addEventListener("click", function(){
+    showEvents = !showEvents; setSwitch(swEvents, showEvents);
+  });
+  var swCoast = document.getElementById("swCoast");
+  swCoast.addEventListener("click", function(){
+    showCoast = !showCoast; setSwitch(swCoast, showCoast);
+  });
+
+  var btnP = document.getElementById("btnP"), btnS = document.getElementById("btnS");
+  var phaseCaption = document.getElementById("phaseCaption");
+  btnP.addEventListener("click", function(){
+    phase="P"; btnP.classList.add("active"); btnS.classList.remove("active");
+    phaseCaption.textContent = "Red = faster (cool slab core) · Blue = slower (hot mantle wedge)";
+  });
+  btnS.addEventListener("click", function(){
+    phase="S"; btnS.classList.add("active"); btnP.classList.remove("active");
+    phaseCaption.textContent = "S-wave anomaly · more sensitive to partial melt & fluids";
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    az=azInit; tilt=tiltInit; zoom=zoomInit; spinning=true; setSwitch(swSpin,true);
+  });
+
+  // ---- color mapping (RdBu_r-like diverging) ----
+  function rdbu(t){ // t in [-1,1]
+    t = Math.max(-1, Math.min(1, t));
+    var r,g,b;
+    if(t >= 0){
+      // white -> red
+      r = 255 - t*(255-178);
+      g = 255 - t*(255-24);
+      b = 255 - t*(255-43);
+    } else {
+      var s = -t;
+      r = 255 - s*(255-33);
+      g = 255 - s*(255-102);
+      b = 255 - s*(255-172);
+    }
+    return [r|0, g|0, b|0];
+  }
+
+  var rAzEl = document.getElementById("rAz");
+  var rTiltEl = document.getElementById("rTilt");
+
+  function project(p, camDist, focal){
+    // rotate: azimuth around Z, then tilt around X
+    var x=p[0], y=p[1], z=p[2];
+    var ca=Math.cos(az), sa=Math.sin(az);
+    var x1 = x*ca - y*sa;
+    var y1 = x*sa + y*ca;
+    var z1 = z;
+    var ct=Math.cos(tilt), st=Math.sin(tilt);
+    var y2 = y1*ct - z1*st;
+    var z2 = y1*st + z1*ct;
+    var vx=x1, vy=y2, vz=z2 + camDist;
+    var scale = focal/Math.max(1, vz);
+    return [vx*scale*zoom, -vy*scale*zoom, vz, scale];
+  }
+
+  var isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  function themeColors(){
+    var root = document.documentElement;
+    var explicit = root.getAttribute("data-theme");
+    var dark = explicit==="dark" || (explicit!=="light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    return dark ? {
+      bg:"#0a0f14", line:"rgba(63,184,201,0.35)", lineDim:"rgba(124,143,163,0.22)",
+      ev:"rgba(230,237,243,0.55)", evBox:"#f2c94c", coast:"rgba(124,143,163,0.55)",
+      text:"rgba(124,143,163,0.9)"
+    } : {
+      bg:"#eef1f4", line:"rgba(15,127,146,0.4)", lineDim:"rgba(90,107,124,0.25)",
+      ev:"rgba(19,26,33,0.55)", evBox:"#c9820c", coast:"rgba(90,107,124,0.55)",
+      text:"rgba(90,107,124,0.9)"
+    };
+  }
+
+  function draw(){
+    var C = themeColors();
+    ctx.clearRect(0,0,W,H);
+    ctx.save();
+    ctx.translate(W/2, H/2 + 10);
+
+    var camDist = 620, focal = 520;
+
+    // bounding wireframe
+    var pc = corners.map(function(c){ return project(c, camDist, focal); });
+    ctx.strokeStyle = C.lineDim; ctx.lineWidth = 1;
+    boxEdges.forEach(function(e){
+      ctx.beginPath();
+      ctx.moveTo(pc[e[0]][0], pc[e[0]][1]);
+      ctx.lineTo(pc[e[1]][0], pc[e[1]][1]);
+      ctx.stroke();
+    });
+
+    // depth ticks on the vertical edge nearest camera (use corner 0 / 4 edge)
+    ctx.fillStyle = C.text;
+    ctx.font = "10px 'IBM Plex Mono', monospace";
+    ctx.textAlign = "right";
+    depthTicks.forEach(function(d){
+      var p = project(toXYZ(LAT0, LON0, d), camDist, focal);
+      ctx.fillText(d+" km", p[0]-8, p[1]+3);
+      ctx.beginPath();
+      ctx.arc(p[0]-4, p[1], 1.4, 0, Math.PI*2);
+      ctx.fill();
+    });
+
+    // Opak rupture box wireframe (highlight)
+    var pob = obCorners.map(function(c){ return project(c, camDist, focal); });
+    var obEdges = [[0,1],[0,2],[3,1],[3,2],[4,5],[4,6],[7,5],[7,6],[0,4],[1,5],[2,6],[3,7]];
+    ctx.strokeStyle = C.evBox; ctx.lineWidth = 1.3; ctx.globalAlpha=0.75;
+    obEdges.forEach(function(e){
+      ctx.beginPath();
+      ctx.moveTo(pob[e[0]][0], pob[e[0]][1]);
+      ctx.lineTo(pob[e[1]][0], pob[e[1]][1]);
+      ctx.stroke();
+    });
+    ctx.globalAlpha=1;
+
+    // coastline
+    if(showCoast){
+      ctx.strokeStyle = C.coast; ctx.lineWidth = 1;
+      coastSegs.forEach(function(seg){
+        ctx.beginPath();
+        for(var k=0;k<seg.length;k++){
+          var pp = project(seg[k], camDist, focal);
+          if(k===0) ctx.moveTo(pp[0],pp[1]); else ctx.lineTo(pp[0],pp[1]);
+        }
+        ctx.stroke();
+      });
+    }
+
+    // ---- velocity cells: build draw list with depth for painter's algorithm ----
+    var vals = phase==="P" ? cellVp : cellVs;
+    var list = [];
+    for(var i=0;i<nCells;i++){
+      var v = vals[i];
+      var av = Math.abs(v);
+      if(av < 0.12) continue; // declutter near-zero
+      var pt = project([cellPos[i*3],cellPos[i*3+1],cellPos[i*3+2]], camDist, focal);
+      list.push([pt[2], pt[0], pt[1], pt[3], v, av]);
+    }
+    if(showEvents){
+      for(var e2=0;e2<nEv;e2++){
+        var pt2 = project([evPos[e2*3],evPos[e2*3+1],evPos[e2*3+2]], camDist, focal);
+        list.push([pt2[2], pt2[0], pt2[1], pt2[3], null, evBox[e2]]);
+      }
+    }
+    list.sort(function(a,b){ return b[0]-a[0]; }); // far to near
+
+    for(var n=0;n<list.length;n++){
+      var row = list[n];
+      var sx=row[1], sy=row[2], sc=row[3];
+      if(row[4]===null){
+        // event marker
+        var inbox = row[5];
+        var r = inbox ? 4.2*sc : 1.7*sc;
+        ctx.beginPath();
+        ctx.arc(sx, sy, Math.max(0.9, r), 0, Math.PI*2);
+        if(inbox){
+          ctx.fillStyle = C.evBox;
+          ctx.globalAlpha = 0.95;
+        } else {
+          ctx.fillStyle = C.ev;
+          ctx.globalAlpha = 0.55;
+        }
+        ctx.fill();
+        if(inbox){
+          ctx.lineWidth = 0.8; ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      } else {
+        var v2 = row[4], av2 = row[5];
+        var col = rdbu(v2/3.0);
+        var alpha = Math.min(0.9, 0.18 + av2*0.28);
+        var size = Math.max(1.1, (2.2 + av2*1.6) * sc);
+        ctx.fillStyle = "rgba("+col[0]+","+col[1]+","+col[2]+","+alpha+")";
+        ctx.beginPath();
+        ctx.arc(sx, sy, size, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    ctx.restore();
+
+    rAzEl.textContent = Math.round((az*180/Math.PI)%360) + "°";
+    rTiltEl.textContent = Math.round(tilt*180/Math.PI) + "°";
+
+    if(spinning) az += 0.0016;
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
