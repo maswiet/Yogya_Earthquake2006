@@ -1,0 +1,417 @@
+c Program SIMUL2023 (started August 2021) to include any changes after SIMUL2017
+c  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+c
+c There are many output files possible with various formats that
+c were given names by Haslinger
+cfh suggestion: incorporate  file-naming for input and output:
+c      input:     file 01: CNTL
+c                 file 02: STNS
+c                 file 03: MOD
+c                 file 04: EQKS
+c                 file 07: SHOT
+c                 file 08: BLAS
+c                 file 09: CLUS
+c                 file 10: TELE
+c                 file 11: VGSW
+c                 file 14: TOPOXY
+c      output:    file 12: summary
+c                 file 13: finalsmpout
+c                 file 15: ev'xxxx'.rp
+c                 file 16: output
+c                 file 17: resol.out
+c                 file 18: nodes.out
+c                 file 19: ttdiff.out
+c                 file 20: residuals
+c                 file 21: rdtres.out
+c                 file 22: newstns
+c                 file 23: velomod.out
+c                 file 24: tteq.out
+c                 file 25: vl_layer.out
+c                 file 26: pseudo
+c                 file 27: ttsht.out
+c                 file 28: ttbls.out
+c                 file 29: ttcev.out
+c                 file 30: ceres.out
+c                 file 31: edtres.out
+c                 file 32: hypllz.gmt
+c                 file 33: hyp_prt.out
+c                 file 34: hypo71list
+c                 file 35: hypxyze.out
+c                 file 36: itersum
+c                 file 43: DWSALL
+c                 file 45: covarid.out
+c                 file 53: vlxyxltln.out
+c                 file 54: velomod.outx 
+c                 file 57: gswres.it01  - end is iteration number
+c                 file 47: resDRE100.out
+c                 file 59: resDRE.out
+c                 file 64: tteqrev.out
+c  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+c  Written by Cliff Thurber  as part of his PhD thesis.
+c  Modified by W. Prothero to include station delays.
+c  Parts of this were programmed by Steve Taylor of LLL.
+c  Obtained from Prothero&Thurber in 1983 and subsequently
+c  modified by Donna Eberhart-Phillips, U.S. Geological Survey, GNS Science,
+c  Andreas Rietbrock, Karlsruhe Institute of Technology.
+c  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+c  Input data file list:
+c     File 01 - Control Parameters  (read in subroutine INPUT1)
+c      line 1- (free format)
+c        neqs - number of earthquakes
+c        nsht  - number of shots
+c        nbls  - number of blasts with known location, but unknown
+c                origin time
+c        wtsht - weighting of shots relative to quake weighting
+c        kout - output control parameter
+c               value    files created
+c                 0      16,32,33,35,36
+c                 1      16,13,32,33,35,36
+c                 2      16,13,22,23,24,32,33,35,36,64
+c                 3      16,13,22,23,24,34,32,33,35,36,64
+c                 4      16,13,22,23,24,25,32,33,34,35,36,64
+c                 5      16,12,13,22,23,24,25,32,33,34,35,36,64
+c        kout2 - Printout control parameter
+c                0 = full printout including station residuals and
+c                    location steps
+c                1 = printout station residuals
+c                2 = printout location steps
+c                3 = don't printout location steps or station residuals
+c                4 = as 3 above, also don't printout stations in input2
+c                5 = as 4. Also printout 1/(diag. covariance) to for016 
+c                    and for045, if ires.gt.0.
+c        kout3 - Yet another output control parameter
+c                0 = Don't output raypath points or tt differences
+c                1 = Output raypath points to file 15, for all raypaths
+c                    Print out travel-time differences between ART and
+c                    pseudo-bending to File 19.
+c                    This is useful for making plots of raypaths.
+c                    (For instance, if you want to test a range of pseudo-
+c                    bending parameters (xfac,tlim,nitpb) )
+c                    **NOTE that this option should not be used regularly,
+c                    ** but only to check a few selected events, since
+c                    ** it creates a lot of output.
+c
+c      line 2 - (free format)
+c        ntel - number of teleseisms
+c        wttel - wt factor for tele obs
+c        ntobmin - minimum number obs per teleseism
+c        reste1, reste2, reste3 - residual weighting like res1,res2,res3 for
+c            for eq travel-time. Make res3 very big on 1st run to compute path delays.
+c      line 3 - (free format)
+c        iuserdt = 1 to use rdt (receiver differential times)
+c              iuserdt=1 for eq only, =2 for rdt on shots and blasts also. (25-jan-13)
+c        edisrdt = max distance between receivers for rdt
+c        facrayr = factor times receiver distance to allow partials along raypaths
+c        mxiqrdt = maximum iqual to use ttime for rdt
+c        wtrdtsht = relative weight of rdt data
+c        res4 = resedt must be less than res4
+c      line 4 - (free format)
+c        iuseclu = 1 to use edt data for groups of earthquakes
+c        nclu = number of clusters to read in from file 9
+c        edisedt = max distance between eq for edt.
+c        facraye =  factor times eq distance to allow partials along raypaths
+c        mxiqedt = maximum iqual to use ttime for edt
+c        nstaepair = maximum number of edt for specific eq pair
+c        wtepdt = wt factor for eq-pair dt, like wtsp or wtrdtsht
+c        wrmscemx = max wrms for ce event, deleted if greater
+c        gminedt0 = absolute minimum slant path length for an observation in edt
+c        minedt = minimum number of edt to include the cluster in the inversion
+c                 about 2-5 times maxcev
+c      line 5 - (free format)
+c        ngsw - number of group velocity observations
+c        dhsw - distance between points in box (analogous to ttmder raypath points)
+c        boxmin - minimum box width (make this roughly 25 percent greater than 
+c           spacing of the group velocity observations)
+c        zswmax - maximum depth of box
+c        wtgsw - wt factor for group velocity observations
+c        itopo - 1 = read in topo file of median filtered topography on x-y grid (TOPOXY)
+c                0 = no topography (This is sloppy. Good solution really needs the topo!)
+c      line 6 - (free format)
+c        nitloc - max of iterations for hypocenter location.
+c        wtsp   - for hypocenter solution, weight of S-P residual 
+c                 relative to P residual (ie:wtsp=1.0 gives equal wt,
+c                 wtsp<1 downweights S-P)
+c        eigtol - SVD cutoff in hypocentral adjustments. If smallest
+c                 eigenvalue in geiger's matrix is < eigtol, the depth
+c                 is not adjusted, and a message is printed.
+c        rmscut - value for rms residual below which hypocentral adjustments
+c                 are terminated.
+c        zmin - minimum hypocenter depth
+c        dxmax - maximum horizontal hypocentral adjustment allowed in
+c                each hypocenter iteration.
+c
+c        rderr - estimate of reading error, used to estimate hypocenter error
+c                used for adding error to synthetic times, not for t*
+c        ercof - for hypoinverse-like error calculations. Set > 0 and
+c                < 1 if you want to include rms.res in hypocenter error
+c                estimate. (sigsq=rderr**2 + ercof * rms**2)
+c      line 7 - (free format)
+c        nhitct - of observations for a parameter to be included
+c                 in the inversion. This uses the variable khit.
+c        dvpmx - maximum P-velocity adjustment allowed per iteration. 
+c        dvsmx - maximum S-velocity adjustment allowed per iteration.
+c        corrvpmax = max corrected vp allowed
+c        corrvpmin = min corrected vp allowed
+c      line 8 - (free format)
+c        idmp -  set to 1 to recalculate the damping value for succeeding
+c                iterations.  set to 0 to have constant damping
+c        vdamp - damping parameter used in velocity inversion.
+c                 vdamp(1)=damping for p-velocity
+c                 vdamp(2)=damping for Vp/Vs
+c                 vdamp(3)=damping for station delays
+c        stepl - (km) used for calculation of partial derivatives along
+c                the raypath.
+c        ieft  - set to 1 to use earth-flattening transformation for
+c                velocity. Oterwise (like simul pre2004) set to 0
+c
+c      line 9 - (free format)
+c        ires - set to 1 to compute the resolution and print diagonal elements,  
+c             also prints out 1/(diagonal covariance)
+c           2 to print full resolution to file 17 (recomputed on each
+c              iteration.)
+c           3 to calculate full resolution on 1st iteration only.
+c           0 no resolution calculations.
+c        i3d - flag for using pseudo-bending:
+c              -1 = only use straight path 
+c              0=no pseudo-bending
+c              1=use in forward problem to compute velocity partial derivatives
+c              2=also use in earthquake location subroutine
+c              3=pseudo-bending; also test more squashed paths (3rd root arc)
+c                that may be better initial paths for long ray paths (moho-like).
+c        nitmax - max of iterations of the velocity inversion-hypocenter
+c                 relocation loop.
+c                 For locations only, set nitmax=0.
+c                 For creating synthetic data, set nitmax= -1, and
+c                   use file007 for hypocenters and stations.
+c        kspr - decides S-P partial derivatives for travel-time data
+c              2  uses S-P partial derivat)ives for both dvpvs and dvp
+c                 need 2 for joint travel-time group-velocity inversion
+c              1  S-P residuals are only related to dvpvs (like simul2000)
+c        snrmct - cutoff value for solution norm. Program will stop
+c                 iterating if the solution norm is less than snrmct.
+c        ihomo - flag for using 1-d starting model (1=yes,0=no)
+c               if flagged, on first ihomo iterations do 2-d art
+c        rmstop - overall rms residual for termination of program.
+c        ifixl - number of velocity inversion steps to keep hypocenters
+c                fixed at start of progressive inversion
+c        ifixz - 0 = free depth
+c                1 = fixed depth, may use on relocations (nitmax=0)
+c
+c      line 10 - (free format)
+c        delt1, delt2 - distance weighting factors. The weight is 1 for
+c               x<delt1, but tapers linearly to 0 between delt1 and delt2.
+c                Note that this is epicentral distance in simulps13
+c        res1,res2 - same pattern as above, but for residual weighting.
+c        res3 = allowing some high residual data during location iterations 
+c             downweighting(linear) 0 to 98% res1 to res2, 98 to 100% res2 to res3
+c
+c      line 11 - (free format)
+c        ndip - of rotation angles of the plane of the ray, which will
+c               be computed in the exhaustive search for the fastest time.
+c        iskip - of rotation angles which will be skipped.
+c                ndip=9, iskip=3 will give a vertical plane, and 2 swung
+c                at angles of 22.5 degrees on each side.
+c                ndip=9, iskip=4 will give only the vertical plane, and should
+c                be used for 1 dim models, to save computer time.
+c           *** Most of the computer time is spent in the raytracing. Careful
+c               selection of the starting model and use of iskip can save
+c               a lot.
+c        scale1 - set scale1 to the step length for the travel time
+c                 computation. Set no larger than the grid spacing.
+c                 Relates to the number of raypath segments in subroutine setup.
+c                 For most studies 1.5 is fine, for small areas 1.0 could be used.
+c                 When bld=0.1 and fine grid, scale1 must be smaller:
+c                   use scale1 = 0.5 to 0.3
+c        scale2 - scale for the number of paths tried in the raytracing.
+c                 Cliff uses a value of 1, and this seems ok, but would
+c                 need to be tested in detail. If scale2 is smaller, the
+c                 number of paths increases, and the computation time also
+c                  goes up.
+c
+c      line 12 - (free format)
+c        xfac - Convergence enhancement factor for pseudo-bending
+c               Cliff suggests 1.2 to 1.5
+c        tlim - Cutoff value for travel time difference to terminate
+c               iteration. (0.0005 to 0.002 s)
+c               Make lower tlim for t* (iuseq=1) than for t.
+c        nitpb - maximum permitted iterations for pseudo-bending (5 to 10)
+c                nitpb(1) for shorter raypaths
+c                nitpb(2) for raypaths > delt1
+c              
+c      line 13 - (free format)
+c        kttfor - flag for travel-time data format
+c               1=cnsp, 2=phs, 3=6-letter-sta phs(Japanese), 4=stn5 and net (NCEDC)
+c        iusep - flag to tell whether or not to use P arrivals (and invert for
+c                P velocities).  0 = no, 1 = yes.
+c        iuses - flag to tell whether or not to use S arrivals (and invert for
+c                S velocities).  0 = no, 1 = yes.
+c        invdel - flag to control inclusion of station delays in the inversion.
+c                 =0 to not include stn delays.
+c                 =1 to include stn delays.
+c        iuse2t = 1 to allow 2 origin times (PANDA array with different master clock)
+c
+c      line 14 - (free format)
+c        iuseq - flag to tell whether inversion is for velocity or Q
+c                0 = velocity,  1 = Q 
+c        dqmax - maximum Q adjustment allowed per iteration
+c        qdamp - damping parameter for Q inversion
+c                actually damps solution for Q*V
+c        qrmax = maximum Q estimate allowed to discard data
+c               using simple slant path with t* data
+c        qmin -  minimum Q value for solution (prior versions just had 1.0)
+c
+c     File 02 - Station Data  (read in subroutine INPUT2)
+c        line 1 - (free format)
+c         ltdo, oltm, lndo, olnm, rota, nzco, cmerid - sets origin and rotation of the
+c              coordinate system. Choose the origin at the lower right corner
+c              of the region.
+c              Y points in North direction.
+c              X points West, then orig lat should be negative for east in simul
+c              rota - angle of rotation counterclockwise (degrees). This is
+c                     used to rotate the entire coordinate system.
+c              nzco - select coordinate transformation
+c                nzco= 0 use origin latitude for central meridian
+c                nzco= 1 New Zealand (lat S and long E), use NZTM2000
+c                nzco= 2 Alaska, use state plane zone AK4 for central Alaska
+c                nzco= 3 use input central meridian (this could be selected from UTM)
+c                nzco= 4 use NZ map grid as in previous simul versions. distances are
+c                        similar to NZTM2000, but some rotation especially offshore.
+c                nzco= 5 use short distance conversion as in Thurber original simul
+c              cmerid - central meridian for coordinate conversion, used for nzco=3
+c                       Note UTM system has 6 deg wide zones, so TM okay for about 700km wide
+c
+c         line 2 - (free format)
+c         nsts - number of stations in station list to follow.
+c
+c         station list: see documentation.
+c
+c     File 03 - velocity model (read in subroutine INPUT3)
+c         This contains the number of nodes in the x, y , and z directions, and
+c         bld factor (1.0 or 0.1 km) used to set up velocity interpolation grid.
+c         Note that scale1 should be smaller for bld=0.1
+c         The dimension of the /locate/ arrays in the include file gives the maximum 
+c         size model, considering bld factor.
+c           line 1: bld nx ny nz   (free format)
+c         Then the velocity model. See the documentation for a complete
+c         description.  In simulps12 this has Vp, followed by Vp/Vs.
+c         For iuseq=1, has Vp, followed by Qp.
+c         Specify which nodes (if any) you want to fix velocity for:
+c           2  3  4   means x2(2nd column), y3(3rd row), z4(4th layer)
+c         ending with, at end of Fixed Nodes:
+c           0  0  0
+c         then linked nodes (see examples), each node a line
+c           master i j k. linking type 1=linear, 2=constant.  slaves i j k 
+c         ending with, for each linked set:
+c           0  0  0
+c         ending with, at end of Linked Nodes:
+c           0  0  0
+c
+c     File 04 - travel-time data for earthquakes. (read in subroutine INPUT4)
+c         Note that S data should be made into S-P data.
+c         Use program 'convert6' to convert hypo71 summary and phase data
+c         to this format.
+c         (should still work with old 'convert3' files also, as well as
+c         Michelini's format)
+c         kttfor in input1 allows phs or Japanese format
+c               1=cnsp, 2=phs, 3=6-letter-sta phs(Japanese)
+c
+c     File 07 - travel-time data for shots
+c         For iuseq=1, read in t* data as shots.
+c         (For iuseq=1, neqs and nbls should be zero.)
+c
+c     File 08 - travel-time data for blasts
+c
+c     File 09 - travel-time data for clusters
+c         Eq groups start "BEGIN CLUSTER", end "END CLUSTER"
+c
+c     File 11 - group (and/or phase) velocity Rayleigh observations at points,
+c       with period, quality, and type (1=Phase or 2=Group)
+c       free format: vgsw(ng),pergsw(ng),rlatsw(ng),rlonsw(ng),iqgsw(ng),icgsw(ng)
+c       Note that the program has only been tested with group velocity,
+c       although the cpsmod subroutine produces kernel for both types.
+c
+c    File 14 - topo on xy grid. For surface wave observation points, want
+c       an elevation which is 30-km median filtered topography (and
+c       bathymetry). Read in for itopo=1. For NZ, extracted from topo30.grd world
+c       and then 30-km median filter in gmt. Then converted to 2km spaced 
+c       nzwide xygrid. 
+c
+c  OUTPUT FILES:
+c     File 16 - printed output, send to line printer
+c     File 12 - hypocenters from each iteration, hypoinverse format with error ellipse
+c     File 13 - Final hypocenters in hypo71 summary card format
+c     File 15 - Written when kout3=1, A separate file for each event
+c         containing all the raypath points, useful for plotting
+c     File 17 - Full resolution matrix.  Created if ires.ge.2.
+c     File 18 - Pointer from full nodes to inversion nodes.
+c          Output when fixed nodes are used.
+c     File 19 - Written when kout3=1, Contains the difference in travel 
+c          time between ART and pseudo-bending
+c     File 20 - Station residual output (created for kout2=0 or 1)
+c     File 21 - Residuals for receiver-pair differential times 
+c     File 22 - Station data with new P and S delays.  This
+c          can be used as input to future runs. NOT created if
+c          invdel=0 (no station delays inverted for).
+c     File 23 - Final velocity model (simul format). This can be used as input
+c          to future runs.
+c     File 24 - Earthquake travel-time data for new hypocenters.
+c          This can be used as input in future runs.
+c     File 25 - New velocities in layer format (FH-EK option; not Q) 
+c     File 26 - List of observations that used maximum allowed 
+c          pseudo-bending iterations (nitpb)
+c     File 28 - Blast travel-time data with new origin times.
+c     File 29 - Revised travel-time data for shots
+c     File 30 - Cluster Eq: Station residual output (for kout2=0 or 1)
+c     File 31 - Residuals for earthquake-pair differential times
+c     File 33 - Final hypocenters as in simul printout with x,y,z
+c     File 34 - Output file similar to HYPO71 listing file, which can
+c          be used as input to FPFIT fault plane solution program.
+c          Only for earthquakes and shots since called from Loceqk.
+c          (Note that DIST is the epicentral distance, as for HYPO71)
+c          Written on last (nitmax) iteration.
+c     File 35 - Final hypocenters with iyr4, decimal latitude longitude, x y 
+c          coordinates, error parameters and quality code.  NOTE that defined
+c          ranges for the quality code are in the include file. So that can
+c          be adjusted if desired.
+c     File 36 - Summary output file that contains key solution
+c          statistics.  This is useful when doing numerous
+c          damping runs and wanting to compare variances.
+c     File 43 - Derivative weighted sum from ttmder for all nodes, including
+c          fixed and linked.  So this is NOT the DWS actually used in the
+c          inversion, but rather an approximation of the data distribution
+c          over all velocity nodes.  This is useful for deciding how to set
+c          fixed and linked nodes.
+c          Only created for nitmax=1 (since use this on preliminary test runs). 
+c     File 45 - 1/diagonal elements of covariance matrix.  In same
+c          format as velocity model input.  Created if ires.ge.2.
+c     File 59 - diagonal resolution elements (DRE) in simul velocity file format
+c     File 47 - DRE multiplied by 100
+c     File 53 - velocity points in Table format with x y z Latitude longitude
+c     File 54 - velocity model with long lines (one per matrix row).
+c     File 57 - group velocity residuals for each iteration 'gswres.it01' for iter1
+c     File 64 - Earthquake travel-time data for new hypocenters. Has
+c          revised quality, based on residual. When relocating (nitmax=0)
+c          iq=iq+1 abs(res)>res2;
+c          iq=iq+3 abs(res)>0.5(res2+res3); iq=iq+5 abs(res)>=res3
+c   HINTS:
+c       1. Invert for a one-dimensional model first. Use nx=3, ny=3, nz=
+c          whatever you want in the final model. Set ndip=9, iskip=4.
+c          Or, better yet, use VELEST, locate your events with the VELEST
+c          model, then fix the earthquake locations on the 1st iteration.
+c
+c       2. Run the inversion on calculated data. This will tell you what
+c          kind of averaging is inherent in the inversion process, since
+c          the result will probably be different from your original input
+c          model.
+c
+c       3. When the program crashes due to divide by 0, etc, the cause can
+c          most often be traced to errors in the setup of the velocity
+c          model. No part of a ray must reach over halfway to an outer node.
+c          Try increasing the distance of the outer node.
+c
+c  ARRAY DIMENSIONING:
+c      11-mar-94 These notes are now in the simul2023_common.inc file.
+c      PLEASE READ that file to understand the array dimensions
+c      and how many parameters you are allowed to invert for.
+
+c  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 

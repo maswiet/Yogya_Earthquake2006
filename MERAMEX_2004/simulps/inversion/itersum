@@ -1,0 +1,47 @@
+
+ neqs nsht nbls wtsht nitloc wtsp   zmin   eigtol  rmscut hitct
+  390    0    0   1.0   6    0.62  -0.50   0.010    0.030    5.
+ ntel wttel ntobmin reste1 reste2 reste3
+    0   1.0      4   2.00   6.00  10.00
+ iuse2t= 0 one origin time, nparhy= 4
+  iuserdt   rdisrdt   facrayr mxiqrdt  wtrdtsht  res4
+      0      50.00    1.50       1       2.00    0.80
+ iuseclu  nclu   edisedt   facraye mxiqedt nstaepair wtepdt wrmscemx gminedt0 minedt
+      0      0      20.00    1.50     1         8     1.00   0.400     75.00   25
+  ngsw  dhsw  boxmin zswmax wtgsw itopo   0   5.00  40.00 200.00   8.000  0
+
+ Both P-velocity and Vp/Vs are included in inversion  (iusep= 1, iuses= 1)
+
+    dvpmx  dvpvsmx corrvpmax corrvpmin idmp     vpdamp    vpvsdmp    stadamp   telpad_damp
+     0.30    0.040     9.50     1.50   0      500.000    300.000     25.000   9500.000
+  ires nitmax  kspr snrmct dxmax rderr ercof
+  0      4      2  0.00100  3.00  0.05  0.00
+ # its. for 1-d vel. model =   0 Use EFT=  1
+ rms for term. = 0.080; fix locations for iterations =   0
+ distance weighting:  100.0  300.0; residual weighting:   0.60   2.00   5.00
+
+  MODEL STATISTICS on nit= 0
+  For all    175 P-Vel gridpts, variance=     0.0000000, sd=   0.00000
+  For all    175 Vp/Vs gridpts, variance=     0.0000000, sd=   0.00000
+
+
+ unweighted rms=   10.662    ; weighted rms=  0.79569     data var.(ssqrw/wnobt ie:rms**2)=       0.63312
+                                        P data var.=      0.628707  S-P data var.=      7.256456
+ Iteration:  0, ssqrw =   3616.4      varw.(ssqrw/wndof) =  0.87542    
+ total nodes observed=    157, nodes inverted for=     97, P-Velocity :     93, Vp/Vs ratio:      4, Sta. Corr. :      0
+, Telpath dly:      0,
+ iteration  1 rhs solution vector:                                                                          All iterations
+         Velocity   : mean  0.014753073, variance  0.2056E-02, norm squared  0.2206E+00, norm  0.4697E+00  Sum  0.4697E+00
+         P-Velocity : mean  0.015865652, variance  0.2113E-02, norm squared  0.2199E+00, norm  0.4689E+00  Sum  0.4689E+00
+         Vp/Vs ratio: mean -0.011114379, variance  0.4997E-04, norm squared  0.6940E-03, norm  0.2634E-01  Sum  0.2634E-01
+Damping: P-Velocity  damp =   0.500E+03, c1rd =   0.3063E-01, damp(c1rd) =   0.000E+00
+Damping: Vp/Vs ratio damp =   0.300E+03, c1rd =   0.7545E-02, damp(c1rd) =   0.000E+00
+
+ sum of squared residuals =  0.11351E+07; total number of observations =     9986, P obs =  5903, S obs =  4083
+                    earthquake obs.=     9986, explosion obs.=        0 (wtsht= 1.00), tele obs=        0 (wttel= 1.00)
+                    gvs surface wave obs=        0 (wtgsw=  8.00)
+                    number obs with non-zero wt:  (eq-parsep) nwrt=     5712,   (sh-medder) nswrt=        0
+        nev with rec-pair dt (nrdtsh)=     0
+              receiver-pair dt: nobs=        0, P obs=        0, S obs=        0, wtrdtsht= 2.00
+  For all    175 P-Vel gridpts, variance=     0.0114860, sd=   0.10717
+  For all    175 Vp/Vs gridpts, variance=     0.0000037, sd=   0.00193

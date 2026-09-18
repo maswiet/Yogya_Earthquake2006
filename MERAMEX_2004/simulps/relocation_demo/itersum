@@ -1,0 +1,25 @@
+
+ neqs nsht nbls wtsht nitloc wtsp   zmin   eigtol  rmscut hitct
+  393    0    0   1.0   6    0.62  -0.50   0.010    0.030    5.
+ ntel wttel ntobmin reste1 reste2 reste3
+    0   1.0      4   2.00   6.00  10.00
+ iuse2t= 0 one origin time, nparhy= 4
+  iuserdt   rdisrdt   facrayr mxiqrdt  wtrdtsht  res4
+      0      50.00    1.50       1       2.00    0.80
+ iuseclu  nclu   edisedt   facraye mxiqedt nstaepair wtepdt wrmscemx gminedt0 minedt
+      0      0      20.00    1.50     1         8     1.00   0.400     75.00   25
+  ngsw  dhsw  boxmin zswmax wtgsw itopo   0   5.00  40.00 200.00   8.000  0
+
+ Both P-velocity and Vp/Vs are included in inversion  (iusep= 1, iuses= 1)
+
+    dvpmx  dvpvsmx corrvpmax corrvpmin idmp     vpdamp    vpvsdmp    stadamp   telpad_damp
+     0.30    0.040     9.50     1.50   0      500.000    300.000     25.000   9500.000
+  ires nitmax  kspr snrmct dxmax rderr ercof
+  0      0      2  0.00100  3.00  0.05  0.00
+ # its. for 1-d vel. model =   0 Use EFT=  1
+ rms for term. = 0.080; fix locations for iterations =   0
+ distance weighting:  100.0  300.0; residual weighting:   0.60   2.00   5.00
+
+  MODEL STATISTICS on nit= 0
+  For all    175 P-Vel gridpts, variance=     0.0000000, sd=   0.00000
+  For all    175 Vp/Vs gridpts, variance=     0.0000000, sd=   0.00000

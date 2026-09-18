@@ -1,0 +1,24 @@
+All the fortran codes are simply compiled as below, and have worked on linux
+and MacOS.
+
+The simul2023 surface wave calculations use Herrmann’s codes (surf96 and srfker96), 
+which can be downloaded from his website (http://www.eas.slu.edu/eqc/eqccps.html).
+Put the CPS bin directory in your path:
+set path = ( $path /home/donna/prog/rbh/PROGRAMS.330/bin )
+
+or for MacOS:
+export PATH=/Users/federica/prg/PROGRAMS.330/bin:$PATH
+
+Array size parameters, considering the model and data, can be adjusted 
+as needed in the include file: simul2023_common.inc
+Note that 'maxpar' for the number of model parameters is generally much larger
+than 'mxpari' for inversion parameters, because many nodes are fixed or linked.
+
+Here are f77 and gfortran commands that we have used successfully:
+
+f77 -O2 -C simul2023.f -o simul2023
+
+gfortran -O2 -C simul2023.f -fcheck=all  -o simul2023 
+
+Then link the executable to a bin directory in the path.
+
