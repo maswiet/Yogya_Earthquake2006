@@ -474,3 +474,20 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **All that remains is user-side:** create the Zenodo record + DOI; fill README/
   manuscript placeholders (raw-data repo/DOI, authors, references); confirm Data
   Mine legacy-data eligibility with the editor; publication-clean the figures.
+
+## [2026-11-04] ingest | PUSGEN 2024 active-fault overlay on GrowClust catalog
+
+- **Trigger:** User provided the PUSGEN 2024 shallow-crustal fault database
+  (gpkg + vertex/parameter CSVs) and asked to overlay the faults on our result.
+- **Files:** `wiki/sources/pusgen-2024-shallow-crustal-faults.md` (new),
+  `wiki/index.md`. Repo (committed a85ce778): `eqt/scripts/plot_pusgen_map.py`,
+  `eqt/data/pusgen2024/{pusgen_traces,pusgen_polygons}.geojson`,
+  `eqt/figures/growclust_pusgen_map.png`.
+- **Key result:** 4 in-region faults extracted — Opak (JAV67, SS-LL, Mmax 6.9,
+  **dip 50°**), Merapi-Merbabu (JAV68), Mataram Tambakbayan/Dengkeng (JAV72/73).
+  Authoritative traces now REPLACE the removed hand-digitized faults. Opak surface
+  trace runs NE-SW along the W margin of the cloud; aftershocks sit ~5-15 km E of
+  it (expected surface-vs-at-depth offset of a dipping/blind structure). PUSGEN
+  dip 50° corroborates the GrowClust steeply-dipping plane.
+- **Follow-ups:** across-strike cross-section of hypocentres to test Opak dip
+  direction (PUSGEN leaves dip_dir blank for this SS fault).

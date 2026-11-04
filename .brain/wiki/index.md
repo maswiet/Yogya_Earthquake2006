@@ -34,6 +34,7 @@ Last updated: 2026-07-20
 - [[wiki/sources/earthquake-transformer-mousavi-2020]] - EQTransformer: deep-learning model for simultaneous earthquake detection + P/S phase picking (Nat. Commun. 2020).
 - [[wiki/sources/eqtransformer-github-repo]] - Official MIT-licensed Python package (TensorFlow/ObsPy) implementing EQTransformer with pretrained models.
 - [[wiki/sources/yogya-2006-aftershock-edl-dataset]] - Raw GFZ EDL aftershock recordings (external volume); layout + critical data-hygiene facts.
+- [[wiki/sources/pusgen-2024-shallow-crustal-faults]] - PUSGEN 2024 national active-fault database; Opak (JAV67, SS-LL, Mmax 6.9, dip 50°) + Mataram/Merapi-Merbabu in-region.
 - [[wiki/sources/diambama-2019-yogya-tomography]] - **Our group's own 2019 GJI tomography** — first proposed the Ngalang Fault association (6 yr before Ramdhan 2025); same dataset; Anggraini 2013 manual picks = pick-validation ground truth.
 - [[wiki/sources/zenodo-lotos-koulakov-2021]] - Zenodo release of the LOTOS tomography code (Koulakov; Gakkel Ridge variant) — a citable copy of the engine used in Diambama et al. 2019.
 
