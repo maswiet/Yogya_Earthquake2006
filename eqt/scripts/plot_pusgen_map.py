@@ -41,7 +41,6 @@ def load_xn():
 
 def main():
     tr = gpd.read_file(f"{PUS}/pusgen_traces.geojson")
-    pg = gpd.read_file(f"{PUS}/pusgen_polygons.geojson")
     e  = pd.read_csv(f"{ROOT}/full/catalog_growclust.csv").rename(
             columns={"lat":"latitude","lon":"longitude","dep":"depth"})
 
@@ -54,12 +53,6 @@ def main():
                         f"(n={len(e)})", "xa0.25f0.05","ya0.25f0.05"])
     fig.coast(region=REGION, projection=PROJ, water="170/200/224",
               shorelines="0.7p,black", resolution="f")
-
-    # PUSGEN fault-source polygons (surface projection of the fault plane, r=5 km buffer)
-    for _,row in pg.iterrows():
-        col = FINFO.get(row["Source_ID"], ("", "gray", 0,0,0))[1]
-        fig.plot(data=gpd.GeoDataFrame(geometry=[row.geometry], crs=4326),
-                 fill=f"{col}@88", pen=f"0.6p,{col}@30")
 
     # aftershocks coloured by focal depth
     pygmt.makecpt(cmap="jet", series=[0,25], reverse=True)
@@ -96,8 +89,8 @@ def main():
     fig.colorbar(cmap=True, frame=["x+lFocal depth","y+lkm"], position="JMR+o0.7c/2.6c+w7c/0.35c")
     fig.basemap(map_scale="jTL+w20k+o0.6c/0.6c+f+u")
     fig.text(position="BC",
-             text="faults: PUSGEN 2024 shallow-crustal database (Pusat Studi Gempa Nasional)  \\267  "
-                  "polygons = fault-source surface projection  \\267  relocation: GrowClust",
+             text="fault traces: PUSGEN 2024 shallow-crustal database (Pusat Studi Gempa Nasional)  \\267  "
+                  "relocation: GrowClust (Trugman & Shearer 2017)",
              font="8p,Helvetica-Oblique,gray20", offset="0c/-0.65c", no_clip=True)
     out=f"{ROOT}/figures/growclust_pusgen_map.png"
     fig.savefig(out,dpi=230); print(f"n={len(e)}; faults={len(tr)}; wrote {out}")
