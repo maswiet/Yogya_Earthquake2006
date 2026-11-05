@@ -491,3 +491,25 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   dip 50° corroborates the GrowClust steeply-dipping plane.
 - **Follow-ups:** across-strike cross-section of hypocentres to test Opak dip
   direction (PUSGEN leaves dip_dir blank for this SS fault).
+
+## [2026-11-05] query | Aftershock moment tensors & statistical stress direction
+
+- **Trigger:** User asked to compute aftershock focal mechanisms with good
+  confidence (ISOLA-family tool), starting ML>1.5, then to plot the statistical
+  stress direction overlaid on topography.
+- **Files changed (.brain):** `wiki/outputs/yogya-2006-moment-tensor-stress.md`
+  (new), `wiki/index.md`, `wiki/log.md`. Repo (separate commit): `eqt/scripts/
+  {mt_extract,mt_run_one,mt_batch,mt_static_inputs,stress_inversion,plot_stress_map}.py`,
+  `eqt/mt/{stations.xml,crustal.dat,results/mt_catalog.csv,results/stress_result.json}`,
+  `eqt/figures/{stress_map,stress_stereonet}.png`, patched clone `eqt/tools/BayesISOLA`.
+- **Key result:** BayesISOLA deviatoric MT on 219 events ML≥1.5 (217 ok); quality
+  VR≥0.5 → 27 (VR≥0.4 → 53). VR is magnitude-independent (best is an ML 1.82 event,
+  VR 0.66). Stress inversion (Michael 1984/87 + bootstrap + random nodal plane):
+  **robust** extension (Shmin) horizontal ~N112°E±20° / SHmax ~N22°E±20°,
+  strike-slip-dominant transtension (17 SS / 9 NOR / 1 REV of the 27). **Full
+  stress tensor NOT resolved** — R≈0.30, ~70° bootstrap cones, 23° mean misfit;
+  the plane-independent T-axis survives, the tensor does not. Consistent with Opak
+  (oblique LL, PUSGEN dip 50°); Mw ~0.9–1.0 above our ML (matches known offset).
+- **Follow-ups:** report SHmax/transtension (defensible) not the full tensor; to
+  tighten, add P-polarity mechanisms (HASH) which suit the dense short-period array;
+  across-strike section to tie P/T axes to Opak dip.
