@@ -1,0 +1,40 @@
+{
+  "n": 36,
+  "vrmin": 0.3,
+  "dcmin": 50.0,
+  "nusedmin": 5,
+  "mean_misfit_deg": 34.5,
+  "sigma1": {
+    "trend": 360.0,
+    "plunge": 53.6,
+    "cone68": 67.7
+  },
+  "sigma2": {
+    "trend": 204.6,
+    "plunge": 33.9,
+    "cone68": 68.2
+  },
+  "sigma3": {
+    "trend": 106.5,
+    "plunge": 11.9,
+    "cone68": 68.3
+  },
+  "R": 0.281,
+  "SHmax_az": 14.5,
+  "SHmax_axial_mean": 1.8,
+  "SHmax_axial_sd": 79.6,
+  "R_CI68": [
+    0.279,
+    0.72
+  ],
+  "n_SS": 16,
+  "ptaxes": {
+    "P_trend": 9.2,
+    "P_trend_sd": 50.6,
+    "P_plunge_med": 48.0,
+    "T_trend": 105.7,
+    "T_trend_sd": 30.9,
+    "T_plunge_med": 15.9,
+    "SHmax_from_T": 15.7
+  }
+}

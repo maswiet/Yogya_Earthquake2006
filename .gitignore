@@ -63,3 +63,8 @@ MERAMEX_2004/tomo*/cov_*.npz
 MERAMEX_2004/tomo*/coverage.npz
 MERAMEX_2004/tomo*/events.npy
 MERAMEX_2004/tomo*/checker_*.npz
+
+# Moment-tensor / BayesISOLA: per-event waveform windows + Green's functions (regenerable; 100s of MB)
+eqt/mt/events/
+eqt/mt/green/
+eqt/scripts/__pycache__/
