@@ -38,20 +38,30 @@ on topography. User asked to start from ML>1.5 for a larger population.
 ## Results
 
 - **Batch:** 219 events ML≥1.5 (gap<180), 217 inverted OK, 2 trivial errors.
-  Quality yield: **VR≥0.5 → 27**, VR≥0.4 → 53, VR≥0.3 → 97.
-- **VR is magnitude-independent** — best single solution is an **ML 1.82** event
-  (VR 0.66). SNR/location/path control quality, not size. (Vindicates ML>1.5.)
-- **Robust, plane-independent observable (from 27 VR≥0.5 MT):**
-  - Extension (Shmin) **horizontal ~N112°E ± 20°**, plunge ~16° (T-axes cluster;
-    consistent at VR≥0.4, n=53: N107°E ± 21°).
-  - **SHmax ~N22°E ± 20°** (NNE–SSW), ⟂ horizontal extension.
-  - Regime **strike-slip-dominant transtension**: 17 SS, 9 normal, 1 reverse.
-- **Formal full stress tensor is NOT resolved:** bootstrap cones ~70° on all
-  three axes, SHmax histogram ~flat, **R ≈ 0.30** (σ1≈σ2 near-degenerate),
-  mean misfit 23°. Honest reason: short-period L4-3D + 1-D model give per-event
-  MT uncertainty too large, and random-nodal-plane bootstrap for a
-  strike-slip-heavy set amplifies σ1/σ2 trade-off. P/T axes are intrinsic to each
-  MT (plane-independent) → the extension direction survives; the tensor does not.
+- **CRITICAL QC (2026-11-09):** the catalog `nsta` is stations *extracted*, not
+  *inverted*. BayesISOLA auto-selects stations by distance vs. frequency; with the
+  high-fmax bands given to small events, often only the 1–3 nearest stations are
+  inverted. **VR anti-correlates with stations actually used (r = −0.49)**: a
+  "VR 0.77" small event (e.g. 20060609T083059) fit **one** station (TF19, 5 km) —
+  trivially high VR, azimuthally unconstrained mechanism. ML↔nsta_used = +0.89
+  (bigger events get lower fmax → more stations inverted → lower but meaningful VR).
+  **Fix:** gate on `nsta_used` (parsed from each `out/log.txt`), NOT VR alone.
+  `nsta_used` added as a catalog column.
+- **Primary quality gate: nsta_used ≥ 5, VR ≥ 0.3, DC ≥ 50 → n = 36.**
+- **Robust, plane-independent observable (36 multi-station MT):**
+  - Extension (Shmin) **horizontal ~N106°E ± 31°**, plunge ~12–16° (T-axes cluster).
+  - **SHmax ~N16°E** (NNE–SSW), ⟂ horizontal extension.
+  - Regime **transtension**; the reliable multi-station set leans **normal-dominant**
+    (σ1 plunge ~54°, 16/36 strike-slip). (Old VR≥0.5 gate looked more strike-slip,
+    σ1 plunge 35° — biased by 1-station fits.)
+  - **The extension direction is STABLE across all gates** (N100–112°E): VR≥0.5
+    n=27 → N112±20; used≥5 VR≥0.3 n=36 → N106±31; used≥6 n=23 → N100±28. Only the
+    spread tightens/loosens; the headline holds. The ±20° of the old gate was
+    artificially tight.
+- **Formal full stress tensor is NOT resolved:** bootstrap cones ~68° on all
+  three axes, SHmax histogram ~flat, **R ≈ 0.28** (σ1≈σ2 near-degenerate),
+  mean misfit 34°. P/T axes are intrinsic to each MT (plane-independent) → the
+  extension direction survives; the full tensor does not.
 
 ## Tectonic reading
 
@@ -64,11 +74,15 @@ ML offset vs the Anggraini manual scale.
 
 ## Files
 
-- Catalog: `eqt/mt/results/mt_catalog.csv` (219 rows), `stress_result.json`.
+- Catalog: `eqt/mt/results/mt_catalog.csv` (219 rows, incl. `nsta_used`),
+  `stress_result.json`.
 - Figures: `eqt/figures/stress_map.png` (SHmax on topography + faults + beachballs),
-  `eqt/figures/stress_stereonet.png` (σ-axis bootstrap clouds + P/T axes + R hist).
+  `eqt/figures/stress_stereonet.png` (σ-axis bootstrap clouds + P/T axes + R hist),
+  `eqt/figures/mt_waveform_fit_*_20060820T005344.png` (obs vs synthetic, 9-station
+  illustration event ML2.84 VR0.57), `mt_beachball_20060820T005344.png`.
 - Scripts: `eqt/scripts/{mt_extract,mt_run_one,mt_batch,mt_static_inputs,
-  stress_inversion,plot_stress_map}.py`; patched clone `eqt/tools/BayesISOLA`.
+  stress_inversion,plot_stress_map,mt_waveform_plot}.py`; patched clone
+  `eqt/tools/BayesISOLA`.
 
 ## Follow-ups
 

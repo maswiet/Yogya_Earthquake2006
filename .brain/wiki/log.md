@@ -513,3 +513,27 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
 - **Follow-ups:** report SHmax/transtension (defensible) not the full tensor; to
   tighten, add P-polarity mechanisms (HASH) which suit the dense short-period array;
   across-strike section to tie P/T axes to Opak dip.
+
+## [2026-11-09] maintenance | MT QC correction: gate on stations USED, not VR
+
+- **Trigger:** User asked for an observed-vs-synthetic waveform-fit illustration.
+  Generating it exposed that the "best VR" event (20060609T083059, VR 0.77) fit
+  only ONE station (TF19, 5 km).
+- **Files changed (.brain):** `wiki/outputs/yogya-2006-moment-tensor-stress.md`,
+  `wiki/log.md`. Repo: `eqt/scripts/{stress_inversion,plot_stress_map,
+  mt_waveform_plot}.py`, `eqt/mt/results/{mt_catalog.csv(+nsta_used),
+  stress_result.json}`, `eqt/figures/{stress_map,stress_stereonet,
+  mt_waveform_fit_*,mt_beachball_*}.png`.
+- **Key result:** catalog `nsta` = stations extracted, not inverted. BayesISOLA
+  auto-selects stations by distance vs frequency; small events (high fmax) often
+  invert only 1–3 nearest stations. **VR anti-correlates with nsta_used
+  (r = −0.49)**; the old VR≥0.5 gate was dominated by ≤3-station fits. Re-gated on
+  **nsta_used≥5, VR≥0.3, DC≥50 → n=36**. Stress result HOLDS: extension (Shmin)
+  horizontal **N106°E±31°**, SHmax **N16°E**, R≈0.28; reliable set leans
+  **normal-dominant transtension** (σ1 plunge ~54°). Extension direction stable
+  across all gates (N100–112°E). Waveform fit (even 9-station events) shows the
+  1-D synthetic captures only the coherent early arrival; scattered coda is
+  unmodeled, and VR is carried by few covariance-whitened components → confirms
+  mechanisms are moderately (not tightly) constrained.
+- **Follow-ups:** report extension/SHmax + transtension, not the full tensor;
+  first-motion (HASH) would add better-constrained mechanisms from this dense array.
