@@ -88,7 +88,11 @@ figure), `hash_batch.py`, `hash_summary.py`.
   robustly, and with a slightly tighter spread.
 - Figures: `eqt/figures/hash_summary.png` (rose + P/T stereonet + comparison),
   `eqt/figures/hash_firstmotion_20060820T005344.png` (9-station worked example,
-  misfit 0/7).
+  misfit 0/7), `eqt/figures/hash_beachball_map.png` (n=38 best-constrained
+  beachballs on topography + Opak/Mataram/Dengkeng traces; beachballs built from
+  each event's resolved mean P/T axes; cluster sits ~5–15 km E of the Opak trace).
+  Map catalog `eqt/mt/results/hash_catalog_map.csv` adds representative s/d/r
+  (`sdr_from_pt`, round-trip validated).
 - Caveat: polarity reliability is limited by EQT pick accuracy and emergent onsets;
   weights down-weight low-SNR picks but a manual/ML polarity re-pick would improve
   individual mechanisms. The stacked direction is robust regardless.
