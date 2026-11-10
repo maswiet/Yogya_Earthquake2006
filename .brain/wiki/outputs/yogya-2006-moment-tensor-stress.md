@@ -3,7 +3,7 @@ title: "Aftershock moment tensors & stress direction — Yogya 2006"
 type: output
 status: active
 created: 2026-11-05
-updated: 2026-11-05
+updated: 2026-11-10
 sources:
   - "[[wiki/syntheses/eqtransformer-yogya-2006-run]]"
 tags:
@@ -63,6 +63,36 @@ on topography. User asked to start from ML>1.5 for a larger population.
   mean misfit 34°. P/T axes are intrinsic to each MT (plane-independent) → the
   extension direction survives; the full tensor does not.
 
+## First-motion cross-check (HASH-style) — INDEPENDENT CONFIRMATION (2026-11-10)
+
+Built a prototype first-motion focal-mechanism pipeline to test the MT extension
+direction with a method that does **not** depend on the problematic 1-D waveform
+fit. Scripts: `eqt/scripts/hash_core.py` (ray tracer + polarity + radiation-sign
+grid search + P/T + quality), `hash_one.py` (one event + beachball/first-motion
+figure), `hash_batch.py`, `hash_summary.py`.
+
+- **Three ingredients, two built from scratch** (NLL stores neither): azimuth from
+  NLL `.hyp` `SAzim`; **takeoff angle** from an own flat-layer ray tracer on
+  `crustal.dat` (direct + head waves) — validated vs NLL `TTpred` to 0.01–0.14 s
+  at 6–30 km; **P first-motion polarity** measured on the raw SAC verticals at the
+  NLL pick (EQT records no `FM`), SNR-weighted.
+- **Catalog:** `eqt/mt/results/hash_catalog.csv`, **n = 202** events with ≥6 usable
+  polarities (quality A=90, B=98, C=14). Grid search s/d/r at 5°.
+- **Per-event mechanisms are underdetermined** (7–11 polarities, network az-gaps;
+  STDR often <0.5; the "best" nodal planes are tie-degenerate). So we stack the
+  **acceptable-set-mean P/T axes** (plane-independent), not nodal planes.
+- **Stacked extension (T-axis) = N102°E ± 27° (R=0.65), SHmax ≈ N12°E**, P axes
+  steep → normal-dominant.
+- **Agreement with MT (N106°E ± 31°, SHmax N16°E) within ~4°**, from two fully
+  independent methods. First motions corroborate the WNW–ESE extension / NNE SHmax
+  robustly, and with a slightly tighter spread.
+- Figures: `eqt/figures/hash_summary.png` (rose + P/T stereonet + comparison),
+  `eqt/figures/hash_firstmotion_20060820T005344.png` (9-station worked example,
+  misfit 0/7).
+- Caveat: polarity reliability is limited by EQT pick accuracy and emergent onsets;
+  weights down-weight low-SNR picks but a manual/ML polarity re-pick would improve
+  individual mechanisms. The stacked direction is robust regardless.
+
 ## Tectonic reading
 
 WNW–ESE horizontal extension / NNE SHmax in transtension is consistent with the
@@ -86,7 +116,11 @@ ML offset vs the Anggraini manual scale.
 
 ## Follow-ups
 
-- Reporting SHmax N22°E±20° / transtension is defensible; the full tensor is not.
-- To tighten: add first-motion polarities (HASH) — dense short-period local array
-  suits P-polarity mechanisms better than full-waveform MT here.
+- Reporting SHmax N12–16°E / WNW–ESE extension / transtension is defensible and now
+  **confirmed by two independent methods** (MT + first motions); the full stress
+  tensor is still not resolved.
+- DONE: first-motion (HASH-style) cross-check — N102°E ± 27° extension, agrees with
+  MT within ~4°. Next refinement would be ML/manual polarity re-picking to tighten
+  per-event mechanisms and a formal stress inversion on the first-motion mechanisms.
 - Across-strike cross-section to tie beachball P/T axes to Opak dip.
+- `updated: 2026-11-10`.

@@ -537,3 +537,24 @@ Allowed types: `setup`, `ingest`, `query`, `lint`, `maintenance`, `export`, `imp
   mechanisms are moderately (not tightly) constrained.
 - **Follow-ups:** report extension/SHmax + transtension, not the full tensor;
   first-motion (HASH) would add better-constrained mechanisms from this dense array.
+
+## [2026-11-10] query | First-motion (HASH-style) mechanisms cross-check MT stress direction
+- **Trigger:** user — "Rintis mekanisme HASH dari polaritas P" (prototype first-motion
+  mechanisms from P polarities), following the finding that the 1-D full-waveform MT
+  fit is weak (raw VR≈0, fit lives in covariance-whitened space).
+- **Files changed:** `wiki/outputs/yogya-2006-moment-tensor-stress.md` (new
+  first-motion section + follow-ups), `wiki/index.md` (outputs line), `wiki/log.md`.
+  Code (untracked, not committed per user policy): `eqt/scripts/hash_core.py`,
+  `hash_one.py`, `hash_batch.py`, `hash_summary.py`; outputs
+  `eqt/mt/results/hash_catalog.csv`, `eqt/figures/hash_summary.png`,
+  `hash_firstmotion_20060820T005344.png`.
+- **Key result:** Built first-motion pipeline. Takeoff angle from own flat-layer ray
+  tracer on crustal.dat (validated vs NLL TTpred to 0.01–0.14 s); P polarity measured
+  on raw SAC verticals at NLL picks (EQT has no FM); azimuth from NLL SAzim. Grid
+  search s/d/r. **n=202 events (≥6 polarities; A=90 B=98 C=14).** Per-event mechanisms
+  underdetermined (stack acceptable-set-mean P/T, plane-independent). **Stacked
+  extension T = N102°E ± 27° (R=0.65), SHmax ≈ N12°E, normal-dominant** — agrees with
+  MT (N106°E±31°, SHmax N16°E) within ~4°, from a method independent of the 1-D
+  waveform fit. Strong corroboration of WNW–ESE extension / NNE SHmax.
+- **Follow-ups:** ML/manual polarity re-pick to tighten per-event mechanisms; formal
+  stress inversion on the first-motion mechanism set; map of first-motion beachballs.

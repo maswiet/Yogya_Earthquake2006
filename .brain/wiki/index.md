@@ -70,7 +70,7 @@ Last updated: 2026-07-20
 - [[wiki/outputs/yogya-2006-1d-velocity-model]] - Data-driven 1-D velocity (Wadati Vp/Vs=1.735; VELEST minimum-1D + station corrections).
 - [[wiki/outputs/yogya-2006-pangandaran-triggering]] - Pangandaran Mw7.7 (17 Jul 2006) triggering test: no detectable triggering; small-event deficit is a completeness artifact.
 - [[wiki/outputs/yogya-2006-srl-paper-plan]] - SRL paper plan (2026-07-20): reframed as methodology + open data product; "N× more events" claim dropped; pick validation is the main remaining task.
-- [[wiki/outputs/yogya-2006-moment-tensor-stress]] - Aftershock moment tensors (BayesISOLA, 219 events; 27 at VR≥0.5) + stress direction: robust SHmax ~N22°E±20° / WNW–ESE extension, strike-slip-dominant transtension; full tensor NOT resolved (R≈0.30, ~70° bootstrap cones).
+- [[wiki/outputs/yogya-2006-moment-tensor-stress]] - Aftershock moment tensors (BayesISOLA, 219 events; n=36 at nsta_used≥5) + stress direction: WNW–ESE extension N106°E / SHmax N16°E, normal-dominant transtension. **Cross-checked by first-motion HASH-style mechanisms (n=202): extension N102°E±27°, agrees within ~4° — independent of waveform fit.** Full tensor NOT resolved (R≈0.28).
 
 ## Templates
 
